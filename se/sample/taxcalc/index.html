@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>TaxCalc</title>
+
+
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+<link rel="stylesheet" type="text/css" href="css/foundation.css" />
+
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="js/main.js"></script>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+  <nav class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand">TaxCalc</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="col-md-6">
+      <label class="control-label">売上金額</label>
+      <div class="input-group">
+        <div class="input-group-addon">¥</div>
+        <input type="text" class="form-control" placeholder="売上金額" value="10000000" id="SalesMoney">
+      </div>
+      <br> <label class="control-label">経費</label>
+      <div class="input-group">
+        <div class="input-group-addon">¥</div>
+        <input type="text" class="form-control" placeholder="経費" value="4000000" id="Cost">
+      </div>
+      <br> <label class="control-label">社会保険料控除額</label>
+      <div class="input-group">
+        <div class="input-group-addon">¥</div>
+        <input type="text" class="form-control" placeholder="社会保険料控除額" value="700000" id="SocialInsurancePremium">
+      </div>
+      <br> <label class="control-label">生命保険料控除額</label>
+      <div class="input-group">
+        <div class="input-group-addon">¥</div>
+        <input type="text" class="form-control" placeholder="生命保険料控除額" value="30000" id="LifeInsurancePremium">
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <label class="control-label">配偶者控除額</label>
+      <div class="input-group">
+        <div class="input-group-addon">¥</div>
+        <input type="text" class="form-control" placeholder="配偶者控除額" value="380000" id="SpouseDeduction">
+      </div>
+      <br> <label class="control-label">扶養控除額</label>
+      <div class="input-group">
+        <div class="input-group-addon">¥</div>
+        <input type="text" class="form-control" placeholder="扶養控除額" value="0" id="TaxExemption">
+      </div>
+      <br> <label class="control-label">基礎控除額</label>
+      <div class="input-group">
+        <div class="input-group-addon">¥</div>
+        <input type="text" class="form-control" placeholder="基礎控除額" value="380000" id="BasicDeduction">
+      </div>
+      <br>
+      <button type="button" class="btn btn-success" id="calc">
+        <span class="glyphicon glyphicon-ok-sign"></span> 計算
+      </button>
+      <button type="button" class="btn btn-info" id="clear">
+        <span class="glyphicon glyphicon-remove-circle"></span>クリア
+
+      </button>
+      <br>
+      <div>
+        <h3>税金の合計</h3>
+        <h1></h1>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

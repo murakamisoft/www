@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>ユーザ管理</title>
+
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+
+<script src="js/usermanage.js"></script>
+
+
+<!-- Custom styles for this template -->
+<link href="css/style.css" rel="stylesheet">
+
+</head>
+<body>
+
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+
+				<a class="navbar-brand" href="#">ユーザー管理</a>
+			</div>
+			<div id="navbar" class="collapse navbar-collapse"></div>
+			<!--/.nav-collapse -->
+		</div>
+	</nav>
+
+	<div class="container">
+		<form class="form-inline">
+			<div class="addArea">
+				<h2>ユーザー追加</h2>
+				<p class="lead">ユーザーを追加します。</p>
+
+				<div class="form-group">
+					<label class="sr-only" for="lblName">名前</label> <input type="text"
+						class="form-control" id="txtName" placeholder="名前">
+				</div>
+				<div class="form-group">
+					<label class="sr-only" for="lblAddress">住所</label> <input
+						type="text" class="form-control" id="txtAddress" placeholder="住所">
+				</div>
+				<div class="form-group">
+					<label class="sr-only" for="lblPost">部署名</label> <input type="text"
+						class="form-control" id="txtPost" placeholder="部署名">
+				</div>
+
+				<button type="button" class="btn btn-primary" id="btnAddUser">追加</button>
+
+			</div>
+
+			<h2>ユーザー一覧</h2>
+			<p class="lead">登録されているユーザーの一覧です。</p>
+			<div class="userListArea"></div>
+		</form>
+	</div>
+	<!-- /.container -->
+
+
+</body>
+</html>

@@ -1,0 +1,163 @@
+body{
+	margin: 0px;
+	padding: 0px;
+	line-height:1.5;
+	background:#ccffff;
+	color:#003333
+}
+hr{display:none}
+h1{
+	margin:0px 5% 0px 5%;
+	padding:10px 5px 10px 30px;
+	font-weight:normal;
+	border:1px solid #003333;
+	border-bottom:2px ridge #006633;
+	color:#006600;
+	background-image:url("pic/gra.bmp");
+	background-position:right;
+	background-repeat:no-repeat;
+}
+h2{
+	margin:0px 15px;
+	padding:5px;
+	border:1px solid #003333;
+	border-bottom:2px ridge #006633;
+	background:#003333;
+	color:ccffff;
+}
+h3{
+	margin:0px 15px;
+	padding:5px 20px;
+	border:3px solid #003333;
+	background:#aadddd;
+}
+p,dl,form{
+	margin:0px 15px 15px 15px;
+	padding:5px 30px;
+	border-width:1px;
+	border-style:solid;
+}
+big{
+	font-size:x-large;
+}
+pre{
+	line-height:1.2;
+	margin:0px 15px 15px 15px;
+	padding:5px 30px;
+	border-width:1px;
+	border-style:solid;
+	background:#ffffff;
+
+}
+ul{
+	margin:0px 15px 15px 15px;
+	padding:5px 30px;
+	border-width:1px;
+	border-style:solid;
+	list-style-type:none;
+	
+}
+dt{
+	font-weight:bold;
+}
+#download{
+	margin:10px 20px;
+	padding:5px 30px;
+	font-weight:bold;
+	border-width:1px;
+	border-style:dotted;
+	background:#ddffff
+}
+/*=====リンクスタイルの設定=====*/
+a{
+	background:transparent;
+	color:#6666ff;
+	text-decoration:none
+}
+a active,a:hover{
+	background:transparent;
+	color:#0066ff;
+	text-decoration:underline
+}
+#source{
+	margin:0px 15px;
+	padding:5px 30px;
+	white-space:pre;
+	border-width:5px;
+	border-style:solid;
+	background:#ffffff;
+}
+#theme{
+	margin:0px 5% 0px 5%;
+	padding:5px;
+	font-size:12pt;
+	background:#003333;
+	color:ccffff;
+}
+#menu{
+	position:absolute;
+	z-index:2;
+	top:103px;
+	left:5%;
+	width:180px;
+	margin:1px;
+	padding:0px;
+	
+}
+
+#menu ul li {display:inline}
+#menu ul{
+	margin:10px, 0px;
+	padding:0.5em;
+	list-style-type:none;
+	border-top:solid 1px #003333;
+	border-right:solid 1px #99cc66;
+	border-bottom:solid 1px #003333;
+	border-left:solid 1px #99cc66;
+	font-size:10pt;
+	background:#003333;
+	color:#ccffff;
+}
+#menu a:link, #menu a:visited{
+	margin:0px;
+	padding:4px;
+	border-top:solid 1px #ccc;
+	border-right:solid 1px #033;
+	border-bottom:solid 1px #ccc;
+	border-left:solid 1px #033;
+	display:block;
+	background:#366;
+	color:#fff;
+}
+#menu a:hover{
+	margin:0px;
+	padding:4px;
+	border-top:solid 1px #111;
+	border-right:solid 1px #eee;
+	border-bottom:solid 1px #eee;
+	border-left:solid 1px #111;
+	display:block;
+	background:#033;
+	color:#ccc;
+
+}
+#content{
+	margin:0px 5%;
+	padding:5px 0px 0px 200px;
+	position:relative;
+	border:1px solid #003333;
+	border-top:1px solid #006633;
+	border-bottom:3px solid #006633;
+	text-align:left;
+	background:#ccffcc;
+	color:#003333;
+}
+div.copy{
+	margin:0px 5% 0px 5%;
+	padding:15px 5px 5px 30px;
+	font-size:12px;
+	font-family:"Courier New",Courier,mono;
+	text-align:right;
+	background:#003333;
+	color:#ccffff
+}

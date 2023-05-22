@@ -1,0 +1,166 @@
+<html>
+<head>
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta name="description" content="VB6で作成したミニゲームのソースコードを紹介">
+<meta name="keywords" content="VB,ゲーム,ミニゲーム,VisualBasic,VB,Visual,Basic,ゲーム,プログラム">
+<link rel="stylesheet" href="style.css" type="text/css">
+<title>VB6でミニゲーム作成 -ゲーム作成の土台作り-</title>
+</head>
+<body lang="ja">
+
+<div id="top">
+	<h1><img src="pic/title.bmp" alt="VB6でミニゲーム作成"></h1>
+</div>
+
+<hr>
+
+							<!-- ***** メニュー ***** -->
+<div id="menu">
+	<ul class="menulist1">
+		<li id="index"><a href="../index.html">はじめに</a></li>
+		<li id="start"><a href="start.htm">ゲーム作成の土台作り</a></li>
+		<li id="gamemodule"><a href="gamemodule.htm">ゲーム専用モジュール</a></li>
+		<li id="slide"><a href="slidegame.htm">スベリゲーム</a></li>
+		<li id="block"><a href="block.htm">ブロック崩し</a></li>
+		<li id="reversi"><a href="reversi.htm">リバーシ</a></li>
+		<li id="stg"><a href="stg.htm">シューティング</a></li>
+		<li id="rpg"><a href="rpg.htm">RPG</a></li>
+		<li id="action"><a href="action.htm">アクション</a></li>
+		<li id="javagame"><a href="javagame.htm">Javaゲーム</a></li>
+	</ul>
+	<script type="text/javascript"><!--
+	google_ad_client = "pub-3116106279235219";
+	/* 160x600, 作成済み 08/06/07 */
+	google_ad_slot = "5430967571";
+	google_ad_width = 160;
+	google_ad_height = 600;
+	//-->
+	</script>
+	<script type="text/javascript"
+	src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+	</script>
+</div>
+
+<hr>
+<div id="theme">
+	VB6で作成したミニゲームのソースコードを紹介
+</div>
+							<!-- ***** メインコンテンツ ***** -->
+<div id="content">
+	<h2>ゲーム作成の土台作り</h2>
+	<p>
+		まず始めにVisualBasic6.0を立ち上げ、『標準EXE』を開きます。<br>
+		<br>
+		<img src="pic/newmake.bmp" alt="標準EXE"><br>
+		<br>
+		プロジェクト名を『Game』、フォームのオブジェクト名を『frmMain』に変更します。<br>
+		<br>
+		<img src="pic/gameprj.bmp" alt="ゲームプロジェクト"><br>
+		<br>
+		次に、frmPic（画像格納用フォーム）と、mdlMain（メインプログラム）と、
+		API.bas（<a href="gamemodule.htm">ゲーム専用モジュール</a>）を追加します。<br>
+		<br>
+		<img src="pic/gameprj2.bmp" alt="ゲームプロジェクト"><br>
+		<br>
+		frmMainのBoderStyleを固定（実線）にし、frmMainにピクチャボックスを追加します。<br>
+		<br>
+		<img src="pic/frm1.bmp" alt="フォームにピクチャボックスを追加"><br>
+		<br>
+		ピクチャボックスのオブジェクト名を『picMain』にし、AutoRedrawを『True』にし、ScaleModeを『3-ピクセル』にします。<br>
+		さらに、BorderStyleを『0-なし』にします。BackColorは適当に『黒』にして下さい。<br>
+		これと同じピクチャボックスをfrmPicに貼り付け、そこへゲームで使用する自作の画像をpictureからロードします。<br>
+		<br>
+		プロジェクトの『Game』を右クリックし、プロジェクトのプロパティから、スタートアップの設定をSub Mainにします。<br>
+		<br>
+		<img src="pic/prjset.bmp" alt="スタートアップの設定"><br>
+		<br>
+		これにて大まかな環境設定は終わりです。<br>
+		<br>
+		続きまして、ここからソースコードを入力していきます。<br>
+		<br>
+		まずは『mdlMain』を開き、次のソースコードを入力してください。
+	</p>
+<pre>
+Sub Main()
+
+End Sub
+</pre>
+	<p>
+		先ほどスタートアップの設定により指定した『Sub Main()』からプログラムが始まります。<br>
+		基本的にこの『Sub Main()』にプログラムを記述していけばゲームが完成します。<br>
+		<br>
+		おおまかな処理の流れは次のとおりです。
+	</p>
+	<pre>
+Sub Main()
+    
+    Dim T1 As Long  '始まりの時間を取得用
+    Dim T2 As Long  '終わりの時間を取得用
+    
+    'フォームを表示する
+    frmMain.Show
+    
+    'メインループ
+    Do
+        '始まりの時間を取得する
+        T1 = timeGetTime
+        'ほかの処理も行う
+        DoEvents
+        '背景を描画
+        BackDraw
+        'キャラを描画
+        CharaDraw
+        '敵を描画
+        EnemyDraw
+        'キーの入出力
+        GetKey
+        'メイン画面を更新する
+        frmMain.picMain.Refresh
+        '終わりの時間を取得する
+        T2 = timeGetTime
+        
+        '25ミリ秒以下で処理された場合
+        If T2 - T1 < 25 Then
+            'ウェイトをかける
+            Wait 25 - (T2 - T1)
+        End If
+        
+    Loop
+    
+    End
+    
+End Sub
+</pre>
+	<p>
+		Long型の変数でT1とT2を宣言していますが、これは処理が早すぎる場合ウェイトをかけるためです。<br>
+		最近の高性能なパソコンだと、描画がめちゃめちゃ早く行われるので、それを防ぎます。<br>
+		メインループ部がゲームの処理部分です。『BackDraw』、『CharaDraw』、『EnemyDraw』、『GetKey』は
+		自作ステートメントです。
+		自分好みの名前に変えていただいてかまいません。<br>
+		<br>
+		このように、メインループ部に自作ステートメントを追加していくことにより、ゲームができていきます。
+	</p>
+	<p>
+		<script type="text/javascript"><!--
+		google_ad_client = "pub-3116106279235219";
+		/* メニュー下 */
+		google_ad_slot = "1992334596";
+		google_ad_width = 200;
+		google_ad_height = 90;
+		//-->
+		</script>
+		<script type="text/javascript"
+		src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+		</script>
+	</p>
+	<p>
+		<a href="start.htm#top">▲上へ移動▲</a>
+	</p>
+</div>
+
+<hr>
+
+<div class="copy" lang="en">&copy; copyright nori</div>
+
+</body>
+</html>
