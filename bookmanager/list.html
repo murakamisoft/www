@@ -15,6 +15,10 @@
 	<link href=https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css rel="stylesheet"
 		integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+
 	<style>
 		.bd-placeholder-img {
 			font-size: 1.125rem;
@@ -49,14 +53,289 @@
 	<!-- Begin page content -->
 	<main class="flex-shrink-0">
 		<div class="container">
-			<h1 class="mt-5">about Programing Lab</h1>
-			<p class="lead">本サイトでは、システム開発に関する技術的な記事を記載していきます。</p>
+			<h1 class="mt-5">本を管理するWebアプリ</h1>
+			<p class="lead">SpringBootとMybatisを使用して、本の一覧画面を表示します。</p>
+			<p>以下が画面レイアウトです。</p>
+			<img src="pic/list.png" />
+			<p>以下がbookテーブルの内容です。</p>
+			<img src="pic/booktable.png" />
+			<p>bookテーブルに登録されている本の一覧を、画面に表示するシンプルな構成です。</p>
+			<p>ソースファイルは以下からダウンロードして下さい。</p>
+			<div class="card w-75">
+				<div class="card-body">
+					<h5 class="card-title">GitHub</h5>
+					<p class="card-text"><a
+							href="https://github.com/murakamisoft/bookmanager">https://github.com/murakamisoft/bookmanager</a>
+					</p>
+				</div>
+			</div>
 		</div>
 		<div class="container">
-			<h2>Contents</h2>
-			<dl class="row">
+			<h2>Mysqlのインストール</h2>
+			<p>
+				データベースは、MySQLを使用します。<br>
+				インストール方法については、ネット上に分かりやすいものが多数ありますので、<br>
+				そちらを参考にしてください。
+			</p>
+			<div class="card w-75">
+				<div class="card-body">
+					<h5 class="card-title">mysqlのインストール方法</h5>
+					<p class="card-text"><a
+							href="https://www.google.com/search?q=mysql+%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB&rlz=1C1PWSB_jaJP979JP979&ei=90VsZO6_FaeA2roP3KGPsAY&ved=0ahUKEwiul-b00Yr_AhUngFYBHdzQA2YQ4dUDCA8&uact=5&oq=mysql+%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB&gs_lcp=Cgxnd3Mtd2l6LXNlcnAQAzIFCAAQgAQyBwgAEIoFEEMyBQgAEIAEMgUIABCABDIHCAAQigUQQzIFCAAQgAQyBQgAEIAEMgcIABCKBRBDMgUIABCABDIFCAAQgAQ6CggAEEcQ1gQQsAM6BggAEAgQHkoECEEYAFCDCFieEGCQEmgCcAF4AIAB7wGIAbIFkgEFMC4zLjGYAQCgAQHIAQrAAQE&sclient=gws-wiz-serp">mysqlのインストール方法を調べる</a>
+					</p>
+				</div>
+			</div>
+			<p>
+				<br>MySqlとアプリの接続情報は以下に記載しています。
+			</p>
 
-			</dl>
+			<p><a
+					href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/resources/application.properties">application.properties</a>
+			<pre>
+<code>spring.datasource.url=jdbc:mysql://localhost:3306/bookmanager
+spring.datasource.username=bookmanager
+spring.datasource.password=pass
+mybatis.configuration.map-underscore-to-camel-case=true
+</code>
+</pre>
+			</p>
+			<p>
+				テーブル作成クエリとデータ登録クエリは以下に用意しています。</p>
+
+			<p><a href="https://github.com/murakamisoft/bookmanager/blob/master/create_book.sql">create_book.sql</a>
+			<pre>
+<code>-- 本
+--* BackupToTempTable
+drop table book cascade;
+
+--* RestoreFromTempTable
+create table book (
+	book_id INT not null AUTO_INCREMENT comment '本ID'
+	, book_name VARCHAR(512) comment '本名称'
+	, created_date DATE comment '作成日'
+	, created_user VARCHAR(256) comment '作成者'
+	, updated_date DATE comment '更新日'
+	, updated_user VARCHAR(256) comment '更新者'
+	, constraint book_PKC primary key (book_id)
+) comment '本' ;
+</code>
+</pre>
+			</p>
+			<p><a href="https://github.com/murakamisoft/bookmanager/blob/master/insert_book.sql">insert_book.sql</a>
+			<pre>
+<code>﻿insert into bookmanager.book(book_name,created_date,created_user,updated_date,updated_user) values 
+    ('abcの本',now(),'test',null,null)
+  , ('プログラミング本',now(),'test',null,null)
+  , ('広辞苑',now(),'test',null,null)
+  , ('おもしろい小説',now(),'test',null,null);
+</code>
+</pre>
+			本の名前は、なんでもOKです。好みのものに変えてください。レコード件数も何件でもOKです。</p>
+		</div>
+		<div class="container">
+			<h2>ソースについて</h2>
+			<p>
+				SpringBoot部分のControllerクラスです。
+			</p>
+			<p><a
+					href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/java/com/bookmanager/book/controller/BookController.java">BookController.java</a>
+			<pre>
+<code>package com.bookmanager.book.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.bookmanager.book.entity.Book;
+import com.bookmanager.book.service.BookService;
+
+@Controller
+@RequestMapping("/book")
+public class BookController {
+
+	@Autowired
+	BookService BookService;
+	
+	@GetMapping
+	private String list(@ModelAttribute User user, Model model) {
+		List<Book> bookList = BookService.search();
+		model.addAttribute("bookList", bookList);
+		return "book/list";
+	}
+	
+
+}
+</code>
+</pre>
+			</p>
+
+			<p>
+				サービスクラスです。
+			</p>
+			<p><a
+					href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/java/com/bookmanager/book/service/BookService.java">BookService.java</a>
+			<pre>
+<code>package com.bookmanager.book.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.bookmanager.book.entity.Book;
+import com.bookmanager.book.repository.BookMapper;
+
+@Service
+public class BookService {
+
+	@Autowired
+	BookMapper bookMapper;
+
+	public List<Book> search() {
+		return bookMapper.search();
+	}
+
+}
+</code>
+</pre>
+			</p>
+
+			<p>
+				MySQLと連携を行う部分のリポジトリクラスです。
+			</p>
+			<p><a
+					href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/java/com/bookmanager/book/repository/BookMapper.java">BookMapper.java</a>
+			<pre>
+<code>package com.bookmanager.book.repository;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import com.bookmanager.book.entity.Book;
+
+@Mapper
+public interface BookMapper {
+
+	List<Book> search();
+	
+}
+</code>
+</pre>
+			</p>
+
+			<p>
+				SQLクエリ発行部分のXMLファイルです。
+			</p>
+			<p><a
+					href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/resources/com/bookmanager/book/repository/BookMapper.xml">BookMapper.xml</a>
+			<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;!DOCTYPE mapper
+		PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
+		&quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
+&lt;mapper namespace=&quot;com.bookmanager.book.repository.BookMapper&quot;&gt;
+	&lt;select id=&quot;search&quot; resultType=&quot;com.bookmanager.book.entity.Book&quot;&gt;
+		SELECT * FROM book
+		order by book_id
+	&lt;/select&gt;
+&lt;/mapper&gt;
+</code>
+</pre>
+			</p>
+
+			<p>
+				本のエンティティクラスです。
+			</p>
+			<p><a
+					href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/java/com/bookmanager/book/entity/Book.java">Book.java</a>
+			<pre>
+<code>package com.bookmanager.book.entity;
+
+import lombok.Data;
+
+@Data
+public class Book {
+	private Integer bookId;
+	private String bookName;
+}
+</code>
+</pre>
+			</p>
+
+			<p>
+				画面（フロント）側の一覧画面ソースです。
+			</p>
+			<p><a
+					href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/resources/templates/book/list.html">list.html</a>
+			<pre>
+<code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ja&quot;&gt;
+
+&lt;head&gt;
+	&lt;meta charset=&quot;utf-8&quot;&gt;
+	&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+	&lt;title&gt;本の一覧&lt;/title&gt;
+	&lt;link href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;
+	integrity=&quot;sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC&quot; crossorigin=&quot;anonymous&quot;&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+	&lt;div class=&quot;container&quot;&gt;
+	&lt;h1&gt;本の一覧&lt;/h1&gt;
+	&lt;script src=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js&quot;
+		integrity=&quot;sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM&quot;
+		crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;
+
+
+	&lt;div th:text=&quot;${deleteError}&quot;&gt;&lt;/div&gt;
+	&lt;div th:if=&quot;${bookList}&quot;&gt;
+		&lt;div th:if=&quot;${bookList.size() == 0}&quot;&gt;登録している本はありません。&lt;/div&gt;
+		&lt;div th:if=&quot;${bookList.size() &gt; 0}&quot;&gt;
+		&lt;table class=&quot;table table-striped&quot;&gt;
+			&lt;thead class=&quot;table-dark&quot;&gt;
+			&lt;tr&gt;
+				&lt;th scope=&quot;col&quot;&gt;ID&lt;/th&gt;
+				&lt;th scope=&quot;col&quot;&gt;書籍名&lt;/th&gt;
+			&lt;/tr&gt;
+			&lt;/thead&gt;
+			&lt;tbody&gt;
+			&lt;tr th:each=&quot;book : ${bookList}&quot; th:object=&quot;${book}&quot;&gt;
+				&lt;td scope=&quot;row&quot; th:text=&quot;${book.bookId}&quot;&gt;&lt;/td&gt;
+				&lt;td scope=&quot;row&quot; th:text=&quot;${book.bookName}&quot;&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;/tbody&gt;
+		&lt;/table&gt;
+		&lt;/div&gt;
+	&lt;/div&gt;
+	&lt;/div&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;
+
+&lt;/body&gt;
+
+&lt;/html&gt;
+</code>
+</pre>
+			</p>
+		</div>
+		<div class="container">
+			<h2>起動方法について</h2>
+			<p><a
+					href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/java/com/bookmanager/book/BookmanagerApplication.java">BookmanagerApplication.java</a>
+				を実行し、SpringBootを起動します。<br>
+				<a
+					href="http://localhost:8080/book">http://localhost:8080/book</a>にアクセスし、Bookテーブルに登録されている本の一覧が、一覧画面に表示されることを確認します。
+			</p>
+			<img src="pic/list.png" />
+			<p>以上です。いかがだったでしょうか。起動しましたでしょうか。</p>
+			<p>Bookテーブルの内容を変えて、それが画面に反映されていることを確認してみてください。</p>
 		</div>
 	</main>
 
@@ -69,7 +348,8 @@
 	<script src="/docs/5.0/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
 		crossorigin="anonymous"></script>
-
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+		crossorigin="anonymous"></script>
 </body>
 
 </html>
