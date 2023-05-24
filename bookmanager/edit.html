@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="作ったアプリのソースコードを紹介">
+	<meta name="keywords" content="プログラム,Java,Spring,SpringBoot,springframework,Mybatis,Webアプリ">
+	<title>Programing Lab</title>
+
+	<link rel="canonical" href="https://getbootstrap.jp/docs/5.0/examples/sticky-footer-navbar/">
+
+	<!-- Bootstrap core CSS -->
+	<link href=https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css rel="stylesheet"
+		integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+
+	<style>
+		.bd-placeholder-img {
+			font-size: 1.125rem;
+			text-anchor: middle;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			user-select: none;
+		}
+
+		@media (min-width: 768px) {
+			.bd-placeholder-img-lg {
+				font-size: 3.5rem;
+			}
+		}
+	</style>
+
+	<!-- Custom styles for this template -->
+	<link href="../sticky-footer-navbar.css" rel="stylesheet">
+</head>
+
+<body class="d-flex flex-column h-100">
+
+	<header>
+		<!-- Fixed navbar -->
+		<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+			<div class="container-fluid">
+				<a class="navbar-brand" href="http://vbminigame.sakura.ne.jp">Programing Lab</a>
+			</div>
+		</nav>
+	</header>
+
+	<!-- Begin page content -->
+	<main class="flex-shrink-0">
+		<div class="container">
+			<h1 class="mt-5">本を管理するWebアプリに、本の編集機能を実装</h1>
+			<p class="lead">本の一覧画面から、本の編集機能を実装します。</p>
+			<p>以下が一覧画面のレイアウトです。編集ボタンを押します。</p>
+			<img src="pic/edit_list.png" />
+			<p>以下が編集画面のレイアウトです。本の名前を編集します。</p>
+			<img src="pic/edit_name.png" />
+			<p>一覧画面に、編集した本の名前が表示されています。</p>
+			<img src="pic/edit_success.png" />
+			<p>ソースファイルは以下からダウンロードして下さい。</p>
+			<div class="card w-75">
+				<div class="card-body">
+					<h5 class="card-title">GitHub</h5>
+					<p class="card-text"><a href="https://github.com/murakamisoft/bookmanager" target="_blank"
+							rel="noopener noreferrer">https://github.com/murakamisoft/bookmanager</a>
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<h2>ソースについて</h2>
+			<p>
+				Controllerクラスの編集部分です。
+			</p>
+			<p><a href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/java/com/bookmanager/book/controller/BookController.java"
+					target="_blank" rel="noopener noreferrer">BookController.java</a>
+			<pre>
+<code>/**
+* 編集画面表示
+* 
+* @param model
+* @return
+*/
+@GetMapping("/edit/{bookId}")
+public String displayEdit(@PathVariable Integer bookId, Model model) {
+	Book book = bookService.findByBookId(bookId);
+	model.addAttribute("bookRequest", book);
+	return "book/edit";
+}
+
+/**
+* 編集画面の更新処理
+*/
+@PutMapping("/edit")
+public String edit(@ModelAttribute @Valid BookRequest bookRequest, BindingResult bindingResult) {
+	if (bindingResult.hasErrors()) {
+		return "book/edit";
+	}
+	bookService.update(bookRequest.getBookId(), bookRequest.getBookName());
+	return "redirect:/book";
+}
+</code>
+</pre>
+			</p>
+
+			<p>
+				サービスクラスの編集部分です。
+			</p>
+			<p><a href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/java/com/bookmanager/book/service/BookService.java"
+					target="_blank" rel="noopener noreferrer">BookService.java</a>
+			<pre>
+<code>/**
+* １件取得
+* 
+* @param bookId
+* @return
+*/
+public Book findByBookId(int bookId) {
+	return bookMapper.findByBookId(bookId);
+}
+
+/**
+* 更新
+* 
+* @param bookId
+* @param bookName
+*/
+public void update(Integer bookId, String bookName) {
+	bookMapper.update(bookId, bookName);
+}
+</code>
+</pre>
+			</p>
+
+			<p>
+				リポジトリクラスの編集部分です。
+			</p>
+			<p><a href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/java/com/bookmanager/book/repository/BookMapper.java"
+					target="_blank" rel="noopener noreferrer">BookMapper.java</a>
+			<pre>
+<code>void update(@Param("bookId") Integer bookId, @Param("bookName") String bookName);
+</code>
+</pre>
+			</p>
+
+			<p>
+				SQLクエリ発行部分のXMLファイルです。
+			</p>
+			<p><a href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/resources/com/bookmanager/book/repository/BookMapper.xml"
+					target="_blank" rel="noopener noreferrer">BookMapper.xml</a>
+			<pre>
+<code class="xml">&lt;update id=&quot;update&quot;&gt;
+	UPDATE book
+	SET
+	book_name = #{bookName}
+	, updated_date = now()
+	, updated_user = &#039;test&#039;
+	WHERE book_id = #{bookId}
+&lt;/update&gt;
+</code>
+</pre>
+			</p>
+
+			<p>
+				画面（フロント）側の編集画面ソースです。
+			</p>
+			<p><a href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/resources/templates/book/edit.html"
+					target="_blank" rel="noopener noreferrer">edit.html</a>
+			<pre>
+<code>&lt;!DOCTYPE html&gt;
+	&lt;html lang=&quot;ja&quot;&gt;
+	
+	&lt;head&gt;
+	  &lt;meta charset=&quot;utf-8&quot;&gt;
+	  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+	  &lt;title&gt;本の編集&lt;/title&gt;
+	  &lt;link href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;
+		integrity=&quot;sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC&quot; crossorigin=&quot;anonymous&quot;&gt;
+	  &lt;script src=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js&quot;
+		integrity=&quot;sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM&quot;
+		crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;
+	&lt;/head&gt;
+	
+	&lt;body&gt;
+	  &lt;div class=&quot;container&quot;&gt;
+		&lt;h1&gt;本の編集&lt;/h1&gt;
+		&lt;div th:if=&quot;${validationError}&quot; th:each=&quot;error : ${validationError}&quot;&gt;
+		  &lt;label class=&quot;text-danger&quot; th:text=&quot;${error}&quot;&gt;&lt;/label&gt;
+		&lt;/div&gt;
+		&lt;form th:action=&quot;@{/book/edit}&quot; th:object=&quot;${bookRequest}&quot; th:method=&quot;put&quot;&gt;
+		  &lt;div class=&quot;form-group&quot;&gt;
+			&lt;label&gt;ID：&lt;/label&gt;
+			&lt;input type=&quot;text&quot; th:field=&quot;*{bookId}&quot; class=&quot;form-control&quot; readonly=&quot;readonly&quot;&gt;
+		  &lt;/div&gt;
+		  &lt;div class=&quot;form-group&quot;&gt;
+			&lt;label&gt;名前：&lt;span class=&quot;text-danger&quot;&gt;※&lt;/span&gt;&lt;/label&gt;
+			&lt;input type=&quot;text&quot; th:field=&quot;*{bookName}&quot; class=&quot;form-control&quot;&gt;
+		  &lt;/div&gt;
+		  &lt;br /&gt;
+		  &lt;div class=&quot;text-left&quot;&gt;
+			&lt;a href=&quot;/book&quot; class=&quot;btn btn-secondary&quot;&gt;キャンセル&lt;/a&gt;
+			&lt;input type=&quot;submit&quot; value=&quot;更新&quot; class=&quot;btn btn-primary&quot;&gt;
+		  &lt;/div&gt;
+		&lt;/form&gt;
+	  &lt;/div&gt;
+	&lt;/body&gt;
+	
+	&lt;/html&gt;
+</code>
+</pre>
+			</p>
+		</div>
+		<div class="container">
+			<h2>起動方法について</h2>
+			<p><a href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/java/com/bookmanager/book/BookmanagerApplication.java"
+					target="_blank" rel="noopener noreferrer">BookmanagerApplication.java</a>
+				を実行し、SpringBootを起動します。<br>
+				<a href="http://localhost:8080/book" target="_blank"
+					rel="noopener noreferrer">http://localhost:8080/book</a>にアクセスし、一覧画面から編集画面に遷移し、本が編集できることを確認します。
+			</p>
+			<img src="pic/edit_list.png" />
+			<img src="pic/edit_name.png" />
+			<img src="pic/edit_success.png" />
+			<p>以上です。いかがだったでしょうか。本が編集できましたでしょうか。</p>
+			<p>色々な内容の本を編集してみてください。</p>
+		</div>
+
+		<div class="container">
+			<h2>お問い合わせ</h2>
+			お問い合わせは<a href="/send/index.html" target="_blank" rel="noopener noreferrer">こちら</a>からお願いします。
+		</div>
+		<div style="margin-bottom: 300px;"></div>
+		
+	</main>
+
+	<footer class="footer mt-auto py-3 bg-light">
+		<div class="container">
+			<span class="text-muted">Copyright (C) nori</span>
+		</div>
+	</footer>
+
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+		crossorigin="anonymous"></script>
+</body>
+
+</html>
