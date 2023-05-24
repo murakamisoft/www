@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="作ったアプリのソースコードを紹介">
+	<meta name="keywords" content="プログラム,Java,Spring,SpringBoot,springframework,Mybatis,Webアプリ">
+	<title>Programing Lab</title>
+
+	<link rel="canonical" href="https://getbootstrap.jp/docs/5.0/examples/sticky-footer-navbar/">
+
+	<!-- Bootstrap core CSS -->
+	<link href=https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css rel="stylesheet"
+		integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+
+	<style>
+		.bd-placeholder-img {
+			font-size: 1.125rem;
+			text-anchor: middle;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			user-select: none;
+		}
+
+		@media (min-width: 768px) {
+			.bd-placeholder-img-lg {
+				font-size: 3.5rem;
+			}
+		}
+	</style>
+
+	<!-- Custom styles for this template -->
+	<link href="../sticky-footer-navbar.css" rel="stylesheet">
+</head>
+
+<body class="d-flex flex-column h-100">
+
+	<header>
+		<!-- Fixed navbar -->
+		<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+			<div class="container-fluid">
+				<a class="navbar-brand" href="http://vbminigame.sakura.ne.jp">Programing Lab</a>
+			</div>
+		</nav>
+	</header>
+
+	<!-- Begin page content -->
+	<main class="flex-shrink-0">
+		<div class="container">
+			<h1 class="mt-5">本を管理するWebアプリに、本の追加機能を実装</h1>
+			<p class="lead">本の一覧画面から、本の追加機能を実装します。</p>
+			<p>以下が一覧画面のレイアウトです。追加ボタンを押します。</p>
+			<img src="pic/add_list.png" />
+			<p>以下が追加画面のレイアウトです。空のまま登録ボタンを押します。</p>
+			<img src="pic/add_book.png" />
+			<p>入力チェックエラーの場合</p>
+			<img src="pic/add_book_err.png" />
+			<p>本の名前を入力し、登録ボタンを押します。</p>
+			<img src="pic/add_book_name.png" />
+			<p>一覧画面に、追加した本の名前が表示されています。</p>
+			<img src="pic/add_book_success.png" />
+			<p>bookテーブルに登録されている本の一覧を、画面に表示するシンプルな構成です。</p>
+			<p>ソースファイルは以下からダウンロードして下さい。</p>
+			<div class="card w-75">
+				<div class="card-body">
+					<h5 class="card-title">GitHub</h5>
+					<p class="card-text"><a href="https://github.com/murakamisoft/bookmanager" target="_blank"
+							rel="noopener noreferrer">https://github.com/murakamisoft/bookmanager</a>
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<h2>ソースについて</h2>
+			<p>
+				Controllerクラスの追加部分です。
+			</p>
+			<p><a href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/java/com/bookmanager/book/controller/BookController.java"
+					target="_blank" rel="noopener noreferrer">BookController.java</a>
+			<pre>
+<code>/**
+* 追加画面表示
+* 
+* @param model
+* @return
+*/
+@GetMapping("/add")
+public String displayAdd(Model model) {
+	model.addAttribute("bookRequest", new BookRequest());
+	return "book/add";
+}
+
+/**
+* 追加
+* 
+* @param model
+* @return
+*/
+@PostMapping
+public String add(@Validated @ModelAttribute BookRequest bookRequest, BindingResult result, Model model) {
+	if (result.hasErrors()) {
+		// 入力チェックエラーの場合
+		List<String> errorList = new ArrayList<String>();
+		for (ObjectError error : result.getAllErrors()) {
+			errorList.add(error.getDefaultMessage());
+		}
+		model.addAttribute("validationError", errorList);
+		return "book/add";
+	}
+	// 本の追加
+	bookService.add(bookRequest.getBookName());
+	return "redirect:/book";
+}
+</code>
+</pre>
+			</p>
+
+			<p>
+				サービスクラスの追加部分です。
+			</p>
+			<p><a href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/java/com/bookmanager/book/service/BookService.java"
+					target="_blank" rel="noopener noreferrer">BookService.java</a>
+			<pre>
+<code>/**
+* 追加
+* @param bookName
+*/
+public void add(String bookName) {
+	bookMapper.save(bookName);
+}
+</code>
+</pre>
+			</p>
+
+			<p>
+				リポジトリクラスの追加部分です。
+			</p>
+			<p><a href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/java/com/bookmanager/book/repository/BookMapper.java"
+					target="_blank" rel="noopener noreferrer">BookMapper.java</a>
+			<pre>
+<code>void save(String bookName);
+</code>
+</pre>
+			</p>
+
+			<p>
+				SQLクエリ発行部分のXMLファイルです。
+			</p>
+			<p><a href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/resources/com/bookmanager/book/repository/BookMapper.xml"
+					target="_blank" rel="noopener noreferrer">BookMapper.xml</a>
+			<pre>
+<code class="xml">&lt;insert id=&quot;save&quot;&gt;
+	insert into Book (book_name, created_date, created_user, updated_date, updated_user)
+	values (#{bookName}, now(), &#039;test&#039;, null, null)
+&lt;/insert&gt;
+</code>
+</pre>
+			</p>
+
+			<p>
+				追加する本のリクエストクラスです。
+			</p>
+			<p><a href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/java/com/bookmanager/book/dto/BookRequest.java"
+					target="_blank" rel="noopener noreferrer">BookRequest.java</a>
+			<pre>
+<code>package com.bookmanager.book.dto;
+
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
+
+/**
+	* 本のリクエスト
+	*/
+@Data
+public class BookRequest {
+
+	/**
+		* 名前
+		*/
+	@NotEmpty(message = "名前を入力してください")
+	@Size(max = 512, message = "名前は512文字以内で入力してください")
+	private String bookName;
+
+}
+</code>
+</pre>
+			</p>
+
+			<p>
+				画面（フロント）側の追加画面ソースです。
+			</p>
+			<p><a href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/resources/templates/book/add.html"
+					target="_blank" rel="noopener noreferrer">add.html</a>
+			<pre>
+<code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ja&quot;&gt;
+
+&lt;head&gt;
+	&lt;meta charset=&quot;utf-8&quot;&gt;
+	&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+	&lt;title&gt;本の追加&lt;/title&gt;
+	&lt;link href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;
+	integrity=&quot;sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC&quot; crossorigin=&quot;anonymous&quot;&gt;
+	&lt;script src=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js&quot;
+	integrity=&quot;sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM&quot;
+	crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+	&lt;div class=&quot;container&quot;&gt;
+	&lt;h1&gt;本の追加&lt;/h1&gt;
+	&lt;div th:if=&quot;${validationError}&quot; th:each=&quot;error : ${validationError}&quot;&gt;
+		&lt;label class=&quot;text-danger&quot; th:text=&quot;${error}&quot;&gt;&lt;/label&gt;
+	&lt;/div&gt;
+	&lt;form th:action=&quot;@{/book}&quot; th:object=&quot;${bookRequest}&quot; th:method=&quot;post&quot;&gt;
+		&lt;div class=&quot;form-group&quot;&gt;
+		&lt;label&gt;名前：&lt;span class=&quot;text-danger&quot;&gt;※&lt;/span&gt;&lt;/label&gt;
+		&lt;input type=&quot;text&quot; th:field=&quot;*{bookName}&quot; class=&quot;form-control&quot;&gt;
+		&lt;/div&gt;
+		&lt;br /&gt;
+		&lt;div class=&quot;text-left&quot;&gt;
+		&lt;a href=&quot;/book&quot; class=&quot;btn btn-secondary&quot;&gt;キャンセル&lt;/a&gt;
+		&lt;input type=&quot;submit&quot; value=&quot;登録&quot; class=&quot;btn btn-primary&quot;&gt;
+		&lt;/div&gt;
+	&lt;/form&gt;
+	&lt;/div&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;
+</code>
+</pre>
+			</p>
+		</div>
+		<div class="container">
+			<h2>起動方法について</h2>
+			<p><a href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/java/com/bookmanager/book/BookmanagerApplication.java"
+					target="_blank" rel="noopener noreferrer">BookmanagerApplication.java</a>
+				を実行し、SpringBootを起動します。<br>
+				<a href="http://localhost:8080/book" target="_blank"
+					rel="noopener noreferrer">http://localhost:8080/book</a>にアクセスし、一覧画面から追加画面に遷移し、本が追加できることを確認します。
+			</p>
+			<img src="pic/add_list.png" />
+			<img src="pic/add_book_name.png" />
+			<img src="pic/add_book_success.png" />
+			<p>以上です。いかがだったでしょうか。本が追加できましたでしょうか。</p>
+			<p>色々な内容の本を追加してみてください。</p>
+		</div>
+	</main>
+
+	<footer class="footer mt-auto py-3 bg-light">
+		<div class="container">
+			<span class="text-muted">Copyright (C) nori</span>
+		</div>
+	</footer>
+
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+		crossorigin="anonymous"></script>
+</body>
+
+</html>
