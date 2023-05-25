@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="作ったアプリのソースコードを紹介">
+	<meta name="keywords" content="プログラム,Java,SpringSecurity,Spring,SpringBoot,springframework,Mybatis,Webアプリ">
+	<title>Programing Lab</title>
+
+	<link rel="canonical" href="https://getbootstrap.jp/docs/5.0/examples/sticky-footer-navbar/">
+
+	<!-- Bootstrap core CSS -->
+	<link href=https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css rel="stylesheet"
+		integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+
+	<style>
+		.bd-placeholder-img {
+			font-size: 1.125rem;
+			text-anchor: middle;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			user-select: none;
+		}
+
+		@media (min-width: 768px) {
+			.bd-placeholder-img-lg {
+				font-size: 3.5rem;
+			}
+		}
+	</style>
+
+	<!-- Custom styles for this template -->
+	<link href="../sticky-footer-navbar.css" rel="stylesheet">
+</head>
+
+<body class="d-flex flex-column h-100">
+
+	<header>
+		<!-- Fixed navbar -->
+		<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+			<div class="container-fluid">
+				<a class="navbar-brand" href="http://vbminigame.sakura.ne.jp">Programing Lab</a>
+			</div>
+		</nav>
+	</header>
+
+	<!-- Begin page content -->
+	<main class="flex-shrink-0">
+		<div class="container">
+			<h1 class="mt-5">本を管理するWebアプリに、SpringSecurityを使用したログイン認証を実装</h1>
+			<p class="lead">SpringSecurityを使用したログイン画面を実装します。DB認証です。</p>
+
+			<p>以下がログイン画面のレイアウトです。間違ったIDでログインします。</p>
+			<img src="pic/login/login.png" />
+			<p>ログイン認証失敗として、エラーメッセージを表示します。</p>
+			<img src="pic/login/login_ng.png" />
+			<p>ユーザ名：「useradmin」、パスワード：[admin]を入力し、ログイン認証成功すると、本の一覧画面に遷移します。
+				ヘッダ部分にユーザ名を表示しています。ログアウトボタンを押します。</p>
+			<img src="pic/login/login_list.png" />
+			<p>ログアウトすると、メッセージを表示し、ログイン画面に戻ります。</p>
+			<img src="pic/login/logout.png" />
+
+			<p>ソースファイルは以下からダウンロードして下さい。</p>
+			<div class="card w-75">
+				<div class="card-body">
+					<h5 class="card-title">GitHub</h5>
+					<p class="card-text"><a href="https://github.com/murakamisoft/bookmanager" target="_blank"
+							rel="noopener noreferrer">https://github.com/murakamisoft/bookmanager</a>
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<h2>ソースについて</h2>
+			<p>
+				Controllerクラスのログイン部分です。
+			</p>
+			<p><a href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/java/com/bookmanager/login/controller/LoginController.java"
+					target="_blank" rel="noopener noreferrer">LoginController.java</a>
+			<pre>
+<code>package com.bookmanager.login.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@RequestMapping("")
+public class LoginController {
+
+	@GetMapping("/")
+	public String index() {
+		return "login";
+	}
+
+	// ログイン画面への遷移
+	@GetMapping("/login")
+	String getLogin() {
+		return "login";
+	}
+
+}
+</code>
+</pre>
+			</p>
+
+			<p>
+				SpringSecurityの、LoginUserDetailsクラスです。
+			</p>
+			<p><a href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/java/com/bookmanager/security/LoginUserDetails.java"
+					target="_blank" rel="noopener noreferrer">LoginUserDetails.java</a>
+			<pre>
+<code>package com.bookmanager.security;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.bookmanager.book.entity.User;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+@Data
+@EqualsAndHashCode(callSuper = false)
+public class LoginUserDetails implements UserDetails {
+
+	private final User user;
+	private Collection<? extends GrantedAuthority> authorities;
+
+	public LoginUserDetails(User user) {
+		this.user = user;
+		List<String> roleList = new ArrayList<>();
+		roleList.add("ROLE_ADMIN");
+		this.authorities = roleList
+				.stream()
+				.map(role -> new SimpleGrantedAuthority(role))
+				.toList();
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return authorities;
+	}
+
+	@Override
+	public String getPassword() {
+		return user.getPassword();
+	}
+
+	@Override
+	public String getUsername() {
+		return user.getUserName();
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
+
+}
+</code>
+</pre>
+			</p>
+
+			<p>
+				LoginUserDetailsServiceクラスです。DB認証のロジック部分です。<br>
+				画面入力値とDB設定値を比較し、OKの場合ログイン認証成功とします。
+			</p>
+			<p><a href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/java/com/bookmanager/security/LoginUserDetailsService.java"
+					target="_blank" rel="noopener noreferrer">LoginUserDetailsService.java</a>
+			<pre>
+<code>package com.bookmanager.security;
+
+import java.util.Objects;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+import com.bookmanager.book.entity.User;
+import com.bookmanager.book.repository.UserMapper;
+
+/***
+	* ログインイン時に認証ユーザーをテーブルから情報を取得するクラス
+	*/
+@Service
+public class LoginUserDetailsService implements UserDetailsService {
+
+	@Autowired
+	UserMapper userMapper;
+
+	@Override
+	public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
+		User user = userMapper.selectByName(name);
+
+		// 該当レコードが取得できなかった場合はエラーにする
+		if (Objects.isNull(user)) {
+			throw new UsernameNotFoundException("Wrong email or password");
+		}
+
+		return new LoginUserDetails(user);
+	}
+}
+</code>
+</pre>
+			</p>
+
+			<p>
+				SpringSecurityの設定部分を担う、WebSecurityConfigクラスです。<br>
+				独自のログイン画面を使用し、ログイン失敗時や、ログアウト時のURL、その他ログインログアウト周りの認証の設定をします。
+			</p>
+			<p><a href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/java/com/bookmanager/config/WebSecurityConfig.java"
+					target="_blank" rel="noopener noreferrer">BookMapper.xml</a>
+			<pre>
+<code>package com.bookmanager.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+
+@Configuration
+@EnableWebSecurity
+@EnableMethodSecurity
+public class WebSecurityConfig {
+
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		http
+				.authorizeHttpRequests((requests) -> requests
+						.anyRequest().authenticated());
+		http.formLogin(login -> login
+				.loginPage("/login")
+				.loginProcessingUrl("/login")
+				.defaultSuccessUrl("/book", true)
+				.failureUrl("/login?error")
+				.permitAll())
+				.logout(logout -> logout
+						.logoutSuccessUrl("/login?logout")
+						.permitAll());
+
+		return http.build();
+	}
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+}
+</code>
+</pre>
+			</p>
+
+			<p>
+				ログイン画面ソースです。
+			</p>
+			<p><a href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/resources/templates/login.html"
+					target="_blank" rel="noopener noreferrer">login.html</a>
+			<pre>
+<code>&lt;!DOCTYPE html&gt;
+
+&lt;/html&gt;
+
+&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot; xmlns:th=&quot;https://www.thymeleaf.org&quot;
+	xmlns:sec=&quot;https://www.thymeleaf.org/thymeleaf-extras-springsecurity3&quot;&gt;
+
+&lt;head&gt;
+	&lt;meta charset=&quot;UTF-8&quot; /&gt;
+	&lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot; /&gt;
+	&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; /&gt;
+	&lt;title&gt;ログイン&lt;/title&gt;
+	&lt;link href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+	&lt;div class=&quot;vh-100 d-flex justify-content-center align-items-center&quot;&gt;
+		&lt;div class=&quot;container&quot;&gt;
+			&lt;div class=&quot;row d-flex justify-content-center&quot;&gt;
+				&lt;div class=&quot;col-12 col-md-8 col-lg-6&quot;&gt;
+					&lt;div class=&quot;card bg-white&quot;&gt;
+						&lt;div class=&quot;card-body p-5&quot;&gt;
+							&lt;form class=&quot;mb-3 mt-md-4&quot; method=&quot;post&quot; th:action=&quot;@{/login}&quot;&gt;
+								&lt;h2 class=&quot;fw-bold mb-2 text-uppercase &quot;&gt;BookManager&lt;/h2&gt;
+								&lt;p class=&quot; mb-3&quot;&gt;ログイン&lt;/p&gt;
+								&lt;div th:if=&quot;${param.error}&quot;&gt;
+									&lt;div class=&quot;alert alert-danger&quot; role=&quot;alert&quot;&gt;入力情報が無効です。&lt;/div&gt;
+								&lt;/div&gt;
+								&lt;div th:if=&quot;${param.logout}&quot;&gt;
+									&lt;div class=&quot;alert alert-success&quot; role=&quot;alert&quot;&gt;ログアウトしました。&lt;/div&gt;
+								&lt;/div&gt;
+								&lt;div class=&quot;mb-3&quot;&gt;
+									&lt;label for=&quot;email&quot; class=&quot;form-label &quot;&gt;ユーザ名&lt;/label&gt;
+									&lt;input type=&quot;text&quot; name=&quot;username&quot; class=&quot;form-control&quot; id=&quot;username&quot;
+										placeholder=&quot;username&quot;&gt;
+								&lt;/div&gt;
+								&lt;div class=&quot;mb-3&quot;&gt;
+									&lt;label for=&quot;password&quot; class=&quot;form-label &quot;&gt;パスワード&lt;/label&gt;
+									&lt;input type=&quot;password&quot; name=&quot;password&quot; class=&quot;form-control&quot; id=&quot;password&quot;
+										placeholder=&quot;*******&quot;&gt;
+								&lt;/div&gt;
+								&lt;div class=&quot;d-grid&quot;&gt;
+									&lt;button class=&quot;btn btn-primary&quot; type=&quot;submit&quot;&gt;ログイン&lt;/button&gt;
+								&lt;/div&gt;
+							&lt;/form&gt;
+						&lt;/div&gt;
+					&lt;/div&gt;
+				&lt;/div&gt;
+			&lt;/div&gt;
+		&lt;/div&gt;
+	&lt;/div&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;
+</code>
+</pre>
+			</p>
+
+			<p>
+				ユーザテーブルに、ユーザの情報を登録します。パスワードは暗号化しており、「admin」です。
+			</p>
+			<p><a href="https://github.com/murakamisoft/bookmanager/blob/master/create_table.sql"
+				target="_blank" rel="noopener noreferrer">create_table.sql</a><br>
+				<a href="https://github.com/murakamisoft/bookmanager/blob/master/insert_data.sql"
+					target="_blank" rel="noopener noreferrer">insert_data.sql</a>
+			<pre>
+<code>-- ユーザ
+drop table user cascade;
+
+create table user (
+	user_id INT AUTO_INCREMENT not null comment 'ユーザID'
+	, user_name VARCHAR(256) comment 'ユーザ名'
+	, password VARCHAR(256) comment 'パスワード'
+	, created_date DATETIME comment '作成日'
+	, created_user VARCHAR(256) comment '作成者'
+	, updated_date DATETIME comment '更新日'
+	, updated_user VARCHAR(256) comment '更新者'
+	, constraint user_PKC primary key (user_id)
+) comment 'ユーザ' ;
+
+delete from user;
+
+insert 
+into bookmanager.`user`( 
+	user_name
+	, password
+	, created_date
+	, created_user
+	, updated_date
+	, updated_user
+) 
+values ( 
+	'useradmin'
+	, '$2a$10$SJTWvNl16fCU7DaXtWC0DeN/A8IOakpCkWWNZ/FKRV2CHvWElQwMS'
+	, now()
+	, 'useradmin'
+	, now()
+	, 'useradmin'
+);
+	
+</code>
+</pre>
+			</p>
+
+		</div>
+		<div class="container">
+			<h2>起動方法について</h2>
+			<p><a href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/java/com/bookmanager/book/BookmanagerApplication.java"
+					target="_blank" rel="noopener noreferrer">BookmanagerApplication.java</a>
+				を実行し、SpringBootを起動します。<br>
+				<a href="http://localhost:8080/book" target="_blank"
+					rel="noopener noreferrer">http://localhost:8080/book</a>にアクセスし、ログイン画面からログインし、編集画面に遷移できることを確認します。
+			</p>
+			<img src="pic/login/login.png" />
+			<img src="pic/login/login_list.png" />
+			<img src="pic/login/logout.png" />
+			<p>以上です。いかがだったでしょうか。SpringSecurityを利用したログイン認証でした。</p>
+		</div>
+
+		<div class="container">
+			<h2>お問い合わせ</h2>
+			お問い合わせは<a href="/send/index.html" target="_blank" rel="noopener noreferrer">こちら</a>からお願いします。
+		</div>
+		<div style="margin-bottom: 300px;"></div>
+		
+	</main>
+
+	<footer class="footer mt-auto py-3 bg-light">
+		<div class="container">
+			<span class="text-muted">Copyright (C) nori</span>
+		</div>
+	</footer>
+
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+		crossorigin="anonymous"></script>
+</body>
+
+</html>
