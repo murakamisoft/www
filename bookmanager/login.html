@@ -2,87 +2,88 @@
 <html lang="ja" class="h-100">
 
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="作ったアプリのソースコードを紹介">
-	<meta name="keywords" content="プログラム,Java,SpringSecurity,Spring,SpringBoot,springframework,Mybatis,Webアプリ">
-	<title>Programing Lab</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="作ったアプリのソースコードを紹介">
+  <meta name="keywords" content="プログラム,Java,SpringSecurity,Spring,SpringBoot,springframework,Mybatis,Webアプリ">
+  <title>Programing Lab</title>
 
-	<link rel="canonical" href="https://getbootstrap.jp/docs/5.0/examples/sticky-footer-navbar/">
+  <link rel="canonical" href="https://getbootstrap.jp/docs/5.0/examples/sticky-footer-navbar/">
 
-	<!-- Bootstrap core CSS -->
-	<link href=https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css rel="stylesheet"
-		integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <!-- Bootstrap core CSS -->
+  <link href=https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
-	<script>hljs.initHighlightingOnLoad();</script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
 
-	<style>
-		.bd-placeholder-img {
-			font-size: 1.125rem;
-			text-anchor: middle;
-			-webkit-user-select: none;
-			-moz-user-select: none;
-			user-select: none;
-		}
+  <style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
 
-		@media (min-width: 768px) {
-			.bd-placeholder-img-lg {
-				font-size: 3.5rem;
-			}
-		}
-	</style>
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+  </style>
 
-	<!-- Custom styles for this template -->
-	<link href="../sticky-footer-navbar.css" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link href="../sticky-footer-navbar.css" rel="stylesheet">
 </head>
 
 <body class="d-flex flex-column h-100">
 
-	<header>
-		<!-- Fixed navbar -->
-		<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-			<div class="container-fluid">
-				<a class="navbar-brand" href="http://vbminigame.sakura.ne.jp">Programing Lab</a>
-			</div>
-		</nav>
-	</header>
+  <header>
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="http://vbminigame.sakura.ne.jp">Programing Lab</a>
+      </div>
+    </nav>
+  </header>
 
-	<!-- Begin page content -->
-	<main class="flex-shrink-0">
-		<div class="container">
-			<h1 class="mt-5">本を管理するWebアプリに、SpringSecurityを使用したログイン認証を実装</h1>
-			<p class="lead">SpringSecurityを使用したログイン画面を実装します。DB認証です。</p>
+  <!-- Begin page content -->
+  <main class="flex-shrink-0">
+    <div class="container">
+      <h1 class="mt-5">本を管理するWebアプリに、SpringSecurityを使用したログイン認証を実装</h1>
+      <p class="lead">SpringSecurityを使用したログイン画面を実装します。DB認証です。</p>
 
-			<p>以下がログイン画面のレイアウトです。間違ったIDでログインします。</p>
-			<img src="pic/login/login.png" />
-			<p>ログイン認証失敗として、エラーメッセージを表示します。</p>
-			<img src="pic/login/login_ng.png" />
-			<p>ユーザ名：「useradmin」、パスワード：[admin]を入力し、ログイン認証成功すると、本の一覧画面に遷移します。
-				ヘッダ部分にユーザ名を表示しています。ログアウトボタンを押します。</p>
-			<img src="pic/login/login_list.png" />
-			<p>ログアウトすると、メッセージを表示し、ログイン画面に戻ります。</p>
-			<img src="pic/login/logout.png" />
+      <p>以下がログイン画面のレイアウトです。間違ったIDでログインします。</p>
+      <img src="pic/login/login.png" />
+      <p>ログイン認証失敗として、エラーメッセージを表示します。</p>
+      <img src="pic/login/login_ng.png" />
+      <p>ユーザ名：「useradmin」、パスワード：[admin]を入力し、ログイン認証成功すると、本の一覧画面に遷移します。
+        ヘッダ部分にユーザ名を表示しています。ログアウトボタンを押します。</p>
+      <img src="pic/login/login_list.png" />
+      <p>ログアウトすると、メッセージを表示し、ログイン画面に戻ります。</p>
+      <img src="pic/login/logout.png" />
 
-			<p>ソースファイルは以下からダウンロードして下さい。</p>
-			<div class="card w-75">
-				<div class="card-body">
-					<h5 class="card-title">GitHub</h5>
-					<p class="card-text"><a href="https://github.com/murakamisoft/bookmanager" target="_blank"
-							rel="noopener noreferrer">https://github.com/murakamisoft/bookmanager</a>
-					</p>
-				</div>
-			</div>
-		</div>
-		<div class="container">
-			<h2>ソースについて</h2>
-			<p>
-				Controllerクラスのログイン部分です。
-			</p>
-			<p><a href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/java/com/bookmanager/login/controller/LoginController.java"
-					target="_blank" rel="noopener noreferrer">LoginController.java</a>
-			<pre>
+      <p>ソースファイルは以下からダウンロードして下さい。</p>
+      <div class="card w-75">
+        <div class="card-body">
+          <h5 class="card-title">GitHub</h5>
+          <p class="card-text"><a href="https://github.com/murakamisoft/bookmanager" target="_blank"
+              rel="noopener noreferrer">https://github.com/murakamisoft/bookmanager</a>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <h2>ソースについて</h2>
+      <p>
+        Controllerクラスのログイン部分です。
+      </p>
+      <p><a
+          href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/java/com/bookmanager/login/controller/LoginController.java"
+          target="_blank" rel="noopener noreferrer">LoginController.java</a>
+      <pre>
 <code>package com.bookmanager.login.controller;
 
 import org.springframework.stereotype.Controller;
@@ -107,14 +108,15 @@ public class LoginController {
 }
 </code>
 </pre>
-			</p>
+      </p>
 
-			<p>
-				SpringSecurityの、LoginUserDetailsクラスです。
-			</p>
-			<p><a href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/java/com/bookmanager/security/LoginUserDetails.java"
-					target="_blank" rel="noopener noreferrer">LoginUserDetails.java</a>
-			<pre>
+      <p>
+        SpringSecurityの、LoginUserDetailsクラスです。
+      </p>
+      <p><a
+          href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/java/com/bookmanager/security/LoginUserDetails.java"
+          target="_blank" rel="noopener noreferrer">LoginUserDetails.java</a>
+      <pre>
 <code>package com.bookmanager.security;
 
 import java.util.ArrayList;
@@ -185,15 +187,16 @@ public class LoginUserDetails implements UserDetails {
 }
 </code>
 </pre>
-			</p>
+      </p>
 
-			<p>
-				LoginUserDetailsServiceクラスです。DB認証のロジック部分です。<br>
-				画面入力値とDB設定値を比較し、OKの場合ログイン認証成功とします。
-			</p>
-			<p><a href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/java/com/bookmanager/security/LoginUserDetailsService.java"
-					target="_blank" rel="noopener noreferrer">LoginUserDetailsService.java</a>
-			<pre>
+      <p>
+        LoginUserDetailsServiceクラスです。DB認証のロジック部分です。<br>
+        画面入力値とDB設定値を比較し、OKの場合ログイン認証成功とします。
+      </p>
+      <p><a
+          href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/java/com/bookmanager/security/LoginUserDetailsService.java"
+          target="_blank" rel="noopener noreferrer">LoginUserDetailsService.java</a>
+      <pre>
 <code>package com.bookmanager.security;
 
 import java.util.Objects;
@@ -230,15 +233,16 @@ public class LoginUserDetailsService implements UserDetailsService {
 }
 </code>
 </pre>
-			</p>
+      </p>
 
-			<p>
-				SpringSecurityの設定部分を担う、WebSecurityConfigクラスです。<br>
-				独自のログイン画面を使用し、ログイン失敗時や、ログアウト時のURL、その他ログインログアウト周りの認証の設定をします。
-			</p>
-			<p><a href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/java/com/bookmanager/config/WebSecurityConfig.java"
-					target="_blank" rel="noopener noreferrer">BookMapper.xml</a>
-			<pre>
+      <p>
+        SpringSecurityの設定部分を担う、WebSecurityConfigクラスです。<br>
+        独自のログイン画面を使用し、ログイン失敗時や、ログアウト時のURL、その他ログインログアウト周りの認証の設定をします。
+      </p>
+      <p><a
+          href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/java/com/bookmanager/config/WebSecurityConfig.java"
+          target="_blank" rel="noopener noreferrer">BookMapper.xml</a>
+      <pre>
 <code>package com.bookmanager.config;
 
 import org.springframework.context.annotation.Bean;
@@ -280,14 +284,14 @@ public class WebSecurityConfig {
 }
 </code>
 </pre>
-			</p>
+      </p>
 
-			<p>
-				ログイン画面ソースです。
-			</p>
-			<p><a href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/resources/templates/login.html"
-					target="_blank" rel="noopener noreferrer">login.html</a>
-			<pre>
+      <p>
+        ログイン画面ソースです。
+      </p>
+      <p><a href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/resources/templates/login.html"
+          target="_blank" rel="noopener noreferrer">login.html</a>
+      <pre>
 <code>&lt;!DOCTYPE html&gt;
 
 &lt;/html&gt;
@@ -344,16 +348,16 @@ public class WebSecurityConfig {
 &lt;/html&gt;
 </code>
 </pre>
-			</p>
+      </p>
 
-			<p>
-				ユーザテーブルに、ユーザの情報を登録します。パスワードは暗号化しており、「admin」です。
-			</p>
-			<p><a href="https://github.com/murakamisoft/bookmanager/blob/master/create_table.sql"
-				target="_blank" rel="noopener noreferrer">create_table.sql</a><br>
-				<a href="https://github.com/murakamisoft/bookmanager/blob/master/insert_data.sql"
-					target="_blank" rel="noopener noreferrer">insert_data.sql</a>
-			<pre>
+      <p>
+        ユーザテーブルに、ユーザの情報を登録します。パスワードは暗号化しており、「admin」です。
+      </p>
+      <p><a href="https://github.com/murakamisoft/bookmanager/blob/master/create_table.sql" target="_blank"
+          rel="noopener noreferrer">create_table.sql</a><br>
+        <a href="https://github.com/murakamisoft/bookmanager/blob/master/insert_data.sql" target="_blank"
+          rel="noopener noreferrer">insert_data.sql</a>
+      <pre>
 <code>-- ユーザ
 drop table user cascade;
 
@@ -390,39 +394,35 @@ values (
 	
 </code>
 </pre>
-			</p>
+      </p>
 
-		</div>
-		<div class="container">
-			<h2>起動方法について</h2>
-			<p><a href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/java/com/bookmanager/book/BookmanagerApplication.java"
-					target="_blank" rel="noopener noreferrer">BookmanagerApplication.java</a>
-				を実行し、SpringBootを起動します。<br>
-				<a href="http://localhost:8080/book" target="_blank"
-					rel="noopener noreferrer">http://localhost:8080/book</a>にアクセスし、ログイン画面からログインし、編集画面に遷移できることを確認します。
-			</p>
-			<img src="pic/login/login.png" />
-			<img src="pic/login/login_list.png" />
-			<img src="pic/login/logout.png" />
-			<p>以上です。いかがだったでしょうか。SpringSecurityを利用したログイン認証でした。</p>
-		</div>
+    </div>
+    <div class="container">
+      <h2>起動方法について</h2>
+      <p><a
+          href="https://github.com/murakamisoft/bookmanager/blob/master/src/main/java/com/bookmanager/book/BookmanagerApplication.java"
+          target="_blank" rel="noopener noreferrer">BookmanagerApplication.java</a>
+        を実行し、SpringBootを起動します。<br>
+        <a href="http://localhost:8080/book" target="_blank"
+          rel="noopener noreferrer">http://localhost:8080/book</a>にアクセスし、ログイン画面からログインし、編集画面に遷移できることを確認します。
+      </p>
+      <img src="pic/login/login.png" />
+      <img src="pic/login/login_list.png" />
+      <img src="pic/login/logout.png" />
+      <p>以上です。いかがだったでしょうか。SpringSecurityを利用したログイン認証でした。</p>
+    </div>
+    <div style="margin-bottom: 300px;"></div>
 
-		<div class="container">
-			<h2>お問い合わせ</h2>
-			お問い合わせは<a href="/send/index.html" target="_blank" rel="noopener noreferrer">こちら</a>からお願いします。
-		</div>
-		<div style="margin-bottom: 300px;"></div>
-		
-	</main>
+  </main>
 
-	<footer class="footer mt-auto py-3 bg-light">
-		<div class="container">
-			<span class="text-muted">Copyright (C) nori</span>
-		</div>
-	</footer>
+  <footer class="footer mt-auto py-3 bg-light">
+    <div class="container">
+      <span class="text-muted">Copyright (C) nori</span>
+    </div>
+  </footer>
 
-	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
-		crossorigin="anonymous"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+    crossorigin="anonymous"></script>
 </body>
 
 </html>
