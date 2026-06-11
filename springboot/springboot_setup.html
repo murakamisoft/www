@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="作ったアプリのソースコードを紹介">
+  <meta name="keywords" content="プログラム,Java,SpringSecurity,Spring,SpringBoot,springframework,Mybatis,Webアプリ">
+  <title>Programing Lab</title>
+
+  <link rel="canonical" href="https://getbootstrap.jp/docs/5.0/examples/sticky-footer-navbar/">
+
+  <!-- Bootstrap core CSS -->
+  <link href=https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+  </style>
+
+  <!-- Custom styles for this template -->
+  <link href="../sticky-footer-navbar.css" rel="stylesheet">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219" crossorigin="anonymous"></script>
+</head>
+
+<body class="d-flex flex-column h-100">
+
+  <header>
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="http://vbminigame.sakura.ne.jp">Programing Lab</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Begin page content -->
+  <main class="flex-shrink-0">
+    <div class="container">
+	<h1 class="mt-5">WindowsでSpring Boot開発環境を構築する手順（Java21 + VS Code + Gradle + PostgreSQL）</h1>
+
+	<p class="lead">
+	Windows 11にSpring Boot開発環境を構築する手順を紹介します。
+	Java 21、VS Code、Gradle、PostgreSQLを使用し、Spring Bootアプリケーションを起動できるところまで解説します。
+	</p>
+
+	<h2>対象読者</h2>
+
+	<ul>
+	<li>Spring Bootをこれから学習したい人</li>
+	<li>EclipseではなくVS Codeを利用したい人</li>
+	<li>Java 21環境を構築したい人</li>
+	<li>PostgreSQLを利用したWebアプリを開発したい人</li>
+	</ul>
+
+	<h2>今回構築する環境</h2>
+
+	<table class="table table-bordered">
+	<tr>
+		<th>ソフトウェア</th>
+		<th>バージョン</th>
+	</tr>
+	<tr>
+		<td>Windows</td>
+		<td>11</td>
+	</tr>
+	<tr>
+		<td>Java</td>
+		<td>21 (LTS)</td>
+	</tr>
+	<tr>
+		<td>VS Code</td>
+		<td>最新版</td>
+	</tr>
+	<tr>
+		<td>Gradle</td>
+		<td>Spring Boot標準</td>
+	</tr>
+	<tr>
+		<td>PostgreSQL</td>
+		<td>17系</td>
+	</tr>
+	<tr>
+		<td>Spring Boot</td>
+		<td>3.x</td>
+	</tr>
+	</table>
+
+	<hr>
+
+	<h2>1. Java 21をインストールする</h2>
+
+	<p>
+	まずJava 21をインストールします。
+	Spring Boot 3系ではJava 17以上が必要です。
+	今回は長期サポート版（LTS）のJava 21を利用します。
+	</p>
+
+	<p>
+	インストール後、コマンドプロンプトで以下を実行します。
+	</p>
+
+	<pre><code>java -version</code></pre>
+
+	<p>
+	以下のように表示されれば成功です。
+	</p>
+
+	<pre><code>openjdk version "21"</code></pre>
+
+	<hr>
+
+	<h2>2. VS Codeをインストールする</h2>
+
+	<p>
+	Visual Studio Codeをインストールします。
+	</p>
+
+	<p>
+	インストール後、以下の拡張機能を追加します。
+	</p>
+
+	<ul>
+	<li>Extension Pack for Java</li>
+	<li>Spring Boot Extension Pack</li>
+	<li>Gradle for Java</li>
+	</ul>
+
+	<p>
+	これらを導入することでSpring Boot開発に必要な機能が利用できます。
+	</p>
+
+	<hr>
+
+	<h2>3. PostgreSQLをインストールする</h2>
+
+	<p>
+	PostgreSQLをインストールします。
+	</p>
+
+	<p>
+	インストール時に以下を設定します。
+	</p>
+
+	<ul>
+	<li>postgresユーザーのパスワード</li>
+	<li>ポート番号（通常は5432）</li>
+	</ul>
+
+	<p>
+	接続確認を行います。
+	</p>
+
+	<pre><code>psql -U postgres</code></pre>
+
+	<p>
+	ログインできれば成功です。
+	</p>
+
+	<hr>
+
+	<h2>4. Spring Bootプロジェクトを作成する</h2>
+
+	<p>
+	Spring Initializrを利用してプロジェクトを作成します。
+	</p>
+
+	<p>
+	以下の設定を選択します。
+	</p>
+
+	<table class="table table-bordered">
+	<tr>
+		<th>項目</th>
+		<th>設定値</th>
+	</tr>
+	<tr>
+		<td>Project</td>
+		<td>Gradle</td>
+	</tr>
+	<tr>
+		<td>Language</td>
+		<td>Java</td>
+	</tr>
+	<tr>
+		<td>Spring Boot</td>
+		<td>最新版</td>
+	</tr>
+	<tr>
+		<td>Packaging</td>
+		<td>Jar</td>
+	</tr>
+	<tr>
+		<td>Java</td>
+		<td>21</td>
+	</tr>
+	</table>
+
+	<p>
+	Dependenciesには以下を追加します。
+	</p>
+
+	<ul>
+	<li>Spring Web</li>
+	<li>Spring Data JPA</li>
+	<li>PostgreSQL Driver</li>
+	<li>Lombok</li>
+	</ul>
+
+	<hr>
+
+	<h2>5. VS Codeでプロジェクトを開く</h2>
+
+	<p>
+	ダウンロードしたプロジェクトを展開します。
+	</p>
+
+	<pre><code>sample-project</code></pre>
+
+	<p>
+	VS Codeでフォルダを開きます。
+	</p>
+
+	<p>
+	初回起動時はGradle依存ライブラリのダウンロードが実行されます。
+	</p>
+
+	<hr>
+
+	<h2>6. PostgreSQL接続設定を行う</h2>
+
+	<p>
+	application.propertiesを編集します。
+	</p>
+
+	<pre><code class="properties">
+	spring.datasource.url=jdbc:postgresql://localhost:5432/sampledb
+	spring.datasource.username=postgres
+	spring.datasource.password=password
+
+	spring.jpa.hibernate.ddl-auto=update
+	spring.jpa.show-sql=true
+	</code></pre>
+
+	<p>
+	事前にデータベースを作成しておきます。
+	</p>
+
+	<pre><code>
+	CREATE DATABASE sampledb;
+	</code></pre>
+
+	<hr>
+
+	<h2>7. Spring Bootを起動する</h2>
+
+	<p>
+	VS Codeのターミナルから以下を実行します。
+	</p>
+
+	<pre><code>gradlew bootRun</code></pre>
+
+	<p>
+	LinuxやMacの場合は以下です。
+	</p>
+
+	<pre><code>./gradlew bootRun</code></pre>
+
+	<p>
+	以下のメッセージが表示されれば起動成功です。
+	</p>
+
+	<pre><code>
+	Started SampleApplication
+	</code></pre>
+
+	<hr>
+
+	<h2>8. 動作確認</h2>
+
+	<p>
+	ブラウザから以下へアクセスします。
+	</p>
+
+	<pre><code>http://localhost:8080</code></pre>
+
+	<p>
+	エラーが表示されなければSpring Bootは正常に起動しています。
+	</p>
+
+	<hr>
+
+	<h2>よくあるエラー</h2>
+
+	<h3>javaコマンドが見つからない</h3>
+
+	<pre><code>
+	'java' は内部コマンドまたは外部コマンド...
+	</code></pre>
+
+	<p>
+	PATH設定を確認してください。
+	</p>
+
+	<h3>PostgreSQLに接続できない</h3>
+
+	<pre><code>
+	Connection refused
+	</code></pre>
+
+	<p>
+	PostgreSQLサービスが起動しているか確認してください。
+	</p>
+
+	<h3>ポート8080が使用中</h3>
+
+	<pre><code>
+	Port 8080 was already in use
+	</code></pre>
+
+	<p>
+	他のSpring Bootアプリが起動していないか確認してください。
+	</p>
+
+	<hr>
+
+	<h2>まとめ</h2>
+
+	<p>
+	WindowsでSpring Boot開発環境を構築する手順を紹介しました。
+	</p>
+
+	<ol>
+	<li>Java 21をインストール</li>
+	<li>VS Codeをインストール</li>
+	<li>PostgreSQLをインストール</li>
+	<li>Spring Initializrでプロジェクト作成</li>
+	<li>Gradleで起動</li>
+	</ol>
+
+	<p>
+	ここまで完了すれば、Spring BootによるWebアプリ開発を始められます。
+	</p>
+
+
+	
+
+	<div class="card w-75">
+	  <div class="card-body">
+	    <h5 class="card-title">GitHub</h5>
+	    <p class="card-text">
+	      <a href="https://github.com/murakamisoft/bookmanager" target="_blank">
+	        サンプルソースコードはこちら
+	      </a>
+	    </p>
+	  </div>
+	</div>
+    </div>
+    <div style="margin-bottom: 300px;"></div>
+
+  </main>
+
+  <footer class="footer mt-auto py-3 bg-light">
+    <div class="container">
+      <span class="text-muted">Copyright (C) nori</span>
+    </div>
+  </footer>
+
+</body>
+
+</html>
