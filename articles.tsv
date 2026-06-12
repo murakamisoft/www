@@ -1,2 +1,3 @@
-PostgreSQL	PostgreSQL接続設定（Spring Boot）	実務直結・検索強い	postgres_springboot_setup.html
-PostgreSQL	PostgreSQL接続エラー解決方法	DB系トラブル記事	postgres_connection_error.html
+MyBatis	MyBatisのBean登録エラー解決方法	DI系エラーは需要大	mybatis_bean_error.html
+MyBatis	MyBatisとSpring Boot連携手順	環境構築系で流入確保	mybatis_springboot_setup.html
+MyBatis	SQLが実行されない原因まとめ	実務トラブル系	mybatis_sql_not_run.html
