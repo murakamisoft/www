@@ -1,7 +1,7 @@
 #!/bin/bash
 
 TEMPLATE="_templete.html"
-OUTPUT_DIR="jenkins"
+OUTPUT_DIR="api_design"
 INPUT_FILE="articles.tsv"
 
 mkdir -p "$OUTPUT_DIR"

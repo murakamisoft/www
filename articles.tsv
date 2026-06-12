@@ -1,2 +1,2 @@
-Jenkins	:contentReference[oaicite:0]{index=0}構築手順（初心者向け）	CI/CD需要あり	jenkins_setup.html
-Jenkins	:contentReference[oaicite:1]{index=1}でビルド失敗する原因まとめ	実務トラブル	jenkins_build_error.html
+API設計	REST API設計の基本ルール	中級者向け単価高め	api_design_basic.html
+API設計	よくあるAPI設計ミスまとめ	設計改善系	api_design_mistake.html

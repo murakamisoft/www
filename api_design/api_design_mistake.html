@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: api_design_mistake.html
+CATEGORY: API設計
+TITLE: よくあるAPI設計ミスまとめ
+DESCRIPTION: REST API設計で現場エンジニアがやりがちなミスと、その改善方法を実務レベルで解説。命名規則・HTTPメソッド・レスポンス設計の落とし穴を整理。
+SEO META END -->
+
+    <title>よくあるAPI設計ミスまとめ | Programming Lab</title>
+
+    <meta
+      name="description"
+      content="REST API設計で現場エンジニアがやりがちなミスと、その改善方法を実務レベルで解説。命名規則・HTTPメソッド・レスポンス設計の落とし穴を整理。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/api_design/api_design_mistake.html"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">よくあるAPI設計ミスまとめ</h1>
+
+        <p class="lead">
+          REST
+          API設計で現場エンジニアがやりがちなミスと、その改善方法を実務レベルで整理します。
+          レガシー改善や設計レビューでそのまま使える内容です。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-12</p>
+
+        <h2>目次</h2>
+        <ul>
+          <li><a href="#section1">1. 概要</a></li>
+          <li><a href="#section2">2. よくある設計ミス</a></li>
+          <li><a href="#section3">3. 改善例（Before / After）</a></li>
+          <li><a href="#section4">4. よくあるエラー・事故パターン</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. 概要</h2>
+
+        <p>
+          API設計の品質はシステム全体の保守性・拡張性に直結する。
+          特に初期設計のミスは後から修正コストが非常に高い。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>対象</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>環境</td>
+            <td>Java 21 / Spring Boot 3.x</td>
+          </tr>
+          <tr>
+            <td>想定読者</td>
+            <td>中級エンジニア・設計レビュー担当</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. よくある設計ミス</h2>
+
+        <h3>① 動詞ベースのURL設計</h3>
+        <p>悪い例：/getUser /createUser</p>
+        <p>問題：RESTの「リソース設計」に違反し、統一性が崩れる</p>
+
+        <pre><code class="bash">
+# NG
+GET /getUser?id=1
+POST /createUser
+
+# OK
+GET /users/1
+POST /users
+        </code></pre>
+
+        <hr />
+
+        <h3>② HTTPメソッドの誤用</h3>
+        <p>POSTで取得、GETで更新などの設計ミス</p>
+        <p>影響：キャッシュ・セキュリティ・監視が破綻</p>
+
+        <hr />
+
+        <h3>③ ステータスコードを全部200にする</h3>
+        <p>フロント側がエラー判定できず、バグ調査コストが増大する</p>
+
+        <pre><code class="json">
+# NG
+{ "status": "error" }
+
+# OK
+HTTP 400 + JSONエラー
+        </code></pre>
+
+        <hr />
+
+        <h3>④ レスポンス構造がバラバラ</h3>
+        <p>プロジェクトごとにJSON形式が違うケース</p>
+        <p>→ フロント実装が複雑化し工数増加</p>
+
+        <hr />
+
+        <h2 id="section3">3. 改善例（Before / After）</h2>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>Before</th>
+            <th>After</th>
+          </tr>
+          <tr>
+            <td>/getUser?id=1</td>
+            <td>/users/1</td>
+          </tr>
+          <tr>
+            <td>/createOrder</td>
+            <td>POST /orders</td>
+          </tr>
+        </table>
+
+        <p>REST設計の基本に統一するだけで、保守性は大幅に改善する。</p>
+
+        <hr />
+
+        <h2 id="section4">4. よくあるエラー・事故パターン</h2>
+
+        <h3>① null返却によるフロントクラッシュ</h3>
+        <p>対策：空配列 or 明示的エラー返却</p>
+
+        <h3>② 想定外のステータスコード</h3>
+        <p>対策：API仕様書でコードを固定化</p>
+
+        <h3>③ API変更による互換性崩壊</h3>
+        <p>対策：バージョニング（/v1 /v2）</p>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>URLはリソース中心で設計する</li>
+          <li>HTTPメソッドとステータスコードを厳密に使う</li>
+          <li>レスポンス形式を統一する</li>
+        </ul>
+
+        <p>
+          API設計のミスは早期に潰すほどコストが下がる。
+          レビュー時点で標準化することが重要。
+        </p>
+
+        <hr />
+
+        <h2>関連記事</h2>
+        <ul>
+          <li><a href="api_design_basic.html">REST API設計の基本ルール</a></li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

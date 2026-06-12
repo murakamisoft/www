@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: api_design_basic.html
+CATEGORY: API設計
+TITLE: REST API設計の基本ルール
+DESCRIPTION: REST API設計の基本ルールを体系的に解説。命名規則、HTTPメソッド設計、ステータスコード、エラーハンドリングまで中級エンジニア向けに実務レベルで整理。
+SEO META END -->
+
+    <title>REST API設計の基本ルール | Programming Lab</title>
+
+    <meta
+      name="description"
+      content="REST API設計の基本ルールを体系的に解説。命名規則、HTTPメソッド設計、ステータスコード、エラーハンドリングまで中級エンジニア向けに実務レベルで整理。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/api_design/api_design_basic.html"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">REST API設計の基本ルール</h1>
+
+        <p class="lead">
+          現場で使えるREST
+          API設計の基本を、命名・HTTPメソッド・ステータスコード・エラー設計の観点から体系的に整理します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-12</p>
+
+        <h2>目次</h2>
+        <ul>
+          <li><a href="#section1">1. REST API設計の基本思想</a></li>
+          <li><a href="#section2">2. エンドポイント設計ルール</a></li>
+          <li><a href="#section3">3. HTTPメソッドの正しい使い方</a></li>
+          <li><a href="#section4">4. ステータスコード設計</a></li>
+          <li><a href="#section5">5. エラーレスポンス設計</a></li>
+          <li><a href="#section6">6. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. REST API設計の基本思想</h2>
+        <p>
+          REST
+          APIは「リソース（資源）をURLで表現し、HTTPメソッドで操作する」という設計思想に基づく。
+          重要なのは「動詞ではなく名詞で設計する」点である。
+        </p>
+
+        <ul>
+          <li>URLはリソース（例：/users /orders）</li>
+          <li>操作はHTTPメソッドで表現</li>
+          <li>ステートレス（状態をサーバーに持たない）</li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section2">2. エンドポイント設計ルール</h2>
+
+        <p>エンドポイントは一貫性が最も重要。</p>
+
+        <pre><code class="bash">
+# 良い例
+GET /users
+GET /users/1
+POST /users
+
+# 悪い例
+GET /getUser
+POST /createUser
+        </code></pre>
+
+        <ul>
+          <li>動詞をURLに入れない</li>
+          <li>複数形を基本にする（/users）</li>
+          <li>階層構造でリソース関係を表す</li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section3">3. HTTPメソッドの正しい使い方</h2>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>メソッド</th>
+            <th>用途</th>
+          </tr>
+          <tr>
+            <td>GET</td>
+            <td>データ取得</td>
+          </tr>
+          <tr>
+            <td>POST</td>
+            <td>新規作成</td>
+          </tr>
+          <tr>
+            <td>PUT</td>
+            <td>全更新</td>
+          </tr>
+          <tr>
+            <td>PATCH</td>
+            <td>部分更新</td>
+          </tr>
+          <tr>
+            <td>DELETE</td>
+            <td>削除</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section4">4. ステータスコード設計</h2>
+
+        <p>ステータスコードはAPI品質を決める重要要素。</p>
+
+        <ul>
+          <li>200：正常終了</li>
+          <li>201：作成成功</li>
+          <li>400：リクエスト不正</li>
+          <li>401：認証エラー</li>
+          <li>404：リソースなし</li>
+          <li>500：サーバーエラー</li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section5">5. エラーレスポンス設計</h2>
+
+        <p>エラーは必ず構造化する。</p>
+
+        <pre><code class="json">
+{
+  "timestamp": "2026-06-12T10:00:00Z",
+  "status": 400,
+  "error": "Bad Request",
+  "message": "userId is required",
+  "path": "/users"
+}
+        </code></pre>
+
+        <p>
+          フロント側が解析しやすい形式に統一することで保守性が大きく向上する。
+        </p>
+
+        <hr />
+
+        <h2 id="section6">6. まとめ</h2>
+
+        <ul>
+          <li>URLはリソース中心で設計する</li>
+          <li>HTTPメソッドを正しく使い分ける</li>
+          <li>ステータスコードとエラー設計を統一する</li>
+        </ul>
+
+        <p>
+          REST
+          API設計は「一貫性」がすべてであり、チーム開発では特に標準化が重要になる。
+        </p>
+
+        <hr />
+
+        <h2>関連記事</h2>
+        <ul>
+          <li>
+            <a href="api_design_mistake.html">よくあるAPI設計ミスまとめ</a>
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>
