@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: jenkins_setup.html
+CATEGORY: Jenkins
+TITLE: Jenkins構築手順（初心者向け）
+DESCRIPTION: Jenkinsのインストールからジョブ作成、Spring Bootプロジェクトのビルド実行までを初心者向けに解説。CI/CD環境をローカルやサーバーで構築する手順を具体的に紹介。
+SEO META END -->
+
+    <title>Jenkins構築手順（初心者向け） | Programming Lab</title>
+
+    <meta
+      name="description"
+      content="Jenkinsのインストールからジョブ作成、Spring Bootプロジェクトのビルド実行までを初心者向けに解説。CI/CD環境を構築する手順を具体的に紹介。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/jenkins/jenkins_setup.html"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">Jenkins構築手順（初心者向け）</h1>
+
+        <p class="lead">
+          Jenkinsを使えば、ビルド・テスト・デプロイを自動化できます。本記事ではローカル環境でのインストールからSpring
+          Bootプロジェクトの実行までを解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-12</p>
+
+        <h2>目次</h2>
+        <ul>
+          <li><a href="#section1">1. 概要</a></li>
+          <li><a href="#section2">2. インストール手順</a></li>
+          <li><a href="#section3">3. ジョブ作成</a></li>
+          <li><a href="#section4">4. ビルド実行</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. 概要</h2>
+
+        <p>
+          Jenkinsは:contentReference[oaicite:0]{index=0}というCI/CDツールで、ソフトウェアのビルド・テスト・デプロイを自動化します。
+          Java / Spring Boot開発現場ではほぼ標準的に利用されています。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>項目</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>対象</td>
+            <td>Spring Boot / Javaアプリケーション</td>
+          </tr>
+          <tr>
+            <td>CIツール</td>
+            <td>:contentReference[oaicite:1]{index=1}</td>
+          </tr>
+          <tr>
+            <td>ビルドツール</td>
+            <td>Maven / Gradle</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. インストール手順</h2>
+
+        <h3>2-1. Javaの確認</h3>
+        <p>JenkinsはJavaが必要です。まずバージョン確認を行います。</p>
+
+        <pre><code class="bash">
+java -version
+        </code></pre>
+
+        <h3>2-2. Jenkins起動（Windows例）</h3>
+        <p>公式サイトからwarファイルをダウンロードして起動します。</p>
+
+        <pre><code class="bash">
+java -jar jenkins.war
+        </code></pre>
+
+        <p>起動後、ブラウザで http://localhost:8080 にアクセスします。</p>
+
+        <hr />
+
+        <h2 id="section3">3. ジョブ作成</h2>
+
+        <p>新規ジョブを作成し、ソースコードをGitから取得します。</p>
+
+        <h3>設定ポイント</h3>
+        <ul>
+          <li>GitリポジトリURL設定</li>
+          <li>ビルド手順にMaven追加</li>
+          <li>ブランチ指定（main/master）</li>
+        </ul>
+
+        <pre><code class="bash">
+git clone https://example.com/repo.git
+mvn clean install
+        </code></pre>
+
+        <hr />
+
+        <h2 id="section4">4. ビルド実行</h2>
+
+        <p>ジョブを保存後「Build Now」を押すとビルドが開始されます。</p>
+
+        <p>成功するとコンソールに以下のように表示されます。</p>
+
+        <pre><code class="text">
+BUILD SUCCESS
+        </code></pre>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>JenkinsはCI/CD自動化の標準ツール</li>
+          <li>Java環境とGit設定が重要</li>
+          <li>ビルド設定ミスが失敗の主原因</li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+        <ul>
+          <li>
+            <a href="jenkins_build_error.html"
+              >Jenkinsでビルド失敗する原因まとめ</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

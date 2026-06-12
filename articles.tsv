@@ -1,3 +1,2 @@
-MyBatis	MyBatisのBean登録エラー解決方法	DI系エラーは需要大	mybatis_bean_error.html
-MyBatis	MyBatisとSpring Boot連携手順	環境構築系で流入確保	mybatis_springboot_setup.html
-MyBatis	SQLが実行されない原因まとめ	実務トラブル系	mybatis_sql_not_run.html
+Jenkins	:contentReference[oaicite:0]{index=0}構築手順（初心者向け）	CI/CD需要あり	jenkins_setup.html
+Jenkins	:contentReference[oaicite:1]{index=1}でビルド失敗する原因まとめ	実務トラブル	jenkins_build_error.html
