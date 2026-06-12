@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: springboot_404_error.html
+CATEGORY: Spring Boot
+TITLE: Spring Bootで404エラーが出る原因まとめ
+DESCRIPTION: Spring Bootでよく発生する404エラーの原因と解決方法を初心者向けに解説。Controllerの設定ミスやURLのズレなど典型パターンを整理。
+SEO META END -->
+
+    <title>Spring Bootで404エラーが出る原因まとめ | Programming Lab</title>
+
+    <meta
+      name="description"
+      content="Spring Bootでよく発生する404エラーの原因と解決方法を初心者向けに解説。Controllerの設定ミスやURLのズレなど典型パターンを整理。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/springboot/springboot_404_error.html"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">Spring Bootで404エラーが出る原因まとめ</h1>
+
+        <p class="lead">
+          Spring Bootで「Whitelabel Error
+          Page」や404エラーが出る原因を、実務で多い順に整理し、すぐ直せる形で解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-12</p>
+
+        <h2>目次</h2>
+        <ul>
+          <li><a href="#section1">1. 概要</a></li>
+          <li><a href="#section2">2. よくある原因</a></li>
+          <li><a href="#section3">3. 解決手順</a></li>
+          <li><a href="#section4">4. サンプルコード</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. 概要</h2>
+
+        <p>
+          Spring
+          Bootの404エラーは「URLとControllerの紐づけが正しくない」場合に発生します。
+          特に初心者は以下の3点で詰まりやすいです。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>項目</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>エラー</td>
+            <td>404 Not Found / Whitelabel Error Page</td>
+          </tr>
+          <tr>
+            <td>原因</td>
+            <td>URLマッピング不一致・ComponentScan漏れ</td>
+          </tr>
+          <tr>
+            <td>影響</td>
+            <td>画面・APIが表示されない</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. よくある原因</h2>
+
+        <h3>2-1. URLの打ち間違い</h3>
+        <p>
+          ブラウザURLとControllerのパスが一致していないケースが最も多いです。
+        </p>
+
+        <h3>2-2. Controllerがスキャンされていない</h3>
+        <p>
+          パッケージ構成がSpring Bootの起動クラス配下にないと認識されません。
+        </p>
+
+        <h3>2-3. @RequestMapping / @GetMappingの設定ミス</h3>
+        <p>スラッシュの有無や階層ズレで404になります。</p>
+
+        <h3>2-4. staticとcontrollerの誤解</h3>
+        <p>HTMLを返すつもりがstatic配下に配置されていないケースもあります。</p>
+
+        <hr />
+
+        <h2 id="section3">3. 解決手順</h2>
+
+        <h3>3-1. URL確認</h3>
+        <pre><code class="text">
+http://localhost:8080/xxx
+        </code></pre>
+
+        <h3>3-2. Controller確認</h3>
+        <pre><code class="java">
+@RestController
+@RequestMapping("/xxx")
+public class SampleController {
+
+  @GetMapping
+  public String test() {
+    return "OK";
+  }
+}
+        </code></pre>
+
+        <h3>3-3. パッケージ構成確認</h3>
+        <p>Applicationクラスと同じ階層以下にControllerを配置する。</p>
+
+        <hr />
+
+        <h2 id="section4">4. サンプルコード</h2>
+
+        <pre><code class="java">
+@RestController
+public class HelloController {
+
+  @GetMapping("/hello")
+  public String hello() {
+    return "Hello Spring Boot";
+  }
+}
+        </code></pre>
+
+        <p>この場合は <code>/hello</code> にアクセスする必要があります。</p>
+
+        <hr />
+
+        <div class="my-4 text-center">
+          <!-- Adsense -->
+        </div>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>404はURLとControllerの不一致が原因</li>
+          <li>パッケージ構成ミスも頻出</li>
+          <li>まずURLとアノテーションを確認する</li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+        <ul class="row">
+          <li class="col-sm-6">
+            <a href="springboot/spring_security_loop.html">
+              Spring Securityの無限ループの原因と解決方法
+            </a>
+          </li>
+          <li class="col-sm-6">
+            <a href="sample/bookmanager/login.html">
+              Spring Securityログイン認証の実装方法
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>
