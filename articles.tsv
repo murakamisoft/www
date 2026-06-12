@@ -1,3 +1,6 @@
-開発効率	コードレビュー観点チェックリスト	実務ツール系	code_review_checklist.html
-開発効率	フォルダ構成ベストプラクティス	現場ナレッジ	project_structure.html
-まとめ	Java開発エラー対策まとめ	回遊ハブ記事	java_error_hub.html
+Spring Boot	Spring Bootのapplication.properties設定ミスと対処法	設定ミスによる起動失敗・環境差分の典型	springboot_properties_error.html
+Spring Boot	Spring BootでBeanが見つからないエラーの原因と解決法	DI設定ミス・ComponentScan漏れ対策	springboot_bean_error.html
+Spring Boot	Spring Bootでポート8080が使用中エラーの解決方法	ローカル開発で頻出するポート競合問題	springboot_port_error.html
+Spring Boot	Spring BootとMySQL接続エラーの原因と対処法	DB接続失敗・ドライバ・設定不備の解説	springboot_mysql_error.html
+Spring Boot	Spring Boot REST APIで404・405エラーが出る原因まとめ	URL設計ミス・HTTPメソッド不一致対応	springboot_rest_api_error.html
+Spring Boot	Spring Boot本番環境で動かない原因（jar・環境差分）	ローカルと本番の差異・デプロイ失敗対策	springboot_deploy_error.html

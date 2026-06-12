@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: springboot_properties_error.html
+CATEGORY: Spring Boot
+TITLE: Spring Bootのapplication.properties設定ミスと対処法
+DESCRIPTION: 設定ミスによる起動失敗・環境差分の典型
+SEO META END -->
+
+    <!-- SEO -->
+    <title>
+      Spring Bootのapplication.properties設定ミスと対処法 | Programming Lab
+    </title>
+
+    <meta
+      name="description"
+      content="Spring Bootのapplication.properties設定ミスによる起動エラーの原因と解決方法を解説。DB設定ミス、ポート設定、環境差分など実務で頻出する問題を具体例付きで説明。"
+    />
+
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/spring-boot/springboot_properties_error.html"
+    />
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <!-- Highlight.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!-- Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <!-- タイトル -->
+        <h1 class="mt-5">
+          Spring Bootのapplication.properties設定ミスと対処法
+        </h1>
+
+        <!-- リード文 -->
+        <p class="lead">
+          Spring
+          Bootで最も多い設定エラーの一つがapplication.propertiesのミスです。本記事では起動失敗の原因と実務的な解決方法を解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-12</p>
+
+        <!-- 目次 -->
+        <h2>目次</h2>
+        <ul>
+          <li><a href="#section1">1. 概要</a></li>
+          <li><a href="#section2">2. 主な原因</a></li>
+          <li><a href="#section3">3. 解決方法</a></li>
+          <li><a href="#section4">4. 設定例</a></li>
+          <li><a href="#section5">5. よくあるエラー</a></li>
+          <li><a href="#section6">6. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <!-- 概要 -->
+        <h2 id="section1">1. 概要</h2>
+        <p>
+          application.propertiesはSpring
+          Bootの設定中心ファイルであり、DB・ポート・ログ設定などを管理します。
+          ここにミスがあるとアプリが起動しません。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>項目</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>対象</td>
+            <td>Spring Boot 3.x</td>
+          </tr>
+          <tr>
+            <td>影響範囲</td>
+            <td>起動失敗・DB接続エラー・設定不整合</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <!-- 主な原因 -->
+        <h2 id="section2">2. 主な原因</h2>
+        <ul>
+          <li>スペルミス（spring.datasource → typo）</li>
+          <li>キーの書き間違い</li>
+          <li>値の形式エラー（URL不正など）</li>
+          <li>環境別設定の未分離（dev/prod混在）</li>
+          <li>インデントや余計な空白</li>
+        </ul>
+
+        <hr />
+
+        <!-- 解決方法 -->
+        <h2 id="section3">3. 解決方法</h2>
+
+        <h3>3-1. 正しいDB設定例</h3>
+        <pre><code class="properties">
+spring.datasource.url=jdbc:mysql://localhost:3306/testdb
+spring.datasource.username=root
+spring.datasource.password=pass
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+        </code></pre>
+
+        <h3>3-2. ポート設定</h3>
+        <pre><code class="properties">
+server.port=8081
+        </code></pre>
+
+        <h3>3-3. プロファイル分離</h3>
+        <pre><code class="properties">
+spring.profiles.active=dev
+        </code></pre>
+
+        <hr />
+
+        <!-- 設定例 -->
+        <h2 id="section4">4. 設定例</h2>
+
+        <pre><code class="properties">
+# 開発環境
+spring.datasource.url=jdbc:mysql://127.0.0.1:3306/devdb
+
+# 本番環境
+spring.datasource.url=jdbc:mysql://prod-db:3306/proddb
+        </code></pre>
+
+        <hr />
+
+        <!-- よくあるエラー -->
+        <h2 id="section5">5. よくあるエラー</h2>
+
+        <h3>設定読み込み失敗</h3>
+        <pre><code class="text">
+Could not bind properties to...
+        </code></pre>
+
+        <h3>DB接続エラー</h3>
+        <pre><code class="text">
+Failed to configure a DataSource
+        </code></pre>
+
+        <p>ほとんどがキー名ミスか環境設定の不整合です。</p>
+
+        <hr />
+
+        <!-- まとめ -->
+        <h2 id="section6">6. まとめ</h2>
+        <ul>
+          <li>キー名ミスが最頻出原因</li>
+          <li>環境分離（dev/prod）が重要</li>
+          <li>DB設定とポート設定を優先チェック</li>
+        </ul>
+
+        <hr />
+
+        <!-- 関連記事 -->
+        <h2>関連記事</h2>
+        <ul>
+          <li><a href="springboot_bean_error.html">Bean未解決エラー</a></li>
+          <li><a href="springboot_port_error.html">ポート8080エラー</a></li>
+          <li><a href="springboot_mysql_error.html">MySQL接続エラー</a></li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted">Copyright (C) nori</span>
+      </div>
+    </footer>
+  </body>
+</html>

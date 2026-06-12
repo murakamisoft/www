@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: springboot_deploy_error.html
+CATEGORY: Spring Boot
+TITLE: Spring Boot本番環境で動かない原因（jar・環境差分）
+DESCRIPTION: ローカルと本番の差異・デプロイ失敗対策
+SEO META END -->
+
+    <!-- SEO -->
+    <title>
+      Spring Boot本番環境で動かない原因（jar・環境差分） | Programming Lab
+    </title>
+
+    <meta
+      name="description"
+      content="Spring Bootアプリが本番環境で動かない原因を解説。jar実行ミス、環境変数差分、プロファイル設定など実務で多いトラブルと対処法を具体例付きで説明。"
+    />
+
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/spring-boot/springboot_deploy_error.html"
+    />
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <!-- Highlight.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!-- Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <!-- タイトル -->
+        <h1 class="mt-5">Spring Boot本番環境で動かない原因（jar・環境差分）</h1>
+
+        <!-- リード文 -->
+        <p class="lead">
+          Spring
+          Bootアプリがローカルでは動くのに本番で動かない原因と、その実務的な解決方法を整理します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-12</p>
+
+        <!-- 目次 -->
+        <h2>目次</h2>
+        <ul>
+          <li><a href="#section1">1. 概要</a></li>
+          <li><a href="#section2">2. 主な原因</a></li>
+          <li><a href="#section3">3. 解決方法</a></li>
+          <li><a href="#section4">4. デプロイ手順例</a></li>
+          <li><a href="#section5">5. よくあるエラー</a></li>
+          <li><a href="#section6">6. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <!-- 概要 -->
+        <h2 id="section1">1. 概要</h2>
+        <p>
+          Spring
+          Bootは環境差分（ローカル・本番）によって動作が変わる典型的なフレームワークです。
+          特にjar実行や環境変数の違いでエラーが発生します。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>項目</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>対象</td>
+            <td>Spring Boot 3.x</td>
+          </tr>
+          <tr>
+            <td>環境</td>
+            <td>Linux / Windows / クラウドサーバ</td>
+          </tr>
+          <tr>
+            <td>主要原因</td>
+            <td>環境差分・jar実行ミス・設定不備</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <!-- 主な原因 -->
+        <h2 id="section2">2. 主な原因</h2>
+        <ul>
+          <li>jarファイルの実行コマンドミス</li>
+          <li>application.propertiesの環境依存設定</li>
+          <li>DB接続情報の差分</li>
+          <li>Javaバージョン違い</li>
+          <li>ポート開放ミス（サーバ側）</li>
+        </ul>
+
+        <hr />
+
+        <!-- 解決方法 -->
+        <h2 id="section3">3. 解決方法</h2>
+
+        <h3>3-1. 正しいjar実行</h3>
+        <pre><code class="bash">
+java -jar app.jar
+        </code></pre>
+
+        <h3>3-2. プロファイル指定</h3>
+        <pre><code class="bash">
+java -jar app.jar --spring.profiles.active=prod
+        </code></pre>
+
+        <h3>3-3. 環境変数の確認</h3>
+        <pre><code class="bash">
+echo $JAVA_HOME
+echo $SPRING_PROFILES_ACTIVE
+        </code></pre>
+
+        <hr />
+
+        <!-- デプロイ手順 -->
+        <h2 id="section4">4. デプロイ手順例</h2>
+
+        <ol>
+          <li>ビルド実行（mvn package）</li>
+          <li>jarファイルをサーバへ転送</li>
+          <li>java -jarで起動</li>
+          <li>ログ確認（nohup.out / journalctl）</li>
+        </ol>
+
+        <hr />
+
+        <!-- よくあるエラー -->
+        <h2 id="section5">5. よくあるエラー</h2>
+
+        <h3>ポート使用中</h3>
+        <pre><code class="text">
+Address already in use
+        </code></pre>
+
+        <h3>プロファイル未設定</h3>
+        <pre><code class="text">
+No active profile set
+        </code></pre>
+
+        <p>これらはほぼ環境設定ミスが原因です。</p>
+
+        <hr />
+
+        <!-- まとめ -->
+        <h2 id="section6">6. まとめ</h2>
+        <ul>
+          <li>ローカルと本番の差分を必ず意識する</li>
+          <li>jar実行とプロファイル指定が重要</li>
+          <li>環境変数管理が安定稼働の鍵</li>
+        </ul>
+
+        <hr />
+
+        <!-- 関連記事 -->
+        <h2>関連記事</h2>
+        <ul>
+          <li>
+            <a href="springboot_properties_error.html"
+              >application.properties設定ミス</a
+            >
+          </li>
+          <li><a href="springboot_mysql_error.html">MySQL接続エラー</a></li>
+          <li><a href="springboot_port_error.html">ポート8080エラー</a></li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted">Copyright (C) nori</span>
+      </div>
+    </footer>
+  </body>
+</html>
