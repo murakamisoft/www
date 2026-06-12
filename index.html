@@ -4,12 +4,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="JavaやSpring Boot、MyBatisを使ったWebアプリの自作ソースコードを公開・解説しています。実装方法やエラー対策の参考にどうぞ！">
-  <meta name="keywords" content="プログラム,Java,Spring,SpringBoot,springframework,Mybatis,Webアプリ,SpringSecurity,CRUD実装,ソースコード公開">
-  <title>Programing Lab｜Java / Spring BootのWebアプリ開発とソースコード解説</title>
-
-  <link rel="canonical" href="https://getbootstrap.jp/docs/5.0/examples/sticky-footer-navbar/">
-
+  <meta name="description"
+  content="Java、Spring Boot、MyBatis、Spring Securityを使ったWebアプリ開発を実例付きで解説。CRUD実装、ログイン認証、開発環境構築、よくあるエラーの解決方法を紹介します。">
+  
+  <title>Java・Spring Boot入門｜Webアプリ開発、MyBatis、Spring Security実装例とエラー解決集</title>
   <!-- Bootstrap core CSS -->
   <link href=https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css rel="stylesheet"
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -31,7 +29,9 @@
   </style>
 
   <!-- Custom styles for this template -->
-  <link href="sticky-footer-navbar.css" rel="stylesheet">
+  <link href="css/sticky-footer-navbar.css" rel="stylesheet">
+
+  <link rel="canonical" href="https://vbminigame.sakura.ne.jp/">
 
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
     crossorigin="anonymous"></script>
@@ -43,7 +43,7 @@
     <!-- Fixed navbar -->
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
       <div class="container-fluid">
-        <a class="navbar-brand" href="http://vbminigame.sakura.ne.jp">Programing Lab</a>
+        <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">Programming Lab</a>
       </div>
     </nav>
   </header>
@@ -51,21 +51,25 @@
   <!-- Begin page content -->
   <main class="flex-shrink-0">
     <div class="container">
-      <h1 class="mt-5">about Programing Lab</h1>
-      <p class="lead">本サイトでは、JavaのWebアプリ開発に関する技術的な記事を記載していきます。<br>
-        ソースコードを公開していますので、ぜひ参考にしてみてください。</p>
+      <h1 class="mt-5">Java・Spring BootによるWebアプリ開発サンプル集</h1>
+      <h2>サイト概要</h2>
+
+      <p>
+      Java、Spring Boot、MyBatis、Spring Securityを利用したWebアプリ開発の実装例を公開しています。
+      実際に動作するソースコード付きで、CRUD機能、ログイン認証、開発環境構築、エラー解決方法を解説しています。
+      </p>
     </div>
     <div class="container">
       <h2>Contents</h2>
       <dl class="row">
         <dt class="col-sm-3"><a href="sample/bookmanager/list.html">1. 本を管理するWebアプリ</a></dt>
-        <dd class="col-sm-9">Spring BootとMybatisによる、本を管理するWebアプリです。一覧画面を作成します。</dd>
+        <dd class="col-sm-9">Spring BootとMyBatisによる、本を管理するWebアプリです。一覧画面を作成します。</dd>
         <dt class="col-sm-3"><a href="sample/bookmanager/add.html">2. Webアプリに、本の追加機能を実装</a></dt>
-        <dd class="col-sm-9">Spring BootとMybatisによる、本を管理するWebアプリです。本の追加機能を作成します。</dd>
+        <dd class="col-sm-9">Spring BootとMyBatisによる、本を管理するWebアプリです。本の追加機能を作成します。</dd>
         <dt class="col-sm-3"><a href="sample/bookmanager/delete.html">3. Webアプリに、本の削除機能を実装</a></dt>
-        <dd class="col-sm-9">Spring BootとMybatisによる、本を管理するWebアプリです。本の削除機能を作成します。</dd>
+        <dd class="col-sm-9">Spring BootとMyBatisによる、本を管理するWebアプリです。本の削除機能を作成します。</dd>
         <dt class="col-sm-3"><a href="sample/bookmanager/edit.html">4. Webアプリに、本の編集機能を実装</a></dt>
-        <dd class="col-sm-9">Spring BootとMybatisによる、本を管理するWebアプリです。本の編集機能を作成します。</dd>
+        <dd class="col-sm-9">Spring BootとMyBatisによる、本を管理するWebアプリです。本の編集機能を作成します。</dd>
         <dt class="col-sm-3"><a href="sample/bookmanager/login.html">5. Webアプリに、spring-securityのログイン認証を実装</a></dt>
         <dd class="col-sm-9">SpringSecurityの認証機能を使用し、ログイン画面を実装します。認証はDB認証となります。</dd>
         <dt class="col-sm-3"><a href="sample/bookmanager/userbook.html">6. ユーザごとに本を管理できるよう実装</a></dt>

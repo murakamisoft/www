@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/</loc>
+  </url>
+
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/sample/bookmanager/list.html</loc>
+  </url>
+
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/sample/bookmanager/add.html</loc>
+  </url>
+
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/sample/bookmanager/delete.html</loc>
+  </url>
+
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/sample/bookmanager/edit.html</loc>
+  </url>
+
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/sample/bookmanager/login.html</loc>
+  </url>
+
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/sample/bookmanager/userbook.html</loc>
+  </url>
+
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/springboot/springboot_setup.html</loc>
+  </url>
+
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/springboot/springboot_errors.html</loc>
+  </url>
+
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/vbminigame/index.html</loc>
+  </url>
+
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/vbminigame/start.htm</loc>
+  </url>
+
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/vbminigame/gamemodule.htm</loc>
+  </url>
+
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/vbminigame/slidegame.htm</loc>
+  </url>
+
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/vbminigame/block.htm</loc>
+  </url>
+
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/vbminigame/reversi.htm</loc>
+  </url>
+
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/vbminigame/stg.htm</loc>
+  </url>
+
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/vbminigame/rpg.htm</loc>
+  </url>
+
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/vbminigame/action.htm</loc>
+  </url>
+
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/vbminigame/javagame.htm</loc>
+  </url>
+
+</urlset>
