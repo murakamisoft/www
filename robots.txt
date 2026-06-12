@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://vbminigame.sakura.ne.jp/sitemap.xml
