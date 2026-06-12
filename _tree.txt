@@ -1,8 +1,10 @@
 フォルダー パスの一覧:  ボリューム Windows-SSD
-ボリューム シリアル番号は 00000012 64B9:5F8F です
+ボリューム シリアル番号は 000000D1 64B9:5F8F です
 C:.
 │  ads.txt
+│  articles.tsv
 │  color.col
+│  generate.sh
 │  google78e7171cfa1cc4fc.html
 │  index.html
 │  robots.txt
@@ -76,7 +78,9 @@ C:.
 ├─springboot
 │      springboot_controller.html
 │      springboot_errors.html
+│      springboot_error_list.html
 │      springboot_setup.html
+│      springboot_whitelabel.html
 │      
 └─vbminigame
     │  action.htm
