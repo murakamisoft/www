@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: project_structure.html
+CATEGORY: 開発効率
+TITLE: フォルダ構成ベストプラクティス
+DESCRIPTION: Java/Spring Boot開発におけるフォルダ構成のベストプラクティスを解説。現場で迷いやすいパッケージ設計・ディレクトリ構造・責務分離の考え方を実務ベースで整理。
+SEO META END -->
+
+    <!-- SEO -->
+    <title>フォルダ構成ベストプラクティス | Programming Lab</title>
+
+    <meta
+      name="description"
+      content="Java/Spring Boot開発におけるフォルダ構成のベストプラクティスを解説。パッケージ設計・ディレクトリ設計・責務分離を実務視点で整理。"
+    />
+
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/development/project_structure.html"
+    />
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <!-- Highlight.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!-- Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <!-- タイトル -->
+        <h1 class="mt-5">フォルダ構成ベストプラクティス</h1>
+
+        <!-- リード文 -->
+        <p class="lead">
+          Java / Spring
+          Boot開発におけるフォルダ構成の設計原則とベストプラクティスを実務視点で解説します。保守性・拡張性・チーム開発効率を上げるための構造設計を整理しています。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-12</p>
+
+        <!-- 目次 -->
+        <h2>目次</h2>
+        <ul>
+          <li><a href="#section1">1. フォルダ構成の基本原則</a></li>
+          <li><a href="#section2">2. よくある失敗パターン</a></li>
+          <li><a href="#section3">3. 推奨ディレクトリ構成</a></li>
+          <li><a href="#section4">4. Spring Bootでの実践例</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <!-- 1 -->
+        <h2 id="section1">1. フォルダ構成の基本原則</h2>
+        <p>
+          フォルダ構成は「機能単位」で分けるのが基本です。クラスの役割（Controller
+          / Service / Repository）ごとに分離し、責務を明確にします。
+        </p>
+
+        <ul>
+          <li>責務が混ざらない構造にする</li>
+          <li>機能単位 or ドメイン単位で分割する</li>
+          <li>変更影響範囲を最小化する</li>
+        </ul>
+
+        <hr />
+
+        <!-- 2 -->
+        <h2 id="section2">2. よくある失敗パターン</h2>
+
+        <ul>
+          <li>Controller / Service が1フォルダに混在</li>
+          <li>機能ごとではなく技術ごとに分割しすぎる</li>
+          <li>共通処理が散らばる</li>
+        </ul>
+
+        <p>
+          この構造だと変更時に複数フォルダを横断する必要があり、保守性が低下します。
+        </p>
+
+        <hr />
+
+        <!-- 3 -->
+        <h2 id="section3">3. 推奨ディレクトリ構成</h2>
+
+        <pre><code class="text">
+com.example.app
+ ├── user
+ │     ├── controller
+ │     ├── service
+ │     ├── repository
+ │     └── dto
+ ├── order
+ │     ├── controller
+ │     ├── service
+ │     ├── repository
+ │     └── dto
+ └── common
+        </code></pre>
+
+        <p>
+          機能単位（ドメイン単位）で分割することで、変更影響が局所化されます。
+        </p>
+
+        <hr />
+
+        <!-- 4 -->
+        <h2 id="section4">4. Spring Bootでの実践例</h2>
+
+        <pre><code class="java">
+@RestController
+@RequestMapping("/users")
+public class UserController {
+
+  private final UserService userService;
+
+  public UserController(UserService userService) {
+    this.userService = userService;
+  }
+
+  @GetMapping("/{id}")
+  public User getUser(@PathVariable Long id) {
+    return userService.findById(id);
+  }
+}
+        </code></pre>
+
+        <p>ControllerはHTTP処理のみ、ビジネスロジックはServiceに分離します。</p>
+
+        <hr />
+
+        <!-- 広告 -->
+        <div class="my-4 text-center">
+          <!-- Adsense -->
+        </div>
+
+        <hr />
+
+        <!-- 5 -->
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>フォルダ構成は機能単位が基本</li>
+          <li>技術単位分割はスケールで破綻しやすい</li>
+          <li>責務分離が保守性を決める</li>
+        </ul>
+
+        <!-- 関連記事 -->
+        <hr />
+
+        <h2>関連記事</h2>
+        <ul>
+          <li>
+            <a href="code_review_checklist.html"
+              >コードレビュー観点チェックリスト</a
+            >
+          </li>
+          <li><a href="java_error_hub.html">Javaエラー対策まとめ</a></li>
+          <li>
+            <a href="../springboot/springboot_setup.html"
+              >Spring Boot構築手順</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>
