@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: mybatis_select_null.html
+CATEGORY: MyBatis
+TITLE: MyBatisでSELECT結果がnullになる原因まとめと解決方法
+DESCRIPTION: MyBatisでSELECT結果がnullになる原因を解説。resultTypeとresultMapの不一致やカラム名ミスマッチなど、実務で頻出する問題と対処法を紹介します。
+SEO META END -->
+
+    <!-- SEO -->
+    <title>
+      MyBatisでSELECT結果がnullになる原因まとめと解決方法 | Programming Lab
+    </title>
+
+    <meta
+      name="description"
+      content="MyBatisでSELECT結果がnullになる原因を解説。resultTypeとresultMapの不一致やカラム名ミスマッチなど実務で頻出する問題と解決方法を紹介。"
+    />
+
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/MyBatis/mybatis_select_null.html"
+    />
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <!-- Highlight.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!-- Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <!-- タイトル -->
+        <h1 class="mt-5">
+          MyBatisでSELECT結果がnullになる原因まとめと解決方法
+        </h1>
+
+        <!-- リード文 -->
+        <p class="lead">
+          MyBatisでSELECT結果がnullになる原因を整理し、resultTypeとresultMapの不一致、カラム名ミスマッチなど実務で頻出する問題と解決方法を解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-12</p>
+
+        <!-- 目次 -->
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. 概要</a></li>
+          <li><a href="#section2">2. 主な原因</a></li>
+          <li><a href="#section3">3. サンプルコード</a></li>
+          <li><a href="#section4">4. よくあるエラー</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <!-- 概要 -->
+        <h2 id="section1">1. 概要</h2>
+
+        <p>
+          MyBatisでSELECT結果がnullになる場合、多くはSQL自体ではなくマッピング設定の問題です。
+          特にresultTypeとresultMapの不一致や、DBカラム名とJavaプロパティ名のズレが原因になります。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>項目</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>環境</td>
+            <td>Java 21</td>
+          </tr>
+          <tr>
+            <td>フレームワーク</td>
+            <td>Spring Boot 3.x</td>
+          </tr>
+          <tr>
+            <td>ORM</td>
+            <td>MyBatis</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <!-- 原因 -->
+        <h2 id="section2">2. 主な原因</h2>
+
+        <h3>2-1. resultTypeと実際のカラムが不一致</h3>
+        <p>
+          SQLのカラム名とJavaのプロパティ名が一致していないとnullになります。
+        </p>
+
+        <pre><code class="sql">
+SELECT user_id AS userId, user_name AS userName
+FROM users
+        </code></pre>
+
+        <h3>2-2. resultMap未設定</h3>
+        <p>
+          複雑なマッピングの場合はresultMapを使わないと正しく格納されません。
+        </p>
+
+        <pre><code class="xml">
+<resultMap id="userMap" type="User">
+  <id property="id" column="user_id"/>
+  <result property="name" column="user_name"/>
+</resultMap>
+        </code></pre>
+
+        <h3>2-3. データはあるがWHERE条件ミス</h3>
+        <p>条件が厳しすぎて結果が0件→nullに見えるケースもあります。</p>
+
+        <hr />
+
+        <!-- サンプル -->
+        <h2 id="section3">3. サンプルコード</h2>
+
+        <p>基本的なSELECTマッピング例</p>
+
+        <pre><code class="xml">
+<select id="findUser" resultType="User">
+  SELECT
+    user_id AS id,
+    user_name AS name
+  FROM users
+  WHERE user_id = #{id}
+</select>
+        </code></pre>
+
+        <hr />
+
+        <!-- 広告 -->
+        <div class="my-4 text-center">
+          <!-- Adsense -->
+        </div>
+
+        <hr />
+
+        <!-- エラー -->
+        <h2 id="section4">4. よくあるエラー</h2>
+
+        <h3>取得結果がnullになる</h3>
+
+        <pre><code class="text">
+null
+        </code></pre>
+
+        <p>SQLは正常でもマッピング失敗によりnullになることがあります。</p>
+
+        <hr />
+
+        <!-- まとめ -->
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>カラム名とJavaプロパティ名を一致させる</li>
+          <li>必要に応じてresultMapを使う</li>
+          <li>WHERE条件も必ず確認する</li>
+        </ul>
+
+        <p>
+          SELECT結果がnullになる原因の多くは「マッピング設定ミス」です。まずはSQLとJavaの対応関係を確認してください。
+        </p>
+
+        <!-- 関連記事 -->
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li>
+            <a href="/MyBatis/mybatis_mapper_not_found.html"
+              >Mapperが読み込まれない原因</a
+            >
+          </li>
+          <li>
+            <a href="/MyBatis/mybatis_dynamic_sql_error.html"
+              >動的SQLが動かない原因</a
+            >
+          </li>
+          <li>
+            <a href="/PostgreSQL/postgres_sql_error.html">SQLエラーまとめ</a>
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

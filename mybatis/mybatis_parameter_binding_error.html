@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: mybatis_parameter_binding_error.html
+CATEGORY: MyBatis
+TITLE: MyBatisのパラメータバインドエラー（#と$の違い）と安全な書き方
+DESCRIPTION: MyBatisの#{}と${}の違いを解説。SQLインジェクションリスクやバインドミスの原因、実務で安全に使う方法を紹介します。
+SEO META END -->
+
+    <!-- SEO -->
+    <title>
+      MyBatisのパラメータバインドエラー（#と$の違い）と安全な書き方 |
+      Programming Lab
+    </title>
+
+    <meta
+      name="description"
+      content="MyBatisの#{}と${}の違いを解説。SQLインジェクションリスクやバインドミスの原因、安全な使い分け方法を紹介。"
+    />
+
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/MyBatis/mybatis_parameter_binding_error.html"
+    />
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <!-- Highlight.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!-- Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <!-- タイトル -->
+        <h1 class="mt-5">
+          MyBatisのパラメータバインドエラー（#と$の違い）と安全な書き方
+        </h1>
+
+        <!-- リード文 -->
+        <p class="lead">
+          MyBatisの#{}と${}の違いを正しく理解しないと、SQLエラーやSQLインジェクションの原因になります。本記事では実務での安全な使い方とバインドエラーの対処法を解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-12</p>
+
+        <!-- 目次 -->
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. 概要</a></li>
+          <li><a href="#section2">2. #{}と${}の違い</a></li>
+          <li><a href="#section3">3. サンプルコード</a></li>
+          <li><a href="#section4">4. よくあるエラー</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <!-- 概要 -->
+        <h2 id="section1">1. 概要</h2>
+
+        <p>
+          MyBatisではパラメータの埋め込み方法として「#{}」と「${}」の2種類があります。
+          この違いを理解していないと、SQLエラーやセキュリティ問題につながります。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>項目</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>環境</td>
+            <td>Java 21</td>
+          </tr>
+          <tr>
+            <td>フレームワーク</td>
+            <td>Spring Boot 3.x</td>
+          </tr>
+          <tr>
+            <td>ORM</td>
+            <td>MyBatis</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <!-- 差分 -->
+        <h2 id="section2">2. #{}と${}の違い</h2>
+
+        <h3>2-1. #{}（推奨：安全）</h3>
+        <p>
+          PreparedStatementとしてバインドされるため、安全でSQLインジェクションを防げます。
+        </p>
+
+        <pre><code class="xml">
+SELECT * FROM users WHERE id = #{id}
+        </code></pre>
+
+        <h3>2-2. ${}（非推奨：危険）</h3>
+        <p>文字列置換のためSQLインジェクションのリスクがあります。</p>
+
+        <pre><code class="xml">
+SELECT * FROM users WHERE name = ${name}
+        </code></pre>
+
+        <p>基本的に${}はORDER BYやカラム名など限定用途のみ使用します。</p>
+
+        <hr />
+
+        <!-- サンプル -->
+        <h2 id="section3">3. サンプルコード</h2>
+
+        <p>安全な検索クエリの例</p>
+
+        <pre><code class="xml">
+<select id="findUser">
+  SELECT * FROM users
+  WHERE id = #{id}
+  AND name = #{name}
+</select>
+        </code></pre>
+
+        <hr />
+
+        <!-- 広告 -->
+        <div class="my-4 text-center">
+          <!-- Adsense -->
+        </div>
+
+        <hr />
+
+        <!-- エラー -->
+        <h2 id="section4">4. よくあるエラー</h2>
+
+        <h3>バインドエラー例</h3>
+
+        <pre><code class="text">
+Parameter 'id' not found. Available parameters are ...
+        </code></pre>
+
+        <p>原因はMapperメソッドとSQL側のパラメータ名不一致が多いです。</p>
+
+        <hr />
+
+        <!-- まとめ -->
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>#{}を基本的に使用する</li>
+          <li>${}は限定用途のみ使用する</li>
+          <li>パラメータ名の不一致を確認する</li>
+        </ul>
+
+        <p>
+          MyBatisのバインドエラーは「書き方ルールの理解不足」が原因です。まずは#{}を徹底してください。
+        </p>
+
+        <!-- 関連記事 -->
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li>
+            <a href="/MyBatis/mybatis_sql_not_run.html"
+              >SQLが実行されない原因まとめ</a
+            >
+          </li>
+          <li>
+            <a href="/MyBatis/mybatis_select_null.html"
+              >SELECT結果がnullになる原因</a
+            >
+          </li>
+          <li>
+            <a href="/MyBatis/mybatis_dynamic_sql_error.html"
+              >動的SQLが動かない原因</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -213,6 +213,70 @@
           <dd class="col-sm-9">
             Mapper・XML・トランザクションなどSQL未実行の原因を整理。
           </dd>
+
+          <dt class="col-sm-3">
+            <a href="mybatis/mybatis_commit_error.html">
+              INSERT/UPDATEが反映されない原因
+            </a>
+          </dt>
+          <dd class="col-sm-9">
+            @Transactional漏れ・commit不足・トランザクション管理ミスによるデータ未反映問題を解説。
+          </dd>
+
+          <dt class="col-sm-3">
+            <a href="mybatis/mybatis_dynamic_sql_error.html">
+              動的SQLが動かない原因（if/where/foreach）
+            </a>
+          </dt>
+          <dd class="col-sm-9">
+            OGNL条件ミス・タグ構文エラー・MyBatis動的SQLの典型バグを整理。
+          </dd>
+
+          <dt class="col-sm-3">
+            <a href="mybatis/mybatis_mapper_not_found.html">
+              Mapperが読み込まれない原因と解決方法
+            </a>
+          </dt>
+          <dd class="col-sm-9">
+            @MapperScan漏れ・XMLパス設定ミス・DI失敗などMyBatis初期トラブル対応。
+          </dd>
+
+          <dt class="col-sm-3">
+            <a href="mybatis/mybatis_n1_problem.html">
+              N+1問題とパフォーマンス改善方法
+            </a>
+          </dt>
+          <dd class="col-sm-9">
+            不正なSELECTループ・JOIN最適化・SQLチューニングによる性能改善手法。
+          </dd>
+
+          <dt class="col-sm-3">
+            <a href="mybatis/mybatis_parameter_binding_error.html">
+              パラメータバインドエラー（#と$の違い）
+            </a>
+          </dt>
+          <dd class="col-sm-9">
+            #{ }と${
+            }の違い・SQLインジェクション・バインドミスの典型エラーを解説。
+          </dd>
+
+          <dt class="col-sm-3">
+            <a href="mybatis/mybatis_select_null.html">
+              SELECT結果がnullになる原因まとめ
+            </a>
+          </dt>
+          <dd class="col-sm-9">
+            resultType/resultMap不一致・カラム名ミスマッチによる取得失敗の対策。
+          </dd>
+
+          <dt class="col-sm-3">
+            <a href="mybatis/mybatis_sql_log_error.html">
+              SQLログが出ない原因と解決方法
+            </a>
+          </dt>
+          <dd class="col-sm-9">
+            application.yml・logback設定・log-impl不足などSQLログ非表示問題を解説。
+          </dd>
         </dl>
 
         <h2>API設計入門記事</h2>

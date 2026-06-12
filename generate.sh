@@ -1,7 +1,7 @@
 #!/bin/bash
 
 TEMPLATE="_templete.html"
-OUTPUT_DIR="postgres"
+OUTPUT_DIR="mybatis"
 INPUT_FILE="articles.tsv"
 
 mkdir -p "$OUTPUT_DIR"
