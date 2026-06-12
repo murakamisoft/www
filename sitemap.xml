@@ -1,81 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-  <url>
-    <loc>https://vbminigame.sakura.ne.jp/</loc>
-  </url>
+  <!-- TOP -->
+  <url><loc>https://vbminigame.sakura.ne.jp/</loc></url>
 
-  <url>
-    <loc>https://vbminigame.sakura.ne.jp/sample/bookmanager/list.html</loc>
-  </url>
+  <!-- sample -->
+  <url><loc>https://vbminigame.sakura.ne.jp/sample/bookmanager/list.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/sample/bookmanager/add.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/sample/bookmanager/delete.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/sample/bookmanager/edit.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/sample/bookmanager/login.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/sample/bookmanager/userbook.html</loc></url>
 
-  <url>
-    <loc>https://vbminigame.sakura.ne.jp/sample/bookmanager/add.html</loc>
-  </url>
+  <!-- api_design -->
+  <url><loc>https://vbminigame.sakura.ne.jp/api_design/api_design_basic.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/api_design/api_design_mistake.html</loc></url>
 
-  <url>
-    <loc>https://vbminigame.sakura.ne.jp/sample/bookmanager/delete.html</loc>
-  </url>
+  <!-- development -->
+  <url><loc>https://vbminigame.sakura.ne.jp/development/code_review_checklist.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/development/project_structure.html</loc></url>
 
-  <url>
-    <loc>https://vbminigame.sakura.ne.jp/sample/bookmanager/edit.html</loc>
-  </url>
+  <!-- hub -->
+  <url><loc>https://vbminigame.sakura.ne.jp/hub/java_error_hub.html</loc></url>
 
-  <url>
-    <loc>https://vbminigame.sakura.ne.jp/sample/bookmanager/login.html</loc>
-  </url>
+  <!-- jenkins -->
+  <url><loc>https://vbminigame.sakura.ne.jp/jenkins/jenkins_build_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/jenkins/jenkins_setup.html</loc></url>
 
-  <url>
-    <loc>https://vbminigame.sakura.ne.jp/sample/bookmanager/userbook.html</loc>
-  </url>
+  <!-- mybatis -->
+  <url><loc>https://vbminigame.sakura.ne.jp/mybatis/mybatis_bean_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/mybatis/mybatis_commit_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/mybatis/mybatis_dynamic_sql_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/mybatis/mybatis_mapper_not_found.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/mybatis/mybatis_n1_problem.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/mybatis/mybatis_parameter_binding_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/mybatis/mybatis_select_null.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/mybatis/mybatis_springboot_setup.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/mybatis/mybatis_sql_log_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/mybatis/mybatis_sql_not_run.html</loc></url>
 
-  <url>
-    <loc>https://vbminigame.sakura.ne.jp/springboot/springboot_setup.html</loc>
-  </url>
+  <!-- postgres -->
+  <url><loc>https://vbminigame.sakura.ne.jp/postgres/postgres_auth_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/postgres/postgres_backup_restore.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/postgres/postgres_connection_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/postgres/postgres_connection_timeout.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/postgres/postgres_ddl_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/postgres/postgres_encoding_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/postgres/postgres_performance.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/postgres/postgres_springboot_setup.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/postgres/postgres_sql_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/postgres/postgres_user_setup.html</loc></url>
 
-  <url>
-    <loc>https://vbminigame.sakura.ne.jp/springboot/springboot_errors.html</loc>
-  </url>
+  <!-- springboot -->
+  <url><loc>https://vbminigame.sakura.ne.jp/springboot/springboot_404_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/springboot/springboot_bean_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/springboot/springboot_controller.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/springboot/springboot_deploy_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/springboot/springboot_errors.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/springboot/springboot_error_list.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/springboot/springboot_mysql_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/springboot/springboot_port_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/springboot/springboot_properties_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/springboot/springboot_rest_api_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/springboot/springboot_setup.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/springboot/springboot_whitelabel.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/springboot/spring_security_loop.html</loc></url>
 
-  <url>
-    <loc>https://vbminigame.sakura.ne.jp/vbminigame/index.html</loc>
-  </url>
-
-  <url>
-    <loc>https://vbminigame.sakura.ne.jp/vbminigame/start.htm</loc>
-  </url>
-
-  <url>
-    <loc>https://vbminigame.sakura.ne.jp/vbminigame/gamemodule.htm</loc>
-  </url>
-
-  <url>
-    <loc>https://vbminigame.sakura.ne.jp/vbminigame/slidegame.htm</loc>
-  </url>
-
-  <url>
-    <loc>https://vbminigame.sakura.ne.jp/vbminigame/block.htm</loc>
-  </url>
-
-  <url>
-    <loc>https://vbminigame.sakura.ne.jp/vbminigame/reversi.htm</loc>
-  </url>
-
-  <url>
-    <loc>https://vbminigame.sakura.ne.jp/vbminigame/stg.htm</loc>
-  </url>
-
-  <url>
-    <loc>https://vbminigame.sakura.ne.jp/vbminigame/rpg.htm</loc>
-  </url>
-
-  <url>
-    <loc>https://vbminigame.sakura.ne.jp/vbminigame/action.htm</loc>
-  </url>
-
-  <url>
-    <loc>https://vbminigame.sakura.ne.jp/vbminigame/javagame.htm</loc>
-  </url>
+  <!-- vbminigame -->
+  <url><loc>https://vbminigame.sakura.ne.jp/vbminigame/index.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/vbminigame/start.htm</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/vbminigame/gamemodule.htm</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/vbminigame/slidegame.htm</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/vbminigame/block.htm</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/vbminigame/reversi.htm</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/vbminigame/stg.htm</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/vbminigame/rpg.htm</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/vbminigame/action.htm</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/vbminigame/javagame.htm</loc></url>
 
 </urlset>
