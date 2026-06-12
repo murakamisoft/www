@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: postgres_sql_error.html
+CATEGORY: PostgreSQL
+TITLE: PostgreSQLでSQL実行エラー（syntax error）の原因と対処法まとめ
+DESCRIPTION: SQL文法ミス・予約語の使用・大小文字問題など、PostgreSQLで頻発するSQL実行エラーの原因と解決方法を実務ベースで解説。
+SEO META END -->
+
+    <!-- SEO -->
+    <title>
+      PostgreSQLでSQL実行エラー（syntax error）の原因と対処法まとめ |
+      Programming Lab
+    </title>
+
+    <meta
+      name="description"
+      content="SQL文法ミス・予約語の使用・大小文字問題など、PostgreSQLで頻発するSQL実行エラーの原因と解決方法を実務ベースで解説。"
+    />
+
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/PostgreSQL/postgres_sql_error.html"
+    />
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <!-- Highlight.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!-- Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <!-- タイトル -->
+        <h1 class="mt-5">
+          PostgreSQLでSQL実行エラー（syntax error）の原因と対処法まとめ
+        </h1>
+
+        <!-- リード文 -->
+        <p class="lead">
+          PostgreSQLのSQLエラーの多くは「文法ミス」「予約語の誤使用」「大小文字の扱いミス」です。本記事では実務で頻出するsyntax
+          errorを体系的に解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-12</p>
+
+        <!-- 目次 -->
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. SQLエラーの基本</a></li>
+          <li><a href="#section2">2. よくある原因</a></li>
+          <li><a href="#section3">3. 正しいSQL書き方</a></li>
+          <li><a href="#section4">4. よくあるエラー例</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <!-- 概要 -->
+        <h2 id="section1">1. SQLエラーの基本</h2>
+
+        <p>
+          PostgreSQLではSQL文が厳密に解析されるため、わずかなミスでもsyntax
+          errorになります。
+        </p>
+
+        <pre><code>
+ERROR: syntax error at or near "FROM"
+        </code></pre>
+
+        <p>このエラーは「SQLの構造が壊れている」ことを意味します。</p>
+
+        <hr />
+
+        <!-- 原因 -->
+        <h2 id="section2">2. よくある原因</h2>
+
+        <ul>
+          <li>カンマ（,）抜け</li>
+          <li>WHERE句の書き忘れ</li>
+          <li>予約語（user, orderなど）の使用</li>
+          <li>クォートの閉じ忘れ</li>
+          <li>テーブル名・カラム名のミス</li>
+        </ul>
+
+        <hr />
+
+        <!-- SQL -->
+        <h2 id="section3">3. 正しいSQL書き方</h2>
+
+        <p>基本のSELECT文：</p>
+
+        <pre><code class="bash">
+SELECT id, name FROM users WHERE id = 1;
+        </code></pre>
+
+        <p>予約語対策：</p>
+
+        <pre><code class="bash">
+SELECT "user", "order" FROM "table_name";
+        </code></pre>
+
+        <p>
+          PostgreSQLでは予約語を使う場合はダブルクォートで囲む必要があります。
+        </p>
+
+        <hr />
+
+        <!-- エラー -->
+        <h2 id="section4">4. よくあるエラー例</h2>
+
+        <h3>① syntax error at or near FROM</h3>
+        <p>SELECT句のカンマ抜けが原因。</p>
+
+        <h3>② column does not exist</h3>
+        <p>カラム名のスペルミスまたは大小文字問題。</p>
+
+        <h3>③ relation does not exist</h3>
+        <p>テーブル名が間違っている、またはスキーマ未指定。</p>
+
+        <hr />
+
+        <!-- 広告 -->
+        <div class="my-4 text-center">
+          <!-- Adsense -->
+        </div>
+
+        <hr />
+
+        <!-- まとめ -->
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>SQLは少しのミスでもエラーになる</li>
+          <li>予約語とカンマミスが最多原因</li>
+          <li>エラーメッセージを必ず読む</li>
+        </ul>
+
+        <p>
+          PostgreSQLのSQLエラーは「構文チェックの厳しさ」が原因なので、丁寧に確認することが重要です。
+        </p>
+
+        <!-- 関連記事 -->
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li>
+            <a href="postgres_connection_timeout.html"
+              >接続エラー（timeout/拒否）</a
+            >
+          </li>
+          <li>
+            <a href="postgres_auth_error.html">認証エラーの原因と対処法</a>
+          </li>
+          <li>
+            <a href="postgres_performance.html">パフォーマンス改善方法</a>
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted">Copyright (C) nori</span>
+      </div>
+    </footer>
+  </body>
+</html>

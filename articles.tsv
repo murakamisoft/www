@@ -1,6 +1,8 @@
-Spring Boot	Spring Bootのapplication.properties設定ミスと対処法	設定ミスによる起動失敗・環境差分の典型	springboot_properties_error.html
-Spring Boot	Spring BootでBeanが見つからないエラーの原因と解決法	DI設定ミス・ComponentScan漏れ対策	springboot_bean_error.html
-Spring Boot	Spring Bootでポート8080が使用中エラーの解決方法	ローカル開発で頻出するポート競合問題	springboot_port_error.html
-Spring Boot	Spring BootとMySQL接続エラーの原因と対処法	DB接続失敗・ドライバ・設定不備の解説	springboot_mysql_error.html
-Spring Boot	Spring Boot REST APIで404・405エラーが出る原因まとめ	URL設計ミス・HTTPメソッド不一致対応	springboot_rest_api_error.html
-Spring Boot	Spring Boot本番環境で動かない原因（jar・環境差分）	ローカルと本番の差異・デプロイ失敗対策	springboot_deploy_error.html
+PostgreSQL	PostgreSQLでパスワード認証エラーの原因と解決方法	接続時の認証失敗・pg_hba.conf設定ミス対策	postgres_auth_error.html
+PostgreSQL	Spring BootでPostgreSQLが接続できない（timeout/拒否）原因	DB未起動・ポート・ネットワーク系トラブル	postgres_connection_timeout.html
+PostgreSQL	PostgreSQLの初期設定（ユーザー作成・権限設定）	実務で必須のDB初期構築手順	postgres_user_setup.html
+PostgreSQL	PostgreSQLでSQL実行エラー（syntax error）の原因まとめ	SQL文法ミス・予約語・大小文字問題	postgres_sql_error.html
+PostgreSQL	Spring Boot＋PostgreSQLでDDL自動生成が動かない原因	JPA設定・hibernate ddl-auto問題	postgres_ddl_error.html
+PostgreSQL	PostgreSQLの文字化け・エンコーディング問題の解決法	UTF-8不一致・日本語データ破損対策	postgres_encoding_error.html
+PostgreSQL	PostgreSQLのパフォーマンスが遅い原因と改善方法	index未使用・VACUUM・EXPLAIN分析	postgres_performance.html
+PostgreSQL	PostgreSQLバックアップ・リストア手順まとめ	運用必須のpg_dump・復旧手順解説	postgres_backup_restore.html

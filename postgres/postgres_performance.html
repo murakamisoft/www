@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: postgres_performance.html
+CATEGORY: PostgreSQL
+TITLE: PostgreSQLのパフォーマンスが遅い原因と改善方法
+DESCRIPTION: PostgreSQLのクエリ遅延・インデックス未使用・VACUUM不足・EXPLAIN分析など、実務で使える性能改善手法を体系的に解説。
+SEO META END -->
+
+    <!-- SEO -->
+    <title>
+      PostgreSQLのパフォーマンスが遅い原因と改善方法 | Programming Lab
+    </title>
+
+    <meta
+      name="description"
+      content="PostgreSQLのクエリ遅延・インデックス未使用・VACUUM不足・EXPLAIN分析など、実務で使える性能改善手法を体系的に解説。"
+    />
+
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/PostgreSQL/postgres_performance.html"
+    />
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <!-- Highlight.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!-- Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <!-- タイトル -->
+        <h1 class="mt-5">PostgreSQLのパフォーマンスが遅い原因と改善方法</h1>
+
+        <!-- リード文 -->
+        <p class="lead">
+          PostgreSQLの遅さの原因は「インデックス未使用」「VACUUM不足」「クエリ設計ミス」が大半です。本記事では実務で使う改善手法を体系的に解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-12</p>
+
+        <!-- 目次 -->
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. パフォーマンス低下の原因</a></li>
+          <li><a href="#section2">2. EXPLAINによる分析</a></li>
+          <li><a href="#section3">3. インデックス改善</a></li>
+          <li><a href="#section4">4. VACUUMとANALYZE</a></li>
+          <li><a href="#section5">5. よくあるエラー</a></li>
+          <li><a href="#section6">6. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <!-- 概要 -->
+        <h2 id="section1">1. パフォーマンス低下の原因</h2>
+
+        <ul>
+          <li>インデックスが使われていない</li>
+          <li>大量データに対する全件検索</li>
+          <li>JOINの設計ミス</li>
+          <li>VACUUM未実行によるテーブル肥大化</li>
+        </ul>
+
+        <p>
+          PostgreSQLの遅さはアプリではなくSQL設計が原因であることがほとんどです。
+        </p>
+
+        <hr />
+
+        <!-- EXPLAIN -->
+        <h2 id="section2">2. EXPLAINによる分析</h2>
+
+        <p>実行計画を確認することでボトルネックを特定できます。</p>
+
+        <pre><code class="bash">
+EXPLAIN ANALYZE SELECT * FROM users WHERE id = 1;
+        </code></pre>
+
+        <p>Seq Scan（全件走査）が出ている場合はインデックス未使用です。</p>
+
+        <hr />
+
+        <!-- インデックス -->
+        <h2 id="section3">3. インデックス改善</h2>
+
+        <p>改善例：</p>
+
+        <pre><code class="bash">
+CREATE INDEX idx_users_id ON users(id);
+        </code></pre>
+
+        <p>
+          WHERE句やJOIN条件に使うカラムには必ずインデックスを貼るのが基本です。
+        </p>
+
+        <hr />
+
+        <!-- VACUUM -->
+        <h2 id="section4">4. VACUUMとANALYZE</h2>
+
+        <p>定期的なメンテナンスが必要です。</p>
+
+        <pre><code class="bash">
+VACUUM ANALYZE;
+        </code></pre>
+
+        <p>更新・削除が多いテーブルは放置すると急激に遅くなります。</p>
+
+        <hr />
+
+        <!-- エラー -->
+        <h2 id="section5">5. よくあるエラー</h2>
+
+        <h3>① Seq Scanが消えない</h3>
+        <p>インデックスが適用されていない。</p>
+
+        <h3>② 急に遅くなる</h3>
+        <p>VACUUM不足でテーブルが肥大化。</p>
+
+        <h3>③ JOINが遅い</h3>
+        <p>結合キーにインデックスがない。</p>
+
+        <hr />
+
+        <!-- 広告 -->
+        <div class="my-4 text-center">
+          <!-- Adsense -->
+        </div>
+
+        <hr />
+
+        <!-- まとめ -->
+        <h2 id="section6">6. まとめ</h2>
+
+        <ul>
+          <li>EXPLAINで原因特定</li>
+          <li>インデックス最適化が最重要</li>
+          <li>VACUUMは定期運用必須</li>
+        </ul>
+
+        <p>PostgreSQLの性能問題は「SQL設計＋運用」でほぼ解決できます。</p>
+
+        <!-- 関連記事 -->
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li><a href="postgres_sql_error.html">SQLエラーの原因と対処法</a></li>
+          <li>
+            <a href="postgres_backup_restore.html"
+              >バックアップ・リストア手順</a
+            >
+          </li>
+          <li>
+            <a href="postgres_connection_timeout.html"
+              >接続エラー（timeout/拒否）</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted">Copyright (C) nori</span>
+      </div>
+    </footer>
+  </body>
+</html>

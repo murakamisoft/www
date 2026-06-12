@@ -1,7 +1,7 @@
 #!/bin/bash
 
 TEMPLATE="_templete.html"
-OUTPUT_DIR="springboot"
+OUTPUT_DIR="postgres"
 INPUT_FILE="articles.tsv"
 
 mkdir -p "$OUTPUT_DIR"

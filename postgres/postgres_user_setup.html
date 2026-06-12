@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: postgres_user_setup.html
+CATEGORY: PostgreSQL
+TITLE: PostgreSQLの初期設定（ユーザー作成・権限設定）
+DESCRIPTION: PostgreSQLのユーザー作成・ロール設定・権限付与・データベース初期構築手順を実務ベースで解説。
+SEO META END -->
+
+    <!-- SEO -->
+    <title>
+      PostgreSQLの初期設定（ユーザー作成・権限設定） | Programming Lab
+    </title>
+
+    <meta
+      name="description"
+      content="PostgreSQLのユーザー作成・ロール設定・権限付与・データベース初期構築手順を実務ベースで解説。"
+    />
+
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/PostgreSQL/postgres_user_setup.html"
+    />
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <!-- Highlight.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!-- Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <!-- タイトル -->
+        <h1 class="mt-5">PostgreSQLの初期設定（ユーザー作成・権限設定）</h1>
+
+        <!-- リード文 -->
+        <p class="lead">
+          PostgreSQLの実務運用で必須となる「ユーザー作成」「ロール設定」「権限付与」の基本手順を体系的に解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-12</p>
+
+        <!-- 目次 -->
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. PostgreSQL初期設定の全体像</a></li>
+          <li><a href="#section2">2. ユーザー・ロール作成</a></li>
+          <li><a href="#section3">3. データベース作成と権限付与</a></li>
+          <li><a href="#section4">4. よくあるエラー</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <!-- 概要 -->
+        <h2 id="section1">1. PostgreSQL初期設定の全体像</h2>
+
+        <p>
+          PostgreSQLでは「ロール＝ユーザー」として扱われます。まずロールを作成し、その後データベースと権限を設定します。
+        </p>
+
+        <ul>
+          <li>ロール（ユーザー）作成</li>
+          <li>データベース作成</li>
+          <li>権限付与</li>
+        </ul>
+
+        <hr />
+
+        <!-- ユーザー作成 -->
+        <h2 id="section2">2. ユーザー・ロール作成</h2>
+
+        <p>基本のユーザー作成：</p>
+
+        <pre><code class="bash">
+CREATE ROLE app_user WITH LOGIN PASSWORD 'password';
+        </code></pre>
+
+        <p>スーパーユーザー権限付与（開発環境のみ）：</p>
+
+        <pre><code class="bash">
+ALTER ROLE app_user WITH SUPERUSER;
+        </code></pre>
+
+        <hr />
+
+        <!-- DB作成 -->
+        <h2 id="section3">3. データベース作成と権限付与</h2>
+
+        <p>データベース作成：</p>
+
+        <pre><code class="bash">
+CREATE DATABASE app_db OWNER app_user;
+        </code></pre>
+
+        <p>権限付与：</p>
+
+        <pre><code class="bash">
+GRANT ALL PRIVILEGES ON DATABASE app_db TO app_user;
+        </code></pre>
+
+        <p>
+          アプリケーション用ユーザーには必要最小限の権限を付与するのが基本です。
+        </p>
+
+        <hr />
+
+        <!-- エラー -->
+        <h2 id="section4">4. よくあるエラー</h2>
+
+        <h3>① password authentication failed</h3>
+        <p>ユーザー名またはパスワードが間違っている。</p>
+
+        <h3>② permission denied for database</h3>
+        <p>権限付与が不足している。</p>
+
+        <h3>③ role does not exist</h3>
+        <p>ユーザー作成が未実施。</p>
+
+        <hr />
+
+        <!-- 広告 -->
+        <div class="my-4 text-center">
+          <!-- Adsense -->
+        </div>
+
+        <hr />
+
+        <!-- まとめ -->
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>PostgreSQLはロール中心設計</li>
+          <li>ユーザー作成 → DB作成 → 権限付与の順</li>
+          <li>権限設計が運用の安全性を決める</li>
+        </ul>
+
+        <p>
+          初期設計を適切に行うことで、後の障害・セキュリティ問題を大幅に減らせます。
+        </p>
+
+        <!-- 関連記事 -->
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li>
+            <a href="postgres_auth_error.html">認証エラーの原因と対処法</a>
+          </li>
+          <li>
+            <a href="postgres_connection_timeout.html"
+              >接続エラー（timeout/拒否）</a
+            >
+          </li>
+          <li><a href="postgres_sql_error.html">SQLエラーまとめ</a></li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted">Copyright (C) nori</span>
+      </div>
+    </footer>
+  </body>
+</html>

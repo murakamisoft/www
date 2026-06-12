@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: postgres_connection_timeout.html
+CATEGORY: PostgreSQL
+TITLE: Spring BootでPostgreSQLが接続できない（timeout/拒否）原因と対処法
+DESCRIPTION: Spring BootからPostgreSQLへ接続できない（timeout・connection refused）の原因をDB未起動・ポート・ネットワーク・設定ミスまで実務レベルで解説。
+SEO META END -->
+
+    <!-- SEO -->
+    <title>
+      Spring BootでPostgreSQLが接続できない（timeout/拒否）原因と対処法 |
+      Programming Lab
+    </title>
+
+    <meta
+      name="description"
+      content="Spring BootからPostgreSQLへ接続できない（timeout・connection refused）の原因をDB未起動・ポート・ネットワーク・設定ミスまで実務レベルで解説。"
+    />
+
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/PostgreSQL/postgres_connection_timeout.html"
+    />
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <!-- Highlight.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!-- Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <!-- タイトル -->
+        <h1 class="mt-5">
+          Spring BootでPostgreSQLが接続できない（timeout/拒否）原因と対処法
+        </h1>
+
+        <!-- リード文 -->
+        <p class="lead">
+          Spring
+          BootからPostgreSQLに接続できないエラーは「DB未起動」「ポート違い」「ネットワーク制限」が主な原因です。本記事では実務で頻出する接続トラブルを体系的に整理します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-12</p>
+
+        <!-- 目次 -->
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. エラー概要</a></li>
+          <li><a href="#section2">2. 主な原因</a></li>
+          <li><a href="#section3">3. Spring Boot設定確認</a></li>
+          <li><a href="#section4">4. PostgreSQL側の確認</a></li>
+          <li><a href="#section5">5. よくあるエラー</a></li>
+          <li><a href="#section6">6. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <!-- 概要 -->
+        <h2 id="section1">1. エラー概要</h2>
+
+        <p>
+          Spring
+          BootでPostgreSQLに接続できない場合、以下のようなエラーが発生します。
+        </p>
+
+        <pre><code>
+java.net.ConnectException: Connection refused
+java.net.SocketTimeoutException: connect timed out
+        </code></pre>
+
+        <p>
+          これらはアプリの問題というより「ネットワーク・DB設定問題」であることがほとんどです。
+        </p>
+
+        <hr />
+
+        <!-- 原因 -->
+        <h2 id="section2">2. 主な原因</h2>
+
+        <ul>
+          <li>PostgreSQLが起動していない</li>
+          <li>ポート5432が違う / 開いていない</li>
+          <li>localhostではなく外部接続が必要</li>
+          <li>pg_hba.confで接続拒否</li>
+          <li>Docker / 仮想環境のネットワーク問題</li>
+        </ul>
+
+        <hr />
+
+        <!-- Spring Boot -->
+        <h2 id="section3">3. Spring Boot設定確認</h2>
+
+        <p>まずapplication.propertiesを確認します。</p>
+
+        <pre><code class="java">
+spring.datasource.url=jdbc:postgresql://localhost:5432/testdb
+spring.datasource.username=postgres
+spring.datasource.password=postgres
+spring.datasource.driver-class-name=org.postgresql.Driver
+        </code></pre>
+
+        <p>重要ポイント：</p>
+
+        <ul>
+          <li>localhost → Dockerの場合はhost.docker.internal</li>
+          <li>ポート5432が正しいか</li>
+          <li>DB名のスペルミス</li>
+        </ul>
+
+        <hr />
+
+        <!-- PostgreSQL -->
+        <h2 id="section4">4. PostgreSQL側の確認</h2>
+
+        <p>PostgreSQLが外部接続を許可しているか確認します。</p>
+
+        <pre><code class="bash">
+# postgresql.conf
+listen_addresses = '*'
+        </code></pre>
+
+        <p>pg_hba.confの例：</p>
+
+        <pre><code class="bash">
+host    all     all     0.0.0.0/0     md5
+        </code></pre>
+
+        <p>設定変更後は必ずPostgreSQLを再起動します。</p>
+
+        <hr />
+
+        <!-- エラー -->
+        <h2 id="section5">5. よくあるエラー</h2>
+
+        <h3>① Connection refused</h3>
+        <p>DB未起動またはポート不一致。</p>
+
+        <h3>② timeout</h3>
+        <p>ネットワーク遮断・Firewall・Docker設定ミス。</p>
+
+        <h3>③ FATAL: no pg_hba.conf entry</h3>
+        <p>接続元IPが許可されていない。</p>
+
+        <hr />
+
+        <!-- 広告 -->
+        <div class="my-4 text-center">
+          <!-- Adsense -->
+        </div>
+
+        <hr />
+
+        <!-- まとめ -->
+        <h2 id="section6">6. まとめ</h2>
+
+        <ul>
+          <li>まずDB起動確認</li>
+          <li>次にポートと接続先</li>
+          <li>最後にpg_hba.conf</li>
+        </ul>
+
+        <p>
+          接続エラーは「アプリではなくインフラ側問題」が大半です。順番に潰すことでほぼ確実に解決できます。
+        </p>
+
+        <!-- 関連記事 -->
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li>
+            <a href="postgres_auth_error.html"
+              >PostgreSQL認証エラーの原因と解決方法</a
+            >
+          </li>
+          <li>
+            <a href="postgres_backup_restore.html"
+              >PostgreSQLバックアップ・リストア手順</a
+            >
+          </li>
+          <li>
+            <a href="../SpringBoot/springboot_mysql_error.html"
+              >Spring BootとMySQL接続エラー</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted">Copyright (C) nori</span>
+      </div>
+    </footer>
+  </body>
+</html>
