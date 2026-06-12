@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: postgres_springboot_setup.html
+CATEGORY: PostgreSQL
+TITLE: PostgreSQL接続設定（Spring Boot）
+DESCRIPTION: Spring BootとPostgreSQLの接続方法を実務レベルで解説。依存関係設定、application.yml、接続確認、よくあるエラーまで網羅。
+SEO META END -->
+
+    <!-- SEO -->
+    <title>Spring BootでPostgreSQL接続設定まとめ | Programming Lab</title>
+
+    <meta
+      name="description"
+      content="Spring BootとPostgreSQLの接続方法を実務レベルで解説。依存関係設定、application.yml、接続確認、よくあるエラーまで網羅。"
+    />
+
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/postgresql/postgres_springboot_setup.html"
+    />
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <!-- Highlight.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!-- Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">Spring BootでPostgreSQL接続設定</h1>
+
+        <p class="lead">
+          Spring
+          BootアプリケーションからPostgreSQLへ接続する手順を、依存関係・設定ファイル・疎通確認・エラー対策まで実務レベルで解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-12</p>
+
+        <h2>目次</h2>
+        <ul>
+          <li><a href="#section1">1. 概要</a></li>
+          <li><a href="#section2">2. 依存関係設定</a></li>
+          <li><a href="#section3">3. application.yml設定</a></li>
+          <li><a href="#section4">4. 接続確認サンプル</a></li>
+          <li><a href="#section5">5. よくあるエラー</a></li>
+          <li><a href="#section6">6. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. 概要</h2>
+
+        <p>
+          Spring
+          BootでPostgreSQLを利用するには、JDBCドライバと設定ファイルの正しい構成が必要です。
+          本記事では最小構成から実務レベルの設定までを整理します。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>項目</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>環境</td>
+            <td>Java 21</td>
+          </tr>
+          <tr>
+            <td>フレームワーク</td>
+            <td>Spring Boot 3.x</td>
+          </tr>
+          <tr>
+            <td>DB</td>
+            <td>PostgreSQL 15+</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. 依存関係設定</h2>
+
+        <p>PostgreSQL接続にはJDBCドライバを追加します。</p>
+
+        <pre><code class="xml">
+&lt;dependency&gt;
+  &lt;groupId&gt;org.postgresql&lt;/groupId&gt;
+  &lt;artifactId&gt;postgresql&lt;/artifactId&gt;
+  &lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;
+        </code></pre>
+
+        <p>Spring Boot Starter JDBCまたはJPAも必要に応じて追加します。</p>
+
+        <pre><code class="xml">
+&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-boot-starter-data-jpa&lt;/artifactId&gt;
+&lt;/dependency&gt;
+        </code></pre>
+
+        <hr />
+
+        <h2 id="section3">3. application.yml設定</h2>
+
+        <p>接続情報を設定します。</p>
+
+        <pre><code class="yaml">
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/sampledb
+    username: postgres
+    password: password
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+        </code></pre>
+
+        <p>※ 本番環境ではパスワードを直書きせず環境変数化が推奨です。</p>
+
+        <hr />
+
+        <h2 id="section4">4. 接続確認サンプル</h2>
+
+        <p>簡単なREST APIで接続確認を行います。</p>
+
+        <pre><code class="java">
+@RestController
+public class DbTestController {
+
+  private final DataSource dataSource;
+
+  public DbTestController(DataSource dataSource) {
+    this.dataSource = dataSource;
+  }
+
+  @GetMapping("/db-check")
+  public String check() throws Exception {
+    try (Connection conn = dataSource.getConnection()) {
+      return "DB接続成功: " + conn.getMetaData().getDatabaseProductName();
+    }
+  }
+}
+        </code></pre>
+
+        <hr />
+
+        <div class="my-4 text-center">
+          <!-- Adsense -->
+        </div>
+
+        <hr />
+
+        <h2 id="section5">5. よくあるエラー</h2>
+
+        <h3>① Connection refused</h3>
+
+        <pre><code>
+Connection refused
+        </code></pre>
+
+        <p>
+          原因：PostgreSQLが起動していない、またはポートが違う。<br />
+          対処：5432ポート確認、サービス起動確認。
+        </p>
+
+        <h3>② password authentication failed</h3>
+
+        <pre><code>
+FATAL: password authentication failed for user
+        </code></pre>
+
+        <p>
+          原因：ユーザー名・パスワード誤り。<br />
+          対処：pg_hba.confと認証情報を確認。
+        </p>
+
+        <hr />
+
+        <h2 id="section6">6. まとめ</h2>
+
+        <ul>
+          <li>依存関係はpostgresqlドライバが必須</li>
+          <li>application.ymlの設定が最重要</li>
+          <li>疎通確認用APIを作るとデバッグが早い</li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li>
+            <a href="postgres_connection_error.html"
+              >PostgreSQL接続エラー解決方法</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

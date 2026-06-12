@@ -1,2 +1,2 @@
-Spring Boot	Spring Bootで404エラーが出る原因まとめ	初心者が必ず詰まる	springboot_404_error.html
-Spring Boot	Spring Bootログイン無限ループの原因	Spring Security系バグ	spring_security_loop.html
+PostgreSQL	PostgreSQL接続設定（Spring Boot）	実務直結・検索強い	postgres_springboot_setup.html
+PostgreSQL	PostgreSQL接続エラー解決方法	DB系トラブル記事	postgres_connection_error.html
