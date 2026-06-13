@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: jenkins_env_variable.html
+CATEGORY: Jenkins
+TITLE: Jenkinsで環境変数が反映されない原因まとめ
+DESCRIPTION: Jenkinsで環境変数がビルドに反映されない原因と対処法を解説。ジョブ設定ミス、シェル環境差異、Pipelineでの扱い方など実務で頻出する問題を網羅します。
+SEO META END -->
+
+    <!-- SEO -->
+    <title>Jenkinsで環境変数が反映されない原因まとめ | Programming Lab</title>
+
+    <meta
+      name="description"
+      content="Jenkinsで環境変数が反映されない原因と対処法を解説。ジョブ設定ミス、シェル差異、Pipelineでの扱い方など実務トラブルを網羅。"
+    />
+
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/jenkins/jenkins_env_variable.html"
+    />
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <!-- Highlight.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!-- Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <!-- タイトル -->
+        <h1 class="mt-5">Jenkinsで環境変数が反映されない原因まとめ</h1>
+
+        <!-- リード文 -->
+        <p class="lead">
+          Jenkinsで環境変数がビルドに反映されない問題の原因と対処法を解説。ジョブ設定ミス、シェル環境の違い、Pipelineでの扱いなど実務で頻出するトラブルを体系的に整理します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-13</p>
+
+        <!-- 目次 -->
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. 概要</a></li>
+          <li><a href="#section2">2. 主な原因</a></li>
+          <li><a href="#section3">3. 設定方法と対処</a></li>
+          <li><a href="#section4">4. サンプルコード</a></li>
+          <li><a href="#section5">5. よくあるエラー</a></li>
+          <li><a href="#section6">6. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <!-- 概要 -->
+        <h2 id="section1">1. 概要</h2>
+
+        <p>
+          Jenkinsでは環境変数が正しく設定されていないと、ビルド失敗や意図しない動作が発生します。
+          特にジョブ設定とPipelineの違いによるトラブルが多発します。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>項目</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>発生頻度</td>
+            <td>高い（実務で頻出）</td>
+          </tr>
+          <tr>
+            <td>原因範囲</td>
+            <td>ジョブ設定・シェル・Pipeline</td>
+          </tr>
+          <tr>
+            <td>影響</td>
+            <td>ビルド失敗・デプロイ失敗</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <!-- 原因 -->
+        <h2 id="section2">2. 主な原因</h2>
+
+        <h3>2-1. ジョブ設定に環境変数が未設定</h3>
+        <p>Jenkinsの「環境変数設定」が空のままになっているケース。</p>
+
+        <h3>2-2. シェル環境との差異</h3>
+        <p>.bashrcや.zshrcの変数はJenkinsでは読み込まれない。</p>
+
+        <h3>2-3. Pipelineでの誤った定義</h3>
+        <p>environmentブロックの位置ミスやスコープ不正。</p>
+
+        <hr />
+
+        <!-- 対処 -->
+        <h2 id="section3">3. 設定方法と対処</h2>
+
+        <h3>3-1. Pipelineでの正しい定義</h3>
+
+        <pre><code class="groovy">
+pipeline {
+  agent any
+
+  environment {
+    APP_ENV = "production"
+    DB_HOST = "localhost"
+  }
+
+  stages {
+    stage('Build') {
+      steps {
+        sh 'echo $APP_ENV'
+      }
+    }
+  }
+}
+        </code></pre>
+
+        <h3>3-2. ジョブ設定での確認</h3>
+        <p>
+          「Build Environment」や「Inject environment variables」を確認する。
+        </p>
+
+        <hr />
+
+        <!-- サンプル -->
+        <h2 id="section4">4. サンプルコード</h2>
+
+        <p>シェルスクリプトでの確認例。</p>
+
+        <pre><code class="bash">
+echo $APP_ENV
+printenv
+        </code></pre>
+
+        <hr />
+
+        <!-- 広告 -->
+        <div class="my-4 text-center">
+          <!-- Adsense -->
+        </div>
+
+        <hr />
+
+        <!-- エラー -->
+        <h2 id="section5">5. よくあるエラー</h2>
+
+        <h3>環境変数が空になる</h3>
+
+        <pre><code class="text">
+APP_ENV=
+        </code></pre>
+
+        <p>
+          原因：Jenkinsはログインシェルではないため、OSの環境変数を継承しない。
+        </p>
+
+        <h3>Pipelineで変数が使えない</h3>
+        <p>environmentブロックのスコープ外で参照しているケースが多い。</p>
+
+        <hr />
+
+        <!-- まとめ -->
+        <h2 id="section6">6. まとめ</h2>
+
+        <ul>
+          <li>Jenkinsはシェル環境と異なる</li>
+          <li>environmentブロックで明示的に定義する</li>
+          <li>ジョブ設定とPipelineの違いを理解する</li>
+        </ul>
+
+        <p>環境変数トラブルはJenkins運用で最も多い問題の一つです。</p>
+
+        <!-- 関連記事 -->
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li>
+            <a href="jenkins_setup.html">Jenkins構築手順（初心者向け）</a>
+          </li>
+          <li>
+            <a href="jenkins_build_error.html"
+              >Jenkinsでビルド失敗する原因まとめ</a
+            >
+          </li>
+          <li>
+            <a href="jenkins_pipeline_debug.html"
+              >Jenkins Pipelineが動かない原因とデバッグ方法</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

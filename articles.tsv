@@ -1,8 +1,8 @@
-API設計	REST APIのページング設計（offset vs cursor徹底比較）	大量データ取得時の設計判断と実装パターン	api_design_pagination.html
-API設計	APIのフィルタ設計ベストプラクティス（検索条件設計）	WHERE条件をAPIにどう落とすかの実務設計	api_design_filter.html
-API設計	APIの並び順（sort設計）と安全な実装方法	複数ソート条件・不正値対策・設計ルール	api_design_sort.html
-API設計	APIの冪等性（idempotency）設計とは何か	POST/PUTの違いと安全な再実行設計	api_design_idempotency.html
-API設計	APIのタイムアウト設計とリトライ戦略	障害耐性を上げる実務設計パターン	api_design_timeout_retry.html
-API設計	APIのレート制限（rate limit）設計方法	スロットリング・API保護・実装方式	api_design_rate_limit.html
-API設計	APIのログ設計とトレーサビリティ設計	障害調査できるAPI設計の考え方	api_design_logging_trace.html
-API設計	API設計とフロント連携のベストパターン（BFF含む）	フロント都合を吸収するAPI設計手法	api_design_frontend_bff.html
+Jenkins	Jenkins Pipeline（Declarative）の書き方と基本構造	CI/CDの標準構文・初心者脱却用	jenkins_pipeline_declarative.html
+Jenkins	Jenkins Pipelineが動かない原因とデバッグ方法	Jenkinsfileエラー・構文ミス対策	jenkins_pipeline_debug.html
+Jenkins	JenkinsとGit連携（Webhook設定・自動ビルド）	実務必須の自動化フロー	jenkins_git_webhook.html
+Jenkins	Jenkinsのジョブがキューに溜まる原因と解決方法	実運用トラブル系（需要高）	jenkins_queue_issue.html
+Jenkins	Jenkinsの権限設定（Role Strategy Plugin）の使い方	チーム開発・セキュリティ設計	jenkins_role_strategy.html
+Jenkins	Jenkinsで環境変数が反映されない原因まとめ	ビルド失敗の定番原因	jenkins_env_variable.html
+Jenkins	JenkinsのDocker連携構築手順	現代CI/CDの主流構成	jenkins_docker_setup.html
+Jenkins	Jenkinsの定期実行（cronビルド）の設定方法	バッチ・夜間処理需要	jenkins_cron_build.html

@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: jenkins_pipeline_debug.html
+CATEGORY: Jenkins
+TITLE: Jenkins Pipelineが動かない原因とデバッグ方法
+DESCRIPTION: Jenkins Pipeline（Jenkinsfile）が動かない原因とデバッグ方法を解説。構文エラー、ステージ構成ミス、ログ確認方法、実務でのトラブルシュート手順を網羅します。
+SEO META END -->
+
+    <!-- SEO -->
+    <title>
+      Jenkins Pipelineが動かない原因とデバッグ方法 | Programming Lab
+    </title>
+
+    <meta
+      name="description"
+      content="Jenkins Pipelineが動かない原因とデバッグ方法を解説。Jenkinsfile構文エラー、ステージミス、ログ確認、実務トラブルシュートを網羅。"
+    />
+
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/jenkins/jenkins_pipeline_debug.html"
+    />
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <!-- Highlight.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!-- Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <!-- タイトル -->
+        <h1 class="mt-5">Jenkins Pipelineが動かない原因とデバッグ方法</h1>
+
+        <!-- リード文 -->
+        <p class="lead">
+          Jenkins
+          Pipeline（Jenkinsfile）が動かない原因を体系的に整理し、ログ確認・構文チェック・ステージ設計ミスなど実務で頻出する問題のデバッグ方法を解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-13</p>
+
+        <!-- 目次 -->
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. Pipelineが動かない原因概要</a></li>
+          <li><a href="#section2">2. よくある構文エラー</a></li>
+          <li><a href="#section3">3. デバッグ手順</a></li>
+          <li><a href="#section4">4. サンプルJenkinsfile</a></li>
+          <li><a href="#section5">5. よくあるエラー</a></li>
+          <li><a href="#section6">6. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <!-- 概要 -->
+        <h2 id="section1">1. Pipelineが動かない原因概要</h2>
+
+        <p>
+          Jenkins
+          Pipelineが動作しない原因は大きく分けて「構文エラー」「ステージ設計ミス」「プラグイン不整合」の3つです。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>原因カテゴリ</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>構文エラー</td>
+            <td>Jenkinsfileの書き間違い</td>
+          </tr>
+          <tr>
+            <td>設計ミス</td>
+            <td>stage/steps構造の誤り</td>
+          </tr>
+          <tr>
+            <td>環境問題</td>
+            <td>plugin不足・バージョン差異</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <!-- 構文 -->
+        <h2 id="section2">2. よくある構文エラー</h2>
+
+        <h3>2-1. pipelineブロック不足</h3>
+        <p>最上位にpipeline {}がないケース。</p>
+
+        <h3>2-2. stageの閉じ忘れ</h3>
+        <p>中括弧の不足が最頻出。</p>
+
+        <h3>2-3. steps忘れ</h3>
+        <p>stage内にstepsがないと実行されない。</p>
+
+        <hr />
+
+        <!-- デバッグ -->
+        <h2 id="section3">3. デバッグ手順</h2>
+
+        <h3>3-1. Console Output確認</h3>
+        <p>Jenkinsのビルドログが最重要情報源。</p>
+
+        <h3>3-2. Replay機能</h3>
+        <p>JenkinsのReplay機能で即修正検証が可能。</p>
+
+        <h3>3-3. 最小構成で検証</h3>
+
+        <pre><code class="groovy">
+pipeline {
+  agent any
+  stages {
+    stage('Test') {
+      steps {
+        echo 'OK'
+      }
+    }
+  }
+}
+        </code></pre>
+
+        <hr />
+
+        <!-- サンプル -->
+        <h2 id="section4">4. サンプルJenkinsfile</h2>
+
+        <pre><code class="groovy">
+pipeline {
+  agent any
+
+  stages {
+    stage('Build') {
+      steps {
+        sh 'echo build'
+      }
+    }
+
+    stage('Test') {
+      steps {
+        sh 'echo test'
+      }
+    }
+  }
+}
+        </code></pre>
+
+        <hr />
+
+        <!-- 広告 -->
+        <div class="my-4 text-center">
+          <!-- Adsense -->
+        </div>
+
+        <hr />
+
+        <!-- エラー -->
+        <h2 id="section5">5. よくあるエラー</h2>
+
+        <h3>Missing required context class</h3>
+
+        <pre><code class="text">
+java.lang.NoSuchMethodError / MissingContextVariableException
+        </code></pre>
+
+        <p>原因：Pipeline構文の誤りまたはプラグイン不足。</p>
+
+        <h3>unexpected token</h3>
+        <p>Jenkinsfileの括弧ミスや記述順序ミス。</p>
+
+        <hr />
+
+        <!-- まとめ -->
+        <h2 id="section6">6. まとめ</h2>
+
+        <ul>
+          <li>Pipelineエラーは構文・設計・環境の3分類</li>
+          <li>Consoleログが最重要</li>
+          <li>最小構成で切り分けるのが基本</li>
+        </ul>
+
+        <p>Jenkins Pipelineは慣れより「構造理解」が重要です。</p>
+
+        <!-- 関連記事 -->
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li>
+            <a href="jenkins_setup.html">Jenkins構築手順（初心者向け）</a>
+          </li>
+          <li>
+            <a href="jenkins_build_error.html"
+              >Jenkinsでビルド失敗する原因まとめ</a
+            >
+          </li>
+          <li>
+            <a href="jenkins_git_webhook.html"
+              >JenkinsとGit連携（Webhook設定）</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

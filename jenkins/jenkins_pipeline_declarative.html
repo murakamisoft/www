@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: jenkins_pipeline_declarative.html
+CATEGORY: Jenkins
+TITLE: Jenkins Pipeline（Declarative）の書き方と基本構造
+DESCRIPTION: Jenkins Declarative Pipelineの基本構文と書き方を解説。CI/CD標準構成、ステージ構造、実務テンプレート、よくあるミスまで初心者向けに整理します。
+SEO META END -->
+
+    <!-- SEO -->
+    <title>
+      Jenkins Pipeline（Declarative）の書き方と基本構造 | Programming Lab
+    </title>
+
+    <meta
+      name="description"
+      content="Jenkins Declarative Pipelineの基本構文と書き方を解説。CI/CD標準構成、ステージ設計、実務テンプレート、エラー対策まで初心者向けに整理。"
+    />
+
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/jenkins/jenkins_pipeline_declarative.html"
+    />
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <!-- Highlight.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!-- Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <!-- タイトル -->
+        <h1 class="mt-5">Jenkins Pipeline（Declarative）の書き方と基本構造</h1>
+
+        <!-- リード文 -->
+        <p class="lead">
+          Jenkins Declarative
+          Pipelineの基本構文を体系的に解説。CI/CD標準構成としてのステージ設計、実務テンプレート、エラー回避ポイントまで初心者向けに整理します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-13</p>
+
+        <!-- 目次 -->
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. Declarative Pipelineとは</a></li>
+          <li><a href="#section2">2. 基本構造</a></li>
+          <li><a href="#section3">3. 実務テンプレート</a></li>
+          <li><a href="#section4">4. サンプルコード</a></li>
+          <li><a href="#section5">5. よくあるエラー</a></li>
+          <li><a href="#section6">6. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <!-- 概要 -->
+        <h2 id="section1">1. Declarative Pipelineとは</h2>
+
+        <p>
+          Declarative
+          PipelineはJenkinsの標準的なパイプライン記法で、構造化された書き方により可読性と保守性を高めた形式です。
+          CI/CDの現場では最も一般的に使用されます。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>項目</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>特徴</td>
+            <td>構造化・標準化されたPipeline</td>
+          </tr>
+          <tr>
+            <td>用途</td>
+            <td>CI/CD自動化</td>
+          </tr>
+          <tr>
+            <td>メリット</td>
+            <td>可読性・再利用性が高い</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <!-- 構造 -->
+        <h2 id="section2">2. 基本構造</h2>
+
+        <p>Declarative Pipelineは以下の構造で構成されます。</p>
+
+        <pre><code class="groovy">
+pipeline {
+  agent any
+
+  stages {
+    stage('Build') {
+      steps {
+        echo 'build'
+      }
+    }
+
+    stage('Test') {
+      steps {
+        echo 'test'
+      }
+    }
+  }
+}
+        </code></pre>
+
+        <p>
+          「pipeline → agent → stages → stage →
+          steps」という階層構造が基本です。
+        </p>
+
+        <hr />
+
+        <!-- 実務 -->
+        <h2 id="section3">3. 実務テンプレート</h2>
+
+        <p>実務では以下の構成が標準です。</p>
+
+        <pre><code class="groovy">
+pipeline {
+  agent any
+
+  environment {
+    APP_ENV = "prod"
+  }
+
+  stages {
+
+    stage('Checkout') {
+      steps {
+        git url: 'https://github.com/user/repo.git'
+      }
+    }
+
+    stage('Build') {
+      steps {
+        sh 'mvn clean package'
+      }
+    }
+
+    stage('Test') {
+      steps {
+        sh 'mvn test'
+      }
+    }
+  }
+
+  post {
+    always {
+      echo 'finished'
+    }
+  }
+}
+        </code></pre>
+
+        <hr />
+
+        <!-- サンプル -->
+        <h2 id="section4">4. サンプルコード</h2>
+
+        <p>最小構成のDeclarative Pipelineです。</p>
+
+        <pre><code class="groovy">
+pipeline {
+  agent any
+
+  stages {
+    stage('Hello') {
+      steps {
+        echo 'Hello Jenkins'
+      }
+    }
+  }
+}
+        </code></pre>
+
+        <hr />
+
+        <!-- 広告 -->
+        <div class="my-4 text-center">
+          <!-- Adsense -->
+        </div>
+
+        <hr />
+
+        <!-- エラー -->
+        <h2 id="section5">5. よくあるエラー</h2>
+
+        <h3>Declarative syntax error</h3>
+
+        <pre><code class="text">
+WorkflowScript: unexpected token
+        </code></pre>
+
+        <p>原因：stageやstepsの閉じ忘れ、または階層ミス。</p>
+
+        <h3>missing required section</h3>
+        <p>agentやstagesが不足している場合に発生。</p>
+
+        <hr />
+
+        <!-- まとめ -->
+        <h2 id="section6">6. まとめ</h2>
+
+        <ul>
+          <li>Declarative Pipelineは標準構文</li>
+          <li>階層構造の理解が最重要</li>
+          <li>実務ではenvironment/postが重要</li>
+        </ul>
+
+        <p>Jenkins CI/CDの基礎として最初に習得すべき構文です。</p>
+
+        <!-- 関連記事 -->
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li>
+            <a href="jenkins_pipeline_debug.html"
+              >Jenkins Pipelineが動かない原因とデバッグ方法</a
+            >
+          </li>
+          <li>
+            <a href="jenkins_git_webhook.html"
+              >JenkinsとGit連携（Webhook設定）</a
+            >
+          </li>
+          <li>
+            <a href="jenkins_setup.html">Jenkins構築手順（初心者向け）</a>
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: jenkins_git_webhook.html
+CATEGORY: Jenkins
+TITLE: JenkinsとGit連携（Webhook設定・自動ビルド）
+DESCRIPTION: JenkinsとGitHubのWebhook連携による自動ビルド構築方法を解説。リポジトリ連携、トリガー設定、認証設定、実務でのCI/CD自動化フローまで網羅します。
+SEO META END -->
+
+    <!-- SEO -->
+    <title>JenkinsとGit連携（Webhook設定・自動ビルド） | Programming Lab</title>
+
+    <meta
+      name="description"
+      content="JenkinsとGitHubのWebhook連携で自動ビルドを構築する方法を解説。リポジトリ連携、トリガー設定、認証設定、CI/CD自動化まで実務レベルで網羅。"
+    />
+
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/jenkins/jenkins_git_webhook.html"
+    />
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <!-- Highlight.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!-- Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <!-- タイトル -->
+        <h1 class="mt-5">JenkinsとGit連携（Webhook設定・自動ビルド）</h1>
+
+        <!-- リード文 -->
+        <p class="lead">
+          JenkinsとGitHubを連携し、Webhookによる自動ビルドを構築する方法を解説。リポジトリ設定、認証、トリガー設定、CI/CD自動化の実務構成まで整理します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-13</p>
+
+        <!-- 目次 -->
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. Git連携とWebhookとは</a></li>
+          <li><a href="#section2">2. Jenkins側の設定</a></li>
+          <li><a href="#section3">3. GitHub側のWebhook設定</a></li>
+          <li><a href="#section4">4. サンプル構成</a></li>
+          <li><a href="#section5">5. よくあるエラー</a></li>
+          <li><a href="#section6">6. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <!-- 概要 -->
+        <h2 id="section1">1. Git連携とWebhookとは</h2>
+
+        <p>
+          GitHubの変更をトリガーにしてJenkinsが自動でビルドを実行する仕組みがWebhook連携です。
+          手動実行を不要にし、CI/CDの自動化を実現します。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>要素</th>
+            <th>役割</th>
+          </tr>
+          <tr>
+            <td>GitHub</td>
+            <td>ソースコード管理</td>
+          </tr>
+          <tr>
+            <td>Webhook</td>
+            <td>変更通知トリガー</td>
+          </tr>
+          <tr>
+            <td>Jenkins</td>
+            <td>ビルド・テスト実行</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <!-- Jenkins設定 -->
+        <h2 id="section2">2. Jenkins側の設定</h2>
+
+        <h3>2-1. Git Plugin確認</h3>
+        <p>Git pluginがインストールされていることを確認。</p>
+
+        <h3>2-2. Job設定</h3>
+        <p>「Source Code Management」でGitを選択。</p>
+
+        <pre><code class="text">
+Repository URL:
+https://github.com/user/repo.git
+        </code></pre>
+
+        <h3>2-3. Build Trigger設定</h3>
+
+        <pre><code class="text">
+GitHub hook trigger for GITScm polling
+        </code></pre>
+
+        <hr />
+
+        <!-- GitHub設定 -->
+        <h2 id="section3">3. GitHub側のWebhook設定</h2>
+
+        <p>GitHubリポジトリのSettings → Webhooksから設定します。</p>
+
+        <pre><code class="text">
+Payload URL:
+http://your-jenkins-url/github-webhook/
+
+Content type:
+application/json
+        </code></pre>
+
+        <p>pushイベントを選択することで、自動ビルドが有効になります。</p>
+
+        <hr />
+
+        <!-- サンプル -->
+        <h2 id="section4">4. サンプル構成</h2>
+
+        <p>典型的なCI/CD構成です。</p>
+
+        <pre><code class="groovy">
+pipeline {
+  agent any
+
+  stages {
+    stage('Checkout') {
+      steps {
+        git 'https://github.com/user/repo.git'
+      }
+    }
+
+    stage('Build') {
+      steps {
+        sh 'mvn clean package'
+      }
+    }
+
+    stage('Test') {
+      steps {
+        sh 'mvn test'
+      }
+    }
+  }
+}
+        </code></pre>
+
+        <hr />
+
+        <!-- 広告 -->
+        <div class="my-4 text-center">
+          <!-- Adsense -->
+        </div>
+
+        <hr />
+
+        <!-- エラー -->
+        <h2 id="section5">5. よくあるエラー</h2>
+
+        <h3>Webhookが動かない</h3>
+
+        <pre><code class="text">
+404 Not Found / github-webhook
+        </code></pre>
+
+        <p>原因：Jenkins URL設定ミスまたはFirewallブロック。</p>
+
+        <h3>認証エラー</h3>
+        <p>GitHubのAccess Token未設定が原因。</p>
+
+        <hr />
+
+        <!-- まとめ -->
+        <h2 id="section6">6. まとめ</h2>
+
+        <ul>
+          <li>WebhookでCI/CDを自動化できる</li>
+          <li>JenkinsとGitHub連携は実務必須</li>
+          <li>Pipeline化で運用が安定する</li>
+        </ul>
+
+        <p>Git連携はJenkins運用の入口であり、最重要スキルの一つです。</p>
+
+        <!-- 関連記事 -->
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li>
+            <a href="jenkins_setup.html">Jenkins構築手順（初心者向け）</a>
+          </li>
+          <li>
+            <a href="jenkins_build_error.html"
+              >Jenkinsでビルド失敗する原因まとめ</a
+            >
+          </li>
+          <li>
+            <a href="jenkins_pipeline_debug.html"
+              >Jenkins Pipelineが動かない原因とデバッグ方法</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

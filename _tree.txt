@@ -1,227 +1,236 @@
-ƒtƒHƒ‹ƒ_[ ƒpƒX‚Ìˆê——:  ƒ{ƒŠƒ…[ƒ€ Windows-SSD
-ƒ{ƒŠƒ…[ƒ€ ƒVƒŠƒAƒ‹”Ô†‚Í 000000CB 64B9:5F8F ‚Å‚·
+ï»¿ãƒ•ã‚©ãƒ«ãƒ€ãƒ¼ ãƒ‘ã‚¹ã®ä¸€è¦§:  ãƒœãƒªãƒ¥ãƒ¼ãƒ  Windows-SSD
+ãƒœãƒªãƒ¥ãƒ¼ãƒ  ã‚·ãƒªã‚¢ãƒ«ç•ªå·ã¯ 0000004C 64B9:5F8F ã§ã™
 C:.
-„   ads.txt
-„   articles.tsv
-„   color.col
-„   generate.sh
-„   google78e7171cfa1cc4fc.html
-„   index.html
-„   robots.txt
-„   sitemap.xml
-„   _templete.html
-„   _tree.txt
-„   
-„¥„Ÿapi_design
-„       api_design_basic.html
-„       api_design_mistake.html
-„       
-„¥„Ÿaws
-„¥„Ÿcss
-„       sticky-footer-navbar.css
-„       
-„¥„Ÿdevelopment
-„       code_review_checklist.html
-„       project_structure.html
-„       
-„¥„Ÿhub
-„       java_error_hub.html
-„       
-„¥„Ÿjenkins
-„       jenkins_build_error.html
-„       jenkins_setup.html
-„       
-„¥„Ÿmybatis
-„       mybatis_bean_error.html
-„       mybatis_commit_error.html
-„       mybatis_dynamic_sql_error.html
-„       mybatis_mapper_not_found.html
-„       mybatis_n1_problem.html
-„       mybatis_parameter_binding_error.html
-„       mybatis_select_null.html
-„       mybatis_springboot_setup.html
-„       mybatis_sql_log_error.html
-„       mybatis_sql_not_run.html
-„       
-„¥„Ÿpostgres
-„       postgres_auth_error.html
-„       postgres_backup_restore.html
-„       postgres_connection_error.html
-„       postgres_connection_timeout.html
-„       postgres_ddl_error.html
-„       postgres_encoding_error.html
-„       postgres_performance.html
-„       postgres_springboot_setup.html
-„       postgres_sql_error.html
-„       postgres_user_setup.html
-„       
-„¥„Ÿsample
-„   „¤„Ÿbookmanager
-„       „   add.html
-„       „   delete.html
-„       „   edit.html
-„       „   list.html
-„       „   login.html
-„       „   userbook.html
-„       „   
-„       „¤„Ÿpic
-„           „   add_book.png
-„           „   add_book_err.png
-„           „   add_book_name.png
-„           „   add_book_success.png
-„           „   add_list.png
-„           „   booktable.png
-„           „   delete_list1.png
-„           „   delete_list2.png
-„           „   edit_list.png
-„           „   edit_name.png
-„           „   edit_success.png
-„           „   list.png
-„           „   
-„           „¥„Ÿadd
-„           „       add_book.png
-„           „       add_book_err.png
-„           „       add_book_name.png
-„           „       add_book_success.png
-„           „       add_list.png
-„           „       
-„           „¥„Ÿdelete
-„           „       delete_list1.png
-„           „       delete_list2.png
-„           „       
-„           „¥„Ÿedit
-„           „       edit_list.png
-„           „       edit_name.png
-„           „       edit_success.png
-„           „       
-„           „¥„Ÿlist
-„           „       booktable.png
-„           „       list.png
-„           „       
-„           „¥„Ÿlogin
-„           „       login.png
-„           „       login_list.png
-„           „       login_ng.png
-„           „       logout.png
-„           „       
-„           „¤„Ÿuserbook
-„                   er.png
-„                   list_user.png
-„                   list_useradmin.png
-„                   login_user.png
-„                   login_useradmin.png
-„                   
-„¥„Ÿspringboot
-„       springboot_404_error.html
-„       springboot_bean_error.html
-„       springboot_controller.html
-„       springboot_deploy_error.html
-„       springboot_errors.html
-„       springboot_error_list.html
-„       springboot_mysql_error.html
-„       springboot_port_error.html
-„       springboot_properties_error.html
-„       springboot_rest_api_error.html
-„       springboot_setup.html
-„       springboot_whitelabel.html
-„       spring_security_loop.html
-„       
-„¤„Ÿvbminigame
-    „   action.htm
-    „   block.htm
-    „   gamemodule.htm
-    „   index.html
-    „   javagame.htm
-    „   reversi.htm
-    „   rpg.htm
-    „   slidegame.htm
-    „   start.htm
-    „   stg.htm
-    „   style.css
-    „   
-    „¥„Ÿfile
-    „       action.lzh
-    „       Api.bas
-    „       blockbreak.lzh
-    „       edit.lzh
-    „       javastg.lzh
-    „       poker.zip
-    „       reversi.lzh
-    „       reversi.zip
-    „       rpg.lzh
-    „       slidegame.lzh
-    „       stg.lzh
-    „       teto.lzh
-    „       
-    „¥„Ÿjavastg
-    „   „   Chara.class
-    „   „   Charabullet.class
-    „   „   Enemy.class
-    „   „   Hitmanager.class
-    „   „   index.html
-    „   „   Input.class
-    „   „   Input.java
-    „   „   Keymanager.class
-    „   „   RandomNumber.class
-    „   „   RandomNumber.java
-    „   „   Shooting.class
-    „   „   Shooting.java
-    „   „   
-    „   „¤„Ÿpic
-    „           chara.bmp
-    „           chara.jpg
-    „           charabullet.bmp
-    „           charabullet.jpg
-    „           enemy.bmp
-    „           enemy.jpg
-    „           enemybullet.bmp
-    „           enemybullet.jpg
-    „           Thumbs.db
-    „           
-    „¥„Ÿpic
-    „       action.bmp
-    „       actionedit.bmp
-    „       actionprj.bmp
-    „       api.bmp
-    „       blockbreak.bmp
-    „       blockprj.bmp
-    „       frm1.bmp
-    „       gameprj.bmp
-    „       gameprj2.bmp
-    „       gra.bmp
-    „       javapoker.bmp
-    „       javapoker2.bmp
-    „       javareversi.bmp
-    „       javareversi2.bmp
-    „       newmake.bmp
-    „       prjset.bmp
-    „       reversi.bmp
-    „       reversiprj.bmp
-    „       rpg.bmp
-    „       rpgedit.bmp
-    „       rpgprj.bmp
-    „       shooting.bmp
-    „       slipgame.bmp
-    „       slipprj.bmp
-    „       stg.bmp
-    „       stgedit.bmp
-    „       stgprj.bmp
-    „       teto.bmp
-    „       Thumbs.db
-    „       title.bmp
-    „       
-    „¤„Ÿteto
-        „   Block.class
-        „   Hitmanager.class
-        „   Hitmanager.java
-        „   index.html
-        „   Keymanager.class
-        „   Keymanager.java
-        „   Screen.class
-        „   Teto.class
-        „   Teto.java
-        „   
-        „¤„Ÿpic
+â”‚  ads.txt
+â”‚  articles.tsv
+â”‚  color.col
+â”‚  generate.sh
+â”‚  google78e7171cfa1cc4fc.html
+â”‚  index.html
+â”‚  robots.txt
+â”‚  sitemap.xml
+â”‚  tree.txt
+â”‚  _templete.html
+â”‚  _tree.txt
+â”‚  
+â”œâ”€api_design
+â”‚      api_design_basic.html
+â”‚      api_design_filter.html
+â”‚      api_design_frontend_bff.html
+â”‚      api_design_idempotency.html
+â”‚      api_design_logging_trace.html
+â”‚      api_design_mistake.html
+â”‚      api_design_pagination.html
+â”‚      api_design_rate_limit.html
+â”‚      api_design_sort.html
+â”‚      api_design_timeout_retry.html
+â”‚      
+â”œâ”€aws
+â”œâ”€css
+â”‚      sticky-footer-navbar.css
+â”‚      
+â”œâ”€development
+â”‚      code_review_checklist.html
+â”‚      project_structure.html
+â”‚      
+â”œâ”€hub
+â”‚      java_error_hub.html
+â”‚      
+â”œâ”€jenkins
+â”‚      jenkins_build_error.html
+â”‚      jenkins_setup.html
+â”‚      
+â”œâ”€mybatis
+â”‚      mybatis_bean_error.html
+â”‚      mybatis_commit_error.html
+â”‚      mybatis_dynamic_sql_error.html
+â”‚      mybatis_mapper_not_found.html
+â”‚      mybatis_n1_problem.html
+â”‚      mybatis_parameter_binding_error.html
+â”‚      mybatis_select_null.html
+â”‚      mybatis_springboot_setup.html
+â”‚      mybatis_sql_log_error.html
+â”‚      mybatis_sql_not_run.html
+â”‚      
+â”œâ”€postgres
+â”‚      postgres_auth_error.html
+â”‚      postgres_backup_restore.html
+â”‚      postgres_connection_error.html
+â”‚      postgres_connection_timeout.html
+â”‚      postgres_ddl_error.html
+â”‚      postgres_encoding_error.html
+â”‚      postgres_performance.html
+â”‚      postgres_springboot_setup.html
+â”‚      postgres_sql_error.html
+â”‚      postgres_user_setup.html
+â”‚      
+â”œâ”€sample
+â”‚  â””â”€bookmanager
+â”‚      â”‚  add.html
+â”‚      â”‚  delete.html
+â”‚      â”‚  edit.html
+â”‚      â”‚  list.html
+â”‚      â”‚  login.html
+â”‚      â”‚  userbook.html
+â”‚      â”‚  
+â”‚      â””â”€pic
+â”‚          â”‚  add_book.png
+â”‚          â”‚  add_book_err.png
+â”‚          â”‚  add_book_name.png
+â”‚          â”‚  add_book_success.png
+â”‚          â”‚  add_list.png
+â”‚          â”‚  booktable.png
+â”‚          â”‚  delete_list1.png
+â”‚          â”‚  delete_list2.png
+â”‚          â”‚  edit_list.png
+â”‚          â”‚  edit_name.png
+â”‚          â”‚  edit_success.png
+â”‚          â”‚  list.png
+â”‚          â”‚  
+â”‚          â”œâ”€add
+â”‚          â”‚      add_book.png
+â”‚          â”‚      add_book_err.png
+â”‚          â”‚      add_book_name.png
+â”‚          â”‚      add_book_success.png
+â”‚          â”‚      add_list.png
+â”‚          â”‚      
+â”‚          â”œâ”€delete
+â”‚          â”‚      delete_list1.png
+â”‚          â”‚      delete_list2.png
+â”‚          â”‚      
+â”‚          â”œâ”€edit
+â”‚          â”‚      edit_list.png
+â”‚          â”‚      edit_name.png
+â”‚          â”‚      edit_success.png
+â”‚          â”‚      
+â”‚          â”œâ”€list
+â”‚          â”‚      booktable.png
+â”‚          â”‚      list.png
+â”‚          â”‚      
+â”‚          â”œâ”€login
+â”‚          â”‚      login.png
+â”‚          â”‚      login_list.png
+â”‚          â”‚      login_ng.png
+â”‚          â”‚      logout.png
+â”‚          â”‚      
+â”‚          â””â”€userbook
+â”‚                  er.png
+â”‚                  list_user.png
+â”‚                  list_useradmin.png
+â”‚                  login_user.png
+â”‚                  login_useradmin.png
+â”‚                  
+â”œâ”€springboot
+â”‚      springboot_404_error.html
+â”‚      springboot_bean_error.html
+â”‚      springboot_controller.html
+â”‚      springboot_deploy_error.html
+â”‚      springboot_errors.html
+â”‚      springboot_error_list.html
+â”‚      springboot_mysql_error.html
+â”‚      springboot_port_error.html
+â”‚      springboot_properties_error.html
+â”‚      springboot_rest_api_error.html
+â”‚      springboot_setup.html
+â”‚      springboot_whitelabel.html
+â”‚      spring_security_loop.html
+â”‚      
+â””â”€vbminigame
+    â”‚  action.htm
+    â”‚  block.htm
+    â”‚  gamemodule.htm
+    â”‚  index.html
+    â”‚  javagame.htm
+    â”‚  reversi.htm
+    â”‚  rpg.htm
+    â”‚  slidegame.htm
+    â”‚  start.htm
+    â”‚  stg.htm
+    â”‚  style.css
+    â”‚  
+    â”œâ”€file
+    â”‚      action.lzh
+    â”‚      Api.bas
+    â”‚      blockbreak.lzh
+    â”‚      edit.lzh
+    â”‚      javastg.lzh
+    â”‚      poker.zip
+    â”‚      reversi.lzh
+    â”‚      reversi.zip
+    â”‚      rpg.lzh
+    â”‚      slidegame.lzh
+    â”‚      stg.lzh
+    â”‚      teto.lzh
+    â”‚      
+    â”œâ”€javastg
+    â”‚  â”‚  Chara.class
+    â”‚  â”‚  Charabullet.class
+    â”‚  â”‚  Enemy.class
+    â”‚  â”‚  Hitmanager.class
+    â”‚  â”‚  index.html
+    â”‚  â”‚  Input.class
+    â”‚  â”‚  Input.java
+    â”‚  â”‚  Keymanager.class
+    â”‚  â”‚  RandomNumber.class
+    â”‚  â”‚  RandomNumber.java
+    â”‚  â”‚  Shooting.class
+    â”‚  â”‚  Shooting.java
+    â”‚  â”‚  
+    â”‚  â””â”€pic
+    â”‚          chara.bmp
+    â”‚          chara.jpg
+    â”‚          charabullet.bmp
+    â”‚          charabullet.jpg
+    â”‚          enemy.bmp
+    â”‚          enemy.jpg
+    â”‚          enemybullet.bmp
+    â”‚          enemybullet.jpg
+    â”‚          Thumbs.db
+    â”‚          
+    â”œâ”€pic
+    â”‚      action.bmp
+    â”‚      actionedit.bmp
+    â”‚      actionprj.bmp
+    â”‚      api.bmp
+    â”‚      blockbreak.bmp
+    â”‚      blockprj.bmp
+    â”‚      frm1.bmp
+    â”‚      gameprj.bmp
+    â”‚      gameprj2.bmp
+    â”‚      gra.bmp
+    â”‚      javapoker.bmp
+    â”‚      javapoker2.bmp
+    â”‚      javareversi.bmp
+    â”‚      javareversi2.bmp
+    â”‚      newmake.bmp
+    â”‚      prjset.bmp
+    â”‚      reversi.bmp
+    â”‚      reversiprj.bmp
+    â”‚      rpg.bmp
+    â”‚      rpgedit.bmp
+    â”‚      rpgprj.bmp
+    â”‚      shooting.bmp
+    â”‚      slipgame.bmp
+    â”‚      slipprj.bmp
+    â”‚      stg.bmp
+    â”‚      stgedit.bmp
+    â”‚      stgprj.bmp
+    â”‚      teto.bmp
+    â”‚      Thumbs.db
+    â”‚      title.bmp
+    â”‚      
+    â””â”€teto
+        â”‚  Block.class
+        â”‚  Hitmanager.class
+        â”‚  Hitmanager.java
+        â”‚  index.html
+        â”‚  Keymanager.class
+        â”‚  Keymanager.java
+        â”‚  Screen.class
+        â”‚  Teto.class
+        â”‚  Teto.java
+        â”‚  
+        â””â”€pic
                 back.jpg
                 back.xcf
                 block.jpg
