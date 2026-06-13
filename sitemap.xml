@@ -67,6 +67,18 @@
   <url><loc>https://vbminigame.sakura.ne.jp/springboot/springboot_whitelabel.html</loc></url>
   <url><loc>https://vbminigame.sakura.ne.jp/springboot/spring_security_loop.html</loc></url>
 
+  <!-- react -->
+  <url><loc>https://vbminigame.sakura.ne.jp/react/react_api_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/react/react_blank_screen.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/react/react_build_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/react/react_cors_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/react/react_npm_install_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/react/react_props_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/react/react_router_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/react/react_start_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/react/react_state_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/react/react_useeffect_loop.html</loc></url>
+
   <!-- aws -->
   <url><loc>https://vbminigame.sakura.ne.jp/aws/aws_cli_error.html</loc></url>
   <url><loc>https://vbminigame.sakura.ne.jp/aws/aws_cloudwatch_log_error.html</loc></url>
