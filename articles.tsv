@@ -1,4 +1,1 @@
-AWS	S3のAccess Deniedエラーの原因と対処法	権限設定ミス・IAM問題	aws_s3_access_denied.html
-AWS	RDSに接続できない原因と解決方法	Spring Boot連携で頻出	aws_rds_connection_error.html
-AWS	Lambdaが実行されない原因と対処法	権限・トリガー設定ミス	aws_lambda_error.html
-AWS	IAM権限エラーの原因と最小権限設計	セキュリティ設計系	aws_iam_permission_error.html
+まとめ	AWSエラー対策まとめ	回遊ハブ記事	aws_error_hub.html

@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: aws_error_hub.html
+CATEGORY: まとめ
+TITLE: AWSエラー対策まとめ
+DESCRIPTION: 回遊ハブ記事
+SEO META END -->
+
+    <title>
+      AWSエラー対策まとめ｜EC2・S3・RDS・Lambda・IAMのトラブル解決集 |
+      Programming Lab
+    </title>
+    <meta
+      name="description"
+      content="AWSで発生しやすいEC2、S3、RDS、Lambda、IAM、VPCのエラー原因と解決方法をまとめたハブ記事です。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/aws/aws_error_hub.html"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp"
+            >Programming Lab</a
+          >
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">AWSエラー対策まとめ</h1>
+
+        <p class="lead">
+          AWS運用で発生しやすい接続エラー、権限エラー、ネットワーク障害、デプロイ失敗の原因と解決方法をまとめています。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-13</p>
+
+        <h2>目次</h2>
+        <ul>
+          <li><a href="#overview">AWSエラーの全体像</a></li>
+          <li><a href="#network">ネットワーク系エラー</a></li>
+          <li><a href="#security">権限・認証系エラー</a></li>
+          <li><a href="#operation">運用・開発系エラー</a></li>
+          <li><a href="#summary">まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="overview">AWSエラーの全体像</h2>
+        <p>
+          AWSトラブルの多くは「ネットワーク設定」「IAM権限」「セキュリティグループ」「VPC設計」のいずれかが原因です。
+          個別記事への入口として本ページを利用してください。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>分類</th>
+            <th>代表的なエラー</th>
+          </tr>
+          <tr>
+            <td>ネットワーク</td>
+            <td>SSH接続失敗、ポート未開放、VPC通信不可</td>
+          </tr>
+          <tr>
+            <td>認証</td>
+            <td>AccessDenied、IAM権限不足</td>
+          </tr>
+          <tr>
+            <td>データベース</td>
+            <td>RDS接続失敗</td>
+          </tr>
+          <tr>
+            <td>運用</td>
+            <td>CloudWatchログ未出力、CLIエラー</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="network">ネットワーク系エラー</h2>
+        <ul>
+          <li>
+            <a href="aws_ec2_ssh_error.html"
+              >EC2にSSH接続できない原因と解決方法</a
+            >
+          </li>
+          <li>
+            <a href="aws_ec2_port_error.html">EC2でポートが開かない原因</a>
+          </li>
+          <li>
+            <a href="aws_vpc_network_error.html"
+              >VPC設定ミスで通信できない原因まとめ</a
+            >
+          </li>
+          <li>
+            <a href="aws_rds_connection_error.html"
+              >RDSに接続できない原因と解決方法</a
+            >
+          </li>
+        </ul>
+
+        <h3>まず確認すべきポイント</h3>
+        <ul>
+          <li>Security Group</li>
+          <li>NACL</li>
+          <li>Route Table</li>
+          <li>Internet Gateway</li>
+          <li>NAT Gateway</li>
+        </ul>
+
+        <hr />
+
+        <h2 id="security">権限・認証系エラー</h2>
+        <ul>
+          <li>
+            <a href="aws_s3_access_denied.html"
+              >S3のAccess Deniedエラーの原因と対処法</a
+            >
+          </li>
+          <li>
+            <a href="aws_iam_permission_error.html"
+              >IAM権限エラーの原因と最小権限設計</a
+            >
+          </li>
+          <li>
+            <a href="aws_cli_error.html">AWS CLIが動かない原因と対処法</a>
+          </li>
+        </ul>
+
+        <p>
+          AWSでは明示的Denyが最優先されます。IAM、Bucket
+          Policy、ACLを合わせて確認しましょう。
+        </p>
+
+        <hr />
+
+        <h2 id="operation">運用・開発系エラー</h2>
+        <ul>
+          <li>
+            <a href="aws_lambda_error.html">Lambdaが実行されない原因と対処法</a>
+          </li>
+          <li>
+            <a href="aws_cloudwatch_log_error.html"
+              >CloudWatchログが出ない原因と解決方法</a
+            >
+          </li>
+          <li>
+            <a href="aws_eb_deploy_error.html"
+              >Elastic Beanstalkデプロイ失敗の原因まとめ</a
+            >
+          </li>
+        </ul>
+
+        <p>
+          CloudWatchログが確認できる状態を作ると、多くの障害調査が容易になります。
+        </p>
+
+        <div class="my-4 text-center">
+          <!-- Adsense -->
+        </div>
+
+        <hr />
+
+        <h2 id="summary">まとめ</h2>
+        <ul>
+          <li>AWS障害の大半は権限またはネットワーク設定</li>
+          <li>Security GroupとIAMを優先確認</li>
+          <li>CloudWatchログを活用する</li>
+          <li>各詳細記事をブックマークしておく</li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+        <ul>
+          <li>
+            <a href="aws_ec2_ssh_error.html"
+              >EC2にSSH接続できない原因と解決方法</a
+            >
+          </li>
+          <li>
+            <a href="aws_s3_access_denied.html"
+              >S3のAccess Deniedエラーの原因と対処法</a
+            >
+          </li>
+          <li>
+            <a href="aws_rds_connection_error.html"
+              >RDSに接続できない原因と解決方法</a
+            >
+          </li>
+          <li>
+            <a href="aws_lambda_error.html">Lambdaが実行されない原因と対処法</a>
+          </li>
+          <li>
+            <a href="aws_cloudwatch_log_error.html"
+              >CloudWatchログが出ない原因と解決方法</a
+            >
+          </li>
+          <li>
+            <a href="/hub/java_error_hub.html">Java開発エラー対策まとめ</a>
+          </li>
+        </ul>
+      </div>
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted">Copyright (C) nori</span>
+      </div>
+    </footer>
+  </body>
+</html>

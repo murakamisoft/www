@@ -1,7 +1,7 @@
 #!/bin/bash
 
 TEMPLATE="_templete.html"
-OUTPUT_DIR="aws"
+OUTPUT_DIR="hub"
 INPUT_FILE="articles.tsv"
 
 mkdir -p "$OUTPUT_DIR"
