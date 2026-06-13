@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>
+      IAM権限エラーの原因と最小権限設計を徹底解説【AWS】 | Programming Lab
+    </title>
+
+    <meta
+      name="description"
+      content="AWSで発生するIAM権限エラー（AccessDenied）の原因と対処法を解説します。ポリシー確認方法、よくある設定ミス、最小権限設計の考え方まで実務目線で紹介します。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/aws/aws_iam_permission_error.html"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">IAM権限エラーの原因と最小権限設計を徹底解説【AWS】</h1>
+
+        <p class="lead">
+          AWSで発生するIAM権限エラー（AccessDenied）の原因調査方法と、セキュリティを維持しながら運用できる最小権限設計について解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-13</p>
+
+        <h2>目次</h2>
+        <ul>
+          <li><a href="#section1">1. IAM権限エラーとは</a></li>
+          <li><a href="#section2">2. 原因調査の手順</a></li>
+          <li><a href="#section3">3. 最小権限設計の考え方</a></li>
+          <li><a href="#section4">4. よくあるエラー</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. IAM権限エラーとは</h2>
+        <p>
+          IAM（Identity and Access
+          Management）はAWSの認証・認可を管理するサービスです。
+          IAMポリシーに必要な権限が含まれていない場合、AccessDeniedエラーが発生します。
+        </p>
+
+        <pre><code class="text">
+An error occurred (AccessDenied)
+when calling the ListBuckets operation:
+Access Denied
+        </code></pre>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>項目</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>エラー名</td>
+            <td>AccessDenied</td>
+          </tr>
+          <tr>
+            <td>主な原因</td>
+            <td>IAM権限不足</td>
+          </tr>
+          <tr>
+            <td>影響範囲</td>
+            <td>S3、EC2、Lambda、RDSなど</td>
+          </tr>
+          <tr>
+            <td>対処方法</td>
+            <td>不足権限の特定と付与</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. 原因調査の手順</h2>
+
+        <h3>2-1. エラーメッセージを確認する</h3>
+        <p>不足しているActionを確認します。</p>
+
+        <pre><code class="text">
+User is not authorized to perform: s3:GetObject
+        </code></pre>
+
+        <p>s3:GetObject権限が不足していることを示しています。</p>
+
+        <h3>2-2. IAMポリシーを確認する</h3>
+        <ul>
+          <li>IAMユーザー</li>
+          <li>IAMロール</li>
+          <li>IAMグループ</li>
+          <li>Permission Boundary</li>
+          <li>SCP</li>
+        </ul>
+
+        <h3>2-3. Policy Simulatorを利用する</h3>
+        <p>
+          IAM Policy
+          Simulatorを利用すると、実際に許可されるアクションを検証できます。
+        </p>
+
+        <hr />
+
+        <h2 id="section3">3. 最小権限設計の考え方</h2>
+
+        <p>
+          AdministratorAccessで解決するのは簡単ですが、本番環境では推奨されません。
+          必要最小限の権限のみを付与する設計が重要です。
+        </p>
+
+        <pre><code class="json">
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::sample-bucket/*"
+      ]
+    }
+  ]
+}
+        </code></pre>
+
+        <p>
+          Resourceを絞り込み、Actionも必要最小限に限定することでセキュリティリスクを低減できます。
+        </p>
+
+        <hr />
+
+        <div class="my-4 text-center">
+          <!-- Adsense -->
+        </div>
+
+        <hr />
+
+        <h2 id="section4">4. よくあるエラー</h2>
+
+        <h3>S3 AccessDenied</h3>
+        <p>IAMだけでなくS3バケットポリシーも確認してください。</p>
+
+        <h3>EC2 UnauthorizedOperation</h3>
+        <p>Describe系権限不足が原因であるケースが多いです。</p>
+
+        <h3>Lambda AccessDeniedException</h3>
+        <p>実行ロールの設定漏れを確認してください。</p>
+
+        <h3>SCPによる拒否</h3>
+        <p>AWS Organizations利用時はSCPによる制限も確認しましょう。</p>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>AccessDeniedはIAM権限不足が主原因</li>
+          <li>エラーメッセージから不足権限を特定する</li>
+          <li>Policy Simulatorを活用する</li>
+          <li>最小権限の原則を守る</li>
+          <li>AdministratorAccessの乱用を避ける</li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li>
+            <a href="aws_s3_access_denied.html"
+              >S3のAccess Deniedエラーの原因と対処法</a
+            >
+          </li>
+          <li>
+            <a href="aws_security_group.html">Security Group設定の基本</a>
+          </li>
+          <li>
+            <a href="aws_ec2_connection_error.html"
+              >EC2へ接続できない原因と対処法</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted">Copyright (C) nori</span>
+      </div>
+    </footer>
+  </body>
+</html>

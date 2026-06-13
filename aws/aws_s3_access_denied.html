@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: aws_s3_access_denied.html
+CATEGORY: AWS
+TITLE: S3のAccess Deniedエラーの原因と対処法
+DESCRIPTION: 権限設定ミス・IAM問題
+SEO META END -->
+
+    <title>S3のAccess Deniedエラーの原因と対処法 | Programming Lab</title>
+
+    <meta
+      name="description"
+      content="AWS S3でAccess Deniedエラーが発生する原因と解決方法を解説します。IAMポリシー、Bucket Policy、ACL、Public Access Block設定など実務で頻出するトラブルをまとめています。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/aws/aws_s3_access_denied.html"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">S3のAccess Deniedエラーの原因と対処法</h1>
+
+        <p class="lead">
+          AWS S3でAccess
+          Deniedエラーが発生した場合の調査方法と解決手順を解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-13</p>
+
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. Access Deniedが発生する主な原因</a></li>
+          <li><a href="#section2">2. 調査手順</a></li>
+          <li><a href="#section3">3. IAMポリシー設定例</a></li>
+          <li><a href="#section4">4. よくあるエラー</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. Access Deniedが発生する主な原因</h2>
+
+        <p>S3のAccess Deniedエラーは権限設定の問題で発生します。</p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>原因</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>IAMポリシー不足</td>
+            <td>s3:GetObjectやs3:PutObjectが許可されていない</td>
+          </tr>
+          <tr>
+            <td>Bucket Policy</td>
+            <td>バケット側でアクセス拒否している</td>
+          </tr>
+          <tr>
+            <td>Public Access Block</td>
+            <td>パブリックアクセスがブロックされている</td>
+          </tr>
+          <tr>
+            <td>ACL設定</td>
+            <td>オブジェクト権限不足</td>
+          </tr>
+          <tr>
+            <td>KMS権限不足</td>
+            <td>暗号化キーへのアクセス権がない</td>
+          </tr>
+          <tr>
+            <td>別アカウントアクセス</td>
+            <td>クロスアカウント権限不足</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. 調査手順</h2>
+
+        <h3>2-1. IAMユーザーを確認する</h3>
+
+        <p>まず現在利用している認証情報を確認します。</p>
+
+        <pre><code class="bash">
+aws sts get-caller-identity
+        </code></pre>
+
+        <p>
+          想定したIAMユーザーまたはIAMロールになっているか確認してください。
+        </p>
+
+        <h3>2-2. S3アクセス確認</h3>
+
+        <pre><code class="bash">
+aws s3 ls
+        </code></pre>
+
+        <pre><code class="bash">
+aws s3 ls s3://sample-bucket
+        </code></pre>
+
+        <p>この時点でAccess Deniedが発生する場合は権限設定に問題があります。</p>
+
+        <h3>2-3. Bucket Policy確認</h3>
+
+        <pre><code class="bash">
+aws s3api get-bucket-policy \
+--bucket sample-bucket
+        </code></pre>
+
+        <p>明示的なDeny設定が存在するとAllow設定より優先されます。</p>
+
+        <h3>2-4. Public Access Block確認</h3>
+
+        <p>AWSではデフォルトでパブリックアクセスをブロックしています。</p>
+
+        <p>Web公開用途の場合は設定を確認してください。</p>
+
+        <hr />
+
+        <h2 id="section3">3. IAMポリシー設定例</h2>
+
+        <p>オブジェクト読み書きを許可するサンプルです。</p>
+
+        <pre><code class="json">
+{
+  "Version":"2012-10-17",
+  "Statement":[
+    {
+      "Effect":"Allow",
+      "Action":[
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:DeleteObject"
+      ],
+      "Resource":[
+        "arn:aws:s3:::sample-bucket/*"
+      ]
+    }
+  ]
+}
+        </code></pre>
+
+        <p>バケット一覧取得にはs3:ListBucketも必要です。</p>
+
+        <pre><code class="json">
+{
+  "Effect":"Allow",
+  "Action":"s3:ListBucket",
+  "Resource":"arn:aws:s3:::sample-bucket"
+}
+        </code></pre>
+
+        <hr />
+
+        <div class="my-4 text-center">
+          <!-- Adsense -->
+        </div>
+
+        <hr />
+
+        <h2 id="section4">4. よくあるエラー</h2>
+
+        <h3>AccessDenied</h3>
+
+        <pre><code class="java">
+An error occurred
+(AccessDenied)
+when calling the GetObject operation
+        </code></pre>
+
+        <p>GetObject権限不足です。</p>
+
+        <h3>403 Forbidden</h3>
+
+        <pre><code class="java">
+403 Forbidden
+        </code></pre>
+
+        <p>Bucket PolicyまたはPublic Access Block設定を確認してください。</p>
+
+        <h3>Access Denied when calling PutObject</h3>
+
+        <pre><code class="java">
+Access Denied
+when calling PutObject
+        </code></pre>
+
+        <p>PutObject権限が不足しています。</p>
+
+        <h3>KMS Access Denied</h3>
+
+        <pre><code class="java">
+AccessDeniedException
+kms:Decrypt
+        </code></pre>
+
+        <p>KMSキーへのアクセス権が不足しています。</p>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>IAMポリシーを確認する</li>
+          <li>Bucket Policyを確認する</li>
+          <li>Public Access Blockを確認する</li>
+          <li>ACL設定を確認する</li>
+          <li>KMS権限を確認する</li>
+        </ul>
+
+        <p>
+          S3のAccess DeniedはIAMポリシーだけでなくBucket PolicyやPublic Access
+          Blockも関係します。権限周りを順番に確認することで原因を特定できます。
+        </p>
+
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul class="row">
+          <li class="col-sm-6">
+            <a href="aws_lambda_error.html">
+              Lambdaが実行されない原因と対処法
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="aws_rds_connection_error.html">
+              RDSに接続できない原因と解決方法
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="aws_vpc_network_error.html">
+              VPC設定ミスによる通信障害の対処法
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="aws_iam_access_denied.html">
+              IAM Access Deniedの原因と解決方法
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: aws_lambda_error.html
+CATEGORY: AWS
+TITLE: Lambdaが実行されない原因と対処法
+DESCRIPTION: 権限・トリガー設定ミス
+SEO META END -->
+
+    <!-- SEO -->
+    <title>AWS Lambdaが実行されない原因と対処法まとめ | Programming Lab</title>
+
+    <meta
+      name="description"
+      content="AWS Lambdaが実行されない場合の原因と対処法を解説。IAM権限不足、トリガー設定ミス、CloudWatch Logs確認方法、タイムアウトやイベント設定不備など実務で多い障害パターンをまとめています。"
+    />
+
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/aws/aws_lambda_error.html"
+    />
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <!-- Highlight.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!-- Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">
+          AWS Lambdaが実行されない原因と対処法まとめ
+        </h1>
+
+        <p class="lead">
+          Lambdaが起動しない、トリガーが反応しない、CloudWatch Logsに何も出力されない場合の調査方法を解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-13</p>
+
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. Lambdaが実行されない主な原因</a></li>
+          <li><a href="#section2">2. 調査手順</a></li>
+          <li><a href="#section3">3. Lambda実装例</a></li>
+          <li><a href="#section4">4. よくあるエラーと対処法</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. Lambdaが実行されない主な原因</h2>
+
+        <p>
+          Lambdaが実行されない場合、コード自体ではなく設定ミスが原因であるケースが非常に多くあります。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>原因</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>IAM権限不足</td>
+            <td>Lambda実行ロールに必要な権限が付与されていない</td>
+          </tr>
+          <tr>
+            <td>トリガー設定ミス</td>
+            <td>S3、API Gateway、EventBridgeなどとの連携不備</td>
+          </tr>
+          <tr>
+            <td>CloudWatch Logs権限不足</td>
+            <td>ログ出力できず原因調査が困難になる</td>
+          </tr>
+          <tr>
+            <td>タイムアウト</td>
+            <td>処理時間が制限時間を超過している</td>
+          </tr>
+          <tr>
+            <td>環境変数ミス</td>
+            <td>接続先URLや認証情報が誤っている</td>
+          </tr>
+          <tr>
+            <td>リージョン違い</td>
+            <td>Lambdaとイベント発生元が別リージョン</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. 調査手順</h2>
+
+        <h3>2-1. CloudWatch Logsを確認する</h3>
+
+        <p>
+          Lambda障害調査で最初に確認すべきなのがCloudWatch Logsです。
+        </p>
+
+        <pre><code class="bash">
+aws logs describe-log-groups
+
+aws logs tail \
+/aws/lambda/sample-function \
+--follow
+        </code></pre>
+
+        <p>
+          エラーメッセージが出力されている場合は、まずその内容を確認しましょう。
+        </p>
+
+        <h3>2-2. Lambda実行ロールを確認する</h3>
+
+        <p>
+          LambdaはIAMロールの権限でAWSサービスへアクセスします。
+        </p>
+
+        <p>最低限以下のポリシーが必要になることが多いです。</p>
+
+        <pre><code class="json">
+{
+  "Version":"2012-10-17",
+  "Statement":[
+    {
+      "Effect":"Allow",
+      "Action":[
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource":"*"
+    }
+  ]
+}
+        </code></pre>
+
+        <h3>2-3. トリガー設定を確認する</h3>
+
+        <p>
+          Lambda関数単体では実行されません。イベントソースとの連携が必要です。
+        </p>
+
+        <ul>
+          <li>S3イベント</li>
+          <li>API Gateway</li>
+          <li>EventBridge</li>
+          <li>SQS</li>
+          <li>SNS</li>
+          <li>DynamoDB Streams</li>
+        </ul>
+
+        <p>
+          トリガー画面で対象リソースが正しく設定されているか確認してください。
+        </p>
+
+        <hr />
+
+        <h2 id="section3">3. Lambda実装例</h2>
+
+        <p>
+          Java Lambdaの基本実装例です。
+        </p>
+
+        <pre><code class="java">
+package sample;
+
+import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.lambda.runtime.RequestHandler;
+
+public class HelloLambda
+implements RequestHandler<String, String> {
+
+    @Override
+    public String handleRequest(
+        String input,
+        Context context) {
+
+        context.getLogger()
+               .log("input=" + input);
+
+        return "Hello Lambda";
+    }
+}
+        </code></pre>
+
+        <p>
+          まずはログ出力だけの簡単な実装で動作確認すると原因を切り分けやすくなります。
+        </p>
+
+        <hr />
+
+        <div class="my-4 text-center">
+          <!-- Adsense -->
+        </div>
+
+        <hr />
+
+        <h2 id="section4">4. よくあるエラーと対処法</h2>
+
+        <h3>AccessDeniedException</h3>
+
+        <pre><code class="java">
+AccessDeniedException:
+User is not authorized
+to perform this action
+        </code></pre>
+
+        <p>
+          IAMロールの権限不足です。必要なポリシーを追加してください。
+        </p>
+
+        <h3>Task timed out</h3>
+
+        <pre><code class="java">
+Task timed out
+after 3.00 seconds
+        </code></pre>
+
+        <p>
+          Lambdaのタイムアウト設定が短すぎる可能性があります。
+        </p>
+
+        <ul>
+          <li>タイムアウト値を延長する</li>
+          <li>外部API呼び出し時間を短縮する</li>
+          <li>処理を非同期化する</li>
+        </ul>
+
+        <h3>CloudWatch Logsに何も出ない</h3>
+
+        <p>
+          Lambdaが起動していないか、ログ出力権限が不足している可能性があります。
+        </p>
+
+        <ul>
+          <li>トリガー設定確認</li>
+          <li>IAMロール確認</li>
+          <li>リージョン確認</li>
+        </ul>
+
+        <h3>S3アップロードで起動しない</h3>
+
+        <p>
+          S3イベント通知が未設定であるケースが多くあります。
+        </p>
+
+        <ul>
+          <li>Bucket Notification設定確認</li>
+          <li>対象プレフィックス確認</li>
+          <li>対象サフィックス確認</li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>まずCloudWatch Logsを確認する</li>
+          <li>IAMロールの権限不足を疑う</li>
+          <li>トリガー設定を確認する</li>
+          <li>リージョン違いを確認する</li>
+          <li>タイムアウトや環境変数もチェックする</li>
+        </ul>
+
+        <p>
+          Lambda障害の大半は「IAM」「トリガー」「CloudWatch Logs」の3点を確認することで原因を特定できます。
+        </p>
+
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul class="row">
+          <li class="col-sm-6">
+            <a href="aws_s3_access_denied.html">
+              S3のAccess Deniedエラーの原因と対処法
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="aws_vpc_network_error.html">
+              VPC設定ミスによる通信障害の対処法
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="aws_ec2_connect_error.html">
+              EC2へSSH接続できない原因と対処法
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="aws_rds_connect_error.html">
+              RDSへ接続できない原因と確認ポイント
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>
