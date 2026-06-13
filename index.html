@@ -5,24 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Java、Spring Boot、MyBatis、Spring Securityを使ったWebアプリ開発を実例付きで解説。CRUD実装、ログイン認証、開発環境構築、よくあるエラーの解決方法を紹介します。"
+      content="Java / Spring Boot / AWS / Docker / Reactなどの開発エラー解決ナレッジサイト。実務で使えるトラブルシューティング集。"
     />
 
-    <title>
-      Java・Spring Boot入門｜Webアプリ開発、MyBatis、Spring
-      Security実装例とエラー解決集
-    </title>
-    <!-- Bootstrap core CSS -->
+    <title>開発エラー解決ナレッジベース</title>
+
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
-      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-      crossorigin="anonymous"
     />
 
-    <!-- Custom styles for this template -->
     <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
-
     <link rel="canonical" href="https://vbminigame.sakura.ne.jp/" />
 
     <script
@@ -30,888 +23,145 @@
       src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
       crossorigin="anonymous"
     ></script>
+
+    <style>
+      body {
+        background: #f8f9fa;
+      }
+      .hero {
+        background: linear-gradient(135deg, #1f2937, #374151);
+        color: white;
+        padding: 40px 20px;
+        border-radius: 12px;
+        margin-top: 20px;
+      }
+      .category-card {
+        transition: 0.2s;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        background: #fff;
+        height: 100%;
+      }
+      .category-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      }
+      .category-title {
+        font-weight: 600;
+        font-size: 1.1rem;
+      }
+      a {
+        text-decoration: none;
+      }
+    </style>
   </head>
 
   <body class="d-flex flex-column h-100">
     <header>
-      <!-- Fixed navbar -->
-      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+      <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
-          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp"
-            >Programming Lab</a
-          >
+          <a class="navbar-brand" href="/">Programming Lab</a>
         </div>
       </nav>
     </header>
 
-    <!-- Begin page content -->
     <main class="flex-shrink-0">
       <div class="container">
-        <h1 class="mt-5">Java・Spring BootによるWebアプリ開発サンプル集</h1>
-        <h2>サイト概要</h2>
-
-        <p>
-          Java、Spring Boot、MyBatis、Spring
-          Securityを利用したWebアプリ開発の実装例を公開しています。
-          実際に動作するソースコード付きで、CRUD機能、ログイン認証、開発環境構築、エラー解決方法を解説しています。
-        </p>
-      </div>
-      <div class="container">
-        <!-- TODO ここにサイト全体の目次を入れる -->
-        <h2>Spring Boot入門記事</h2>
-
-        <dl class="row">
-          <dt class="col-sm-3">
-            <a href="springboot/springboot_setup.html">
-              WindowsでSpring Boot開発環境を構築する手順
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            Java、VS Code、Gradleを利用したSpring
-            Boot開発環境の構築手順を解説します。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="springboot/springboot_controller.html">
-              Spring BootのController入門
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            @Controller、@RestController、@GetMappingの基本的な使い方をサンプル付きで解説します。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="springboot/springboot_errors.html">
-              Spring Boot開発でよくあるエラーと解決集
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            MyBatisのBean登録エラーやSpring
-            Securityのログイン無限ループなどの対処法をまとめています。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="springboot/springboot_error_list.html">
-              起動エラー一覧と解決方法
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            Spring
-            Bootの起動時に発生しやすいエラー（Bean生成失敗、ポート競合、設定ミス、DB接続エラーなど）と原因・解決方法をまとめた実務向けガイド。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="springboot/springboot_whitelabel.html">
-              Whitelabel Error Page対策
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            404・マッピングミス・テンプレート不足の解決方法
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="springboot/spring_security_loop.html">
-              Spring Securityログイン無限ループ
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            認証リダイレクトループ・permitAll設定ミスの解決方法。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="springboot/springboot_404_error.html">
-              Spring Bootで404エラーが出る原因まとめ
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            Spring Bootで404エラーが出る原因をまとめました。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="springboot/springboot_properties_error.html">
-              application.properties設定ミスと対処法
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            Spring
-            Bootの設定ファイルミスによる起動失敗・環境差分の典型パターンと解決方法。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="springboot/springboot_bean_error.html">
-              Beanが見つからないエラーの原因と解決法
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            DI・ComponentScanミスなどSpring BootのBean解決エラー対策。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="springboot/springboot_port_error.html">
-              ポート8080使用中エラーの解決方法
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            ローカル開発で頻発するポート競合エラーの原因と対処方法。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="springboot/springboot_mysql_error.html">
-              MySQL接続エラーの原因と対処法
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            DB接続失敗・ドライバ設定・URLミスなどの実務トラブル解説。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="springboot/springboot_rest_api_error.html">
-              REST APIで404・405エラーが出る原因まとめ
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            URL設計ミス・HTTPメソッド不一致などAPI設計エラー対策。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="springboot/springboot_deploy_error.html">
-              本番環境で動かない原因（jar・環境差分）
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            ローカルと本番の差異・デプロイ失敗・環境変数問題の解決方法。
-          </dd>
-        </dl>
-
-        <h2>React入門記事</h2>
-        <dl class="row">
-          <dt class="col-sm-3">
-            <a href="react/react_start_error.html"
-              >Reactアプリが起動しない原因と解決方法</a
-            >
-          </dt>
-          <dd class="col-sm-9">npm start系トラブルの解決方法</dd>
-
-          <dt class="col-sm-3">
-            <a href="react/react_useeffect_loop.html"
-              >useEffectが無限ループする原因と対処法</a
-            >
-          </dt>
-          <dd class="col-sm-9">初心者が最も詰まりやすいポイント</dd>
-
-          <dt class="col-sm-3">
-            <a href="react/react_build_error.html"
-              >React buildエラーの原因まとめ</a
-            >
-          </dt>
-          <dd class="col-sm-9">本番ビルド失敗対策</dd>
-
-          <dt class="col-sm-3">
-            <a href="react/react_state_error.html"
-              >stateが更新されない原因と解決方法</a
-            >
-          </dt>
-          <dd class="col-sm-9">useStateの誤用対策</dd>
-
-          <dt class="col-sm-3">
-            <a href="react/react_props_error.html"
-              >propsが渡らない原因と対処法</a
-            >
-          </dt>
-          <dd class="col-sm-9">コンポーネント設計ミス対策</dd>
-
-          <dt class="col-sm-3">
-            <a href="react/react_api_error.html"
-              >ReactでAPI通信が失敗する原因まとめ</a
-            >
-          </dt>
-          <dd class="col-sm-9">fetch / axiosエラー対策</dd>
-
-          <dt class="col-sm-3">
-            <a href="react/react_cors_error.html"
-              >CORSエラーの原因とフロント側対処法</a
-            >
-          </dt>
-          <dd class="col-sm-9">API連携で頻出の問題</dd>
-
-          <dt class="col-sm-3">
-            <a href="react/react_router_error.html"
-              >React Routerが動かない原因と解決方法</a
-            >
-          </dt>
-          <dd class="col-sm-9">ルーティング問題の解決</dd>
-
-          <dt class="col-sm-3">
-            <a href="react/react_npm_install_error.html"
-              >npm installエラーの原因と解決方法</a
-            >
-          </dt>
-          <dd class="col-sm-9">環境構築系トラブル</dd>
-
-          <dt class="col-sm-3">
-            <a href="react/react_blank_screen.html"
-              >Reactで画面が真っ白になる原因まとめ</a
-            >
-          </dt>
-          <dd class="col-sm-9">デバッグ総合ガイド</dd>
-        </dl>
-
-        <h2>MyBatis入門記事</h2>
-
-        <dl class="row">
-          <dt class="col-sm-3">
-            <a href="mybatis/mybatis_springboot_setup.html">
-              MyBatisとSpring Boot連携手順
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            Spring
-            BootでMyBatisを動かすための環境構築（依存・設定・Mapper作成）を解説。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="mybatis/mybatis_bean_error.html">
-              MyBatisのBean登録エラー解決方法
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            @MapperScan漏れ・Mapper未登録などDIエラーの原因と対処法。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="mybatis/mybatis_sql_not_run.html">
-              SQLが実行されない原因まとめ
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            Mapper・XML・トランザクションなどSQL未実行の原因を整理。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="mybatis/mybatis_commit_error.html">
-              INSERT/UPDATEが反映されない原因
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            @Transactional漏れ・commit不足・トランザクション管理ミスによるデータ未反映問題を解説。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="mybatis/mybatis_dynamic_sql_error.html">
-              動的SQLが動かない原因（if/where/foreach）
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            OGNL条件ミス・タグ構文エラー・MyBatis動的SQLの典型バグを整理。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="mybatis/mybatis_mapper_not_found.html">
-              Mapperが読み込まれない原因と解決方法
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            @MapperScan漏れ・XMLパス設定ミス・DI失敗などMyBatis初期トラブル対応。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="mybatis/mybatis_n1_problem.html">
-              N+1問題とパフォーマンス改善方法
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            不正なSELECTループ・JOIN最適化・SQLチューニングによる性能改善手法。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="mybatis/mybatis_parameter_binding_error.html">
-              パラメータバインドエラー（#と$の違い）
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            #{ }と${
-            }の違い・SQLインジェクション・バインドミスの典型エラーを解説。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="mybatis/mybatis_select_null.html">
-              SELECT結果がnullになる原因まとめ
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            resultType/resultMap不一致・カラム名ミスマッチによる取得失敗の対策。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="mybatis/mybatis_sql_log_error.html">
-              SQLログが出ない原因と解決方法
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            application.yml・logback設定・log-impl不足などSQLログ非表示問題を解説。
-          </dd>
-        </dl>
-
-        <h2>API設計入門記事</h2>
-
-        <dl class="row">
-          <dt class="col-sm-3">
-            <a href="api_design/api_design_basic.html">
-              REST API設計の基本ルール
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            REST
-            API設計の基本ルールを体系的に解説。命名規則、HTTPメソッド設計、ステータスコード、エラーハンドリングまで中級エンジニア向けに実務レベルで整理。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="api_design/api_design_mistake.html">
-              よくあるAPI設計ミスまとめ
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            REST
-            API設計で現場エンジニアがやりがちなミスと、その改善方法を実務レベルで解説。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="api_design/api_design_filter.html">
-              APIのフィルタ設計ベストプラクティス（検索条件設計）
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            WHERE条件をAPIにどう落とすかの実務設計と、検索APIの設計パターンを解説。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="api_design/api_design_frontend_bff.html">
-              API設計とフロント連携のベストパターン（BFF含む）
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            フロント都合を吸収するBFF設計とAPI分離アーキテクチャの実務解説。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="api_design/api_design_idempotency.html">
-              APIの冪等性（idempotency）設計とは何か
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            POST/PUTの違いと安全な再実行設計について実務視点で解説。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="api_design/api_design_logging_trace.html">
-              APIのログ設計とトレーサビリティ設計
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            障害調査を可能にするログ設計・トレースID設計の実務パターンを解説。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="api_design/api_design_pagination.html">
-              REST APIのページング設計（offset vs cursor徹底比較）
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            大量データ取得時のページング設計（offset/cursor）の比較と使い分けを解説。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="api_design/api_design_rate_limit.html">
-              APIのレート制限（rate limit）設計方法
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            API保護のためのスロットリング設計・実装パターンを整理。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="api_design/api_design_sort.html">
-              APIの並び順（sort設計）と安全な実装方法
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            複数ソート条件・不正値対策を含む安全なsort設計方法を解説。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="api_design/api_design_timeout_retry.html">
-              APIのタイムアウト設計とリトライ戦略
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            障害耐性を上げるためのtimeout・retry設計パターンを解説。
-          </dd>
-        </dl>
-
-        <h2>PostgreSQL入門記事</h2>
-
-        <dl class="row">
-          <dt class="col-sm-3">
-            <a href="postgres/postgres_springboot_setup.html">
-              PostgreSQL接続設定（Spring Boot）
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            Spring BootからPostgreSQLへ接続する基本設定と構成方法。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="postgres/postgres_connection_error.html">
-              PostgreSQL接続エラー解決方法
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            Connection refusedや認証エラーなど実務で多いDBトラブルの解決方法。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="postgres/postgres_user_setup.html">
-              PostgreSQL初期設定（ユーザー作成・権限）
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            ロール作成・権限設定など実務で必須のDB初期構築手順。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="postgres/postgres_sql_error.html">
-              SQL実行エラー（syntax error）の原因
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            SQL文法ミス・予約語・カンマ抜けなど頻出エラーの解決方法。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="postgres/postgres_auth_error.html">
-              パスワード認証エラーの原因と対処法
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            pg_hba.conf設定ミス・認証失敗などのトラブル対応。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="postgres/postgres_connection_timeout.html">
-              接続タイムアウト・拒否エラー
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            DB未起動・ポート・ネットワーク問題の切り分け方法。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="postgres/postgres_backup_restore.html">
-              バックアップ・リストア手順
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            pg_dump・復元手順など運用必須のデータ保護方法。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="postgres/postgres_encoding_error.html">
-              文字化け・エンコーディング問題
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            UTF-8不一致や日本語データ破損の原因と対処法。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="postgres/postgres_performance.html">
-              パフォーマンスが遅い原因と改善方法
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            index未使用・VACUUM・EXPLAIN分析による性能改善。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="postgres/postgres_ddl_error.html">
-              DDL自動生成が動かない原因
-            </a>
-          </dt>
-          <dd class="col-sm-9">hibernate ddl-autoやJPA設定ミスの典型問題。</dd>
-        </dl>
-
-        <h2>AWS入門・トラブルシューティング記事</h2>
-
-        <dl class="row">
-          <dt class="col-sm-3">
-            <a href="aws/aws_ec2_ssh_error.html">
-              EC2にSSH接続できない原因と解決方法
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            初心者が最初に詰まりやすいEC2へのSSH接続エラーの原因と解決方法を解説。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="aws/aws_s3_access_denied.html">
-              S3のAccess Deniedエラーの原因と対処法
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            IAM権限不足やバケットポリシー設定ミスによるアクセス拒否問題を解説。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="aws/aws_rds_connection_error.html">
-              RDSに接続できない原因と解決方法
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            Spring Boot連携時に発生しやすい接続エラーやネットワーク設定を解説。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="aws/aws_eb_deploy_error.html">
-              Elastic Beanstalkデプロイ失敗の原因まとめ
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            デプロイエラー、設定不備、アプリ起動失敗などの対処法を解説。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="aws/aws_ec2_port_error.html">
-              EC2でポートが開かない原因（セキュリティグループ）
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            通信できない問題の典型例であるセキュリティグループやNACL設定を解説。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="aws/aws_lambda_error.html">
-              Lambdaが実行されない原因と対処法
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            権限不足、トリガー設定ミス、タイムアウトなどの原因を整理。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="aws/aws_cloudwatch_log_error.html">
-              CloudWatchログが出ない原因と解決方法
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            ログ出力設定やIAM権限不足による監視トラブルを解説。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="aws/aws_cli_error.html"> AWS CLIが動かない原因と対処法 </a>
-          </dt>
-          <dd class="col-sm-9">
-            認証情報、リージョン設定、インストール不備などの問題を解説。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="aws/aws_iam_permission_error.html">
-              IAM権限エラーの原因と最小権限設計
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            AccessDeniedエラーの調査方法と安全な権限設計の考え方を解説。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="aws/aws_vpc_network_error.html">
-              VPC設定ミスで通信できない原因まとめ
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            ルートテーブル、サブネット、NAT
-            Gatewayなどネットワーク設計の典型ミスを解説。
-          </dd>
-        </dl>
-
-        <h2>Docker入門・トラブルシューティング記事</h2>
-
-        <dl class="row">
-          <dt class="col-sm-3">
-            <a href="docker/docker_container_start_error.html">
-              Dockerコンテナが起動しない原因と解決方法
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            コンテナ起動失敗、Exit
-            Code、設定ミスなどDockerで最も多いトラブルの原因と解決方法を解説。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="docker/docker_build_error.html">
-              Docker buildエラーの原因まとめ
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            Dockerfile記述ミス、依存関係エラー、イメージ作成失敗の原因と対処法を解説。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="docker/docker_compose_error.html">
-              Docker Composeが動かない原因と対処法
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            docker-compose.yml設定ミスやサービス依存関係による起動トラブルを解説。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="docker/docker_port_conflict.html">
-              ポート競合エラー（Port already in use）の解決方法
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            Spring
-            Boot連携時にも発生しやすいポート競合問題の原因と解決方法を紹介。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="docker/docker_springboot_error.html">
-              コンテナ内でSpring Bootが起動しない原因
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            Javaアプリ実行エラー、Jar配置ミス、環境変数設定不備などを解説。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="docker/docker_image_size.html">
-              Dockerイメージが大きすぎる原因と最適化方法
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            マルチステージビルドや不要ファイル削除による軽量化手法を紹介。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="docker/docker_volume_error.html">
-              volumeマウントが効かない原因と解決方法
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            データ永続化やホストディレクトリ共有時の典型的な設定ミスを解説。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="docker/docker_network_error.html">
-              ネットワーク接続できないDockerエラーの原因
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            コンテナ間通信、DNS解決、bridgeネットワーク設定の問題を整理。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="docker/docker_log_error.html">
-              Dockerログが見れない原因と対処法
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            docker logsが取得できない問題やログドライバ設定ミスを解説。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="docker/docker_mysql_error.html">
-              DockerとMySQL接続エラーの原因まとめ
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            DB接続失敗、コンテナ間通信、接続設定ミスなどのトラブル対策を解説。
-          </dd>
-        </dl>
-
-        <h2>CI/CD・Jenkins入門記事</h2>
-
-        <dl class="row">
-          <dt class="col-sm-3">
-            <a href="jenkins/jenkins_setup.html">
-              Jenkins構築手順（初心者向け）
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            Jenkinsのインストールからジョブ作成、Spring
-            Bootプロジェクトのビルド実行までを解説します。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="jenkins/jenkins_build_error.html">
-              Jenkinsでビルド失敗する原因まとめ
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            Jenkinsで発生するビルド失敗の原因（設定ミス・依存関係・環境差分）と実務的な対処方法をまとめています。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="jenkins/jenkins_cron_build.html">
-              Jenkinsの定期実行（cronビルド）の設定方法
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            夜間バッチ・定期ジョブ・スケジュール実行の設定方法を実務ベースで解説します。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="jenkins/jenkins_docker_setup.html">
-              JenkinsのDocker連携構築手順
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            JenkinsをDocker環境で構築し、CI/CDパイプラインをコンテナ化する手順を解説します。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="jenkins/jenkins_env_variable.html">
-              Jenkinsで環境変数が反映されない原因まとめ
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            ビルド時に環境変数が効かない原因（スコープ・ジョブ設定・シェル差異）を整理します。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="jenkins/jenkins_git_webhook.html">
-              JenkinsとGit連携（Webhook設定・自動ビルド）
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            GitHub/GitLabのWebhookによる自動ビルド設定とCI/CD自動化の基本構成を解説します。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="jenkins/jenkins_pipeline_declarative.html">
-              Jenkins Pipeline（Declarative）の書き方と基本構造
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            Declarative
-            Pipelineの構文・stage構造・実務での標準パターンを解説します。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="jenkins/jenkins_pipeline_debug.html">
-              Jenkins Pipelineが動かない原因とデバッグ方法
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            Jenkinsfileの構文エラー・ログ確認・失敗原因の切り分け方法を解説します。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="jenkins/jenkins_queue_issue.html">
-              Jenkinsのジョブがキューに溜まる原因と解決方法
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            executor不足・ノード制約・並列制御など実運用トラブルの原因と対処方法を解説します。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="jenkins/jenkins_role_strategy.html">
-              Jenkinsの権限設定（Role Strategy Plugin）の使い方
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            チーム開発における権限管理・Role Strategy
-            Pluginによるセキュアな運用方法を解説します。
-          </dd>
-        </dl>
-        <h2>開発効率・設計ナレッジ</h2>
-
-        <dl class="row">
-          <dt class="col-sm-3">
-            <a href="development/code_review_checklist.html">
-              コードレビュー観点チェックリスト
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            Java/Spring
-            Boot開発で使えるレビュー観点を体系化した実務チェックリスト。
-            バグ防止・設計品質・可読性・パフォーマンスを網羅。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="development/project_structure.html">
-              フォルダ構成ベストプラクティス
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            Spring Boot開発におけるディレクトリ設計のベストプラクティス。
-            保守性と拡張性を高める構造設計を解説。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="hub/java_error_hub.html"> Java開発エラー対策まとめ </a>
-          </dt>
-          <dd class="col-sm-9">
-            Spring
-            Boot・MyBatis・Jenkinsなどのエラーを横断的にまとめたハブページ。
-          </dd>
-        </dl>
-        <h2>Spring Bootサンプルアプリ開発</h2>
-
-        <dl class="row">
-          <dt class="col-sm-3">
-            <a href="sample/bookmanager/list.html">
-              1. 本を管理するWebアプリ
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            Spring BootとMyBatisによる本管理アプリの一覧画面を作成します。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="sample/bookmanager/add.html"> 2. 本の追加機能を実装 </a>
-          </dt>
-          <dd class="col-sm-9">登録機能を実装します。</dd>
-
-          <dt class="col-sm-3">
-            <a href="sample/bookmanager/delete.html"> 3. 本の削除機能を実装 </a>
-          </dt>
-          <dd class="col-sm-9">削除機能を実装します。</dd>
-
-          <dt class="col-sm-3">
-            <a href="sample/bookmanager/edit.html"> 4. 本の編集機能を実装 </a>
-          </dt>
-          <dd class="col-sm-9">更新機能を実装します。</dd>
-
-          <dt class="col-sm-3">
-            <a href="sample/bookmanager/login.html">
-              5. Spring Securityログイン認証
-            </a>
-          </dt>
-          <dd class="col-sm-9">
-            Spring Securityによるログイン認証を実装します。
-          </dd>
-
-          <dt class="col-sm-3">
-            <a href="sample/bookmanager/userbook.html"> 6. ユーザ別の本管理 </a>
-          </dt>
-          <dd class="col-sm-9">
-            ユーザごとにデータを管理できるよう改善します。
-          </dd>
-        </dl>
-
-        <h2>Other old contents</h2>
-        <dl class="row">
-          <dt class="col-sm-3">
-            <a href="vbminigame/index.html">VB6.0ミニゲーム作成</a>
-          </dt>
-          <dd class="col-sm-9">
-            <p>
-              VisualBasic6.0で、WindowsApiのBitBltを利用したミニゲームを作成します。
-            </p>
-          </dd>
-        </dl>
+        <!-- HERO -->
+        <div class="hero">
+          <h1 class="fw-bold">開発エラー解決ナレッジベース</h1>
+          <p class="mb-0">
+            Java / Spring Boot / AWS / Docker / React / MyBatis / PostgreSQL /
+            Jenkinsなどの 実務エラーと解決方法を体系的に整理
+          </p>
+        </div>
+
+        <!-- CATEGORY -->
+        <h2 class="mt-5 mb-3">カテゴリ一覧</h2>
+
+        <div class="row g-3">
+          <div class="col-md-3 col-sm-6">
+            <a href="/springboot/index.html">
+              <div class="category-card p-3">
+                <div class="category-title">Spring Boot</div>
+                <div class="text-muted small">API / 認証 / エラー</div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-md-3 col-sm-6">
+            <a href="/aws/index.html">
+              <div class="category-card p-3">
+                <div class="category-title">AWS</div>
+                <div class="text-muted small">EC2 / S3 / RDS</div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-md-3 col-sm-6">
+            <a href="/docker/index.html">
+              <div class="category-card p-3">
+                <div class="category-title">Docker</div>
+                <div class="text-muted small">コンテナ / ネットワーク</div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-md-3 col-sm-6">
+            <a href="/react/index.html">
+              <div class="category-card p-3">
+                <div class="category-title">React</div>
+                <div class="text-muted small">Hooks / API / エラー</div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-md-3 col-sm-6">
+            <a href="/mybatis/index.html">
+              <div class="category-card p-3">
+                <div class="category-title">MyBatis</div>
+                <div class="text-muted small">SQL / Mapper</div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-md-3 col-sm-6">
+            <a href="/postgres/index.html">
+              <div class="category-card p-3">
+                <div class="category-title">PostgreSQL</div>
+                <div class="text-muted small">DB / パフォーマンス</div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-md-3 col-sm-6">
+            <a href="/jenkins/index.html">
+              <div class="category-card p-3">
+                <div class="category-title">Jenkins</div>
+                <div class="text-muted small">CI/CD / 自動化</div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-md-3 col-sm-6">
+            <a href="/api_design/index.html">
+              <div class="category-card p-3">
+                <div class="category-title">API設計</div>
+                <div class="text-muted small">REST / 設計パターン</div>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <!-- GUIDE -->
+        <div class="mt-5 p-4 bg-white rounded border">
+          <h2>サイトの使い方</h2>
+          <ol class="mb-0">
+            <li>カテゴリを選ぶ</li>
+            <li>エラー記事を見る</li>
+            <li>そのまま実装に適用する</li>
+          </ol>
+        </div>
       </div>
     </main>
 

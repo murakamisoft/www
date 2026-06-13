@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Dockerのエラー・起動失敗・build・compose・ネットワーク・MySQL連携など実務トラブルを体系的に解説。Spring Boot連携問題もカバー。"
+    />
+
+    <title>Dockerエラー一覧｜開発トラブルシューティングまとめ</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        background: #f8f9fa;
+      }
+
+      .hero {
+        background: linear-gradient(135deg, #111827, #374151);
+        color: white;
+        padding: 30px;
+        border-radius: 12px;
+        margin-top: 20px;
+      }
+
+      .card-box {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 16px;
+        height: 100%;
+        transition: 0.2s;
+      }
+
+      .card-box:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .tag {
+        font-size: 12px;
+        color: #6b7280;
+      }
+
+      .ad-box {
+        margin: 20px 0;
+        text-align: center;
+      }
+    </style>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">Programming Lab</a>
+      </div>
+    </nav>
+    <main class="container">
+      <!-- HERO -->
+      <div class="hero">
+        <h1>Docker エラー一覧</h1>
+        <p class="mb-0">
+          コンテナ起動・build・compose・ネットワーク・DB連携など実務トラブルを体系化。
+        </p>
+      </div>
+
+      <h2 class="mt-5 mb-3">記事一覧</h2>
+
+      <div class="row g-3">
+        <div class="col-md-4 col-sm-6">
+          <a href="docker_container_start_error.html">
+            <div class="card-box">
+              <div class="tag">最頻出</div>
+              <h5>Dockerコンテナが起動しない原因と解決方法</h5>
+              <p class="text-muted small">起動失敗・エントリーポイント問題</p>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-md-4 col-sm-6">
+          <a href="docker_build_error.html">
+            <div class="card-box">
+              <div class="tag">Build</div>
+              <h5>Docker buildエラーの原因まとめ</h5>
+              <p class="text-muted small">Dockerfileミス・依存関係</p>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-md-4 col-sm-6">
+          <a href="docker_compose_error.html">
+            <div class="card-box">
+              <div class="tag">Compose</div>
+              <h5>Docker Composeが動かない原因と対処法</h5>
+              <p class="text-muted small">yaml・依存関係問題</p>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-md-4 col-sm-6">
+          <a href="docker_port_conflict.html">
+            <div class="card-box">
+              <div class="tag">ネットワーク</div>
+              <h5>ポート競合エラーの解決方法</h5>
+              <p class="text-muted small">Spring Boot連携で頻出</p>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-md-4 col-sm-6">
+          <a href="docker_springboot_error.html">
+            <div class="card-box">
+              <div class="tag">Spring連携</div>
+              <h5>コンテナ内でSpring Bootが起動しない原因</h5>
+              <p class="text-muted small">Java実行環境問題</p>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-md-4 col-sm-6">
+          <a href="docker_image_size.html">
+            <div class="card-box">
+              <div class="tag">最適化</div>
+              <h5>Dockerイメージが大きすぎる原因と最適化方法</h5>
+              <p class="text-muted small">軽量化・本番改善</p>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-md-4 col-sm-6">
+          <a href="docker_volume_error.html">
+            <div class="card-box">
+              <div class="tag">Storage</div>
+              <h5>volumeマウントが効かない原因と解決方法</h5>
+              <p class="text-muted small">データ永続化問題</p>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-md-4 col-sm-6">
+          <a href="docker_network_error.html">
+            <div class="card-box">
+              <div class="tag">Network</div>
+              <h5>ネットワーク接続できないDockerエラー</h5>
+              <p class="text-muted small">コンテナ間通信問題</p>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-md-4 col-sm-6">
+          <a href="docker_log_error.html">
+            <div class="card-box">
+              <div class="tag">Debug</div>
+              <h5>Dockerログが見れない原因と対処法</h5>
+              <p class="text-muted small">デバッグ手法</p>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-md-4 col-sm-6">
+          <a href="docker_mysql_error.html">
+            <div class="card-box">
+              <div class="tag">DB</div>
+              <h5>DockerとMySQL接続エラーの原因まとめ</h5>
+              <p class="text-muted small">DB連携トラブル</p>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="mt-5">
+        <a href="/" class="btn btn-outline-secondary">← トップへ戻る</a>
+      </div>
+    </main>
+
+    <footer class="text-center py-4 text-muted">Copyright (C) nori</footer>
+  </body>
+</html>

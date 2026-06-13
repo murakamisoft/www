@@ -4,6 +4,16 @@
   <!-- TOP -->
   <url><loc>https://vbminigame.sakura.ne.jp/</loc></url>
 
+  <!-- CATEGORY INDEX -->
+  <url><loc>https://vbminigame.sakura.ne.jp/springboot/index.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/api_design/index.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/docker/index.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/jenkins/index.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/react/index.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/postgres/index.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/mybatis/index.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/aws/index.html</loc></url>
+
   <!-- sample -->
   <url><loc>https://vbminigame.sakura.ne.jp/sample/bookmanager/list.html</loc></url>
   <url><loc>https://vbminigame.sakura.ne.jp/sample/bookmanager/add.html</loc></url>

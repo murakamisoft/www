@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta
+      name="description"
+      content="AWSのEC2・S3・RDS・Lambda・VPC・IAMなどのエラーとトラブルシューティングを体系的に解説。"
+    />
+
+    <title>AWSエラー一覧｜クラウド開発トラブルシューティング</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        background: #f8f9fa;
+      }
+
+      .hero {
+        background: linear-gradient(135deg, #0f172a, #1e293b);
+        color: white;
+        padding: 30px;
+        border-radius: 12px;
+        margin-top: 20px;
+      }
+
+      .card-box {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 16px;
+        height: 100%;
+        transition: 0.2s;
+      }
+
+      .card-box:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .tag {
+        font-size: 12px;
+        color: #6b7280;
+      }
+    </style>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">Programming Lab</a>
+      </div>
+    </nav>
+
+    <main class="container">
+      <!-- HERO -->
+      <div class="hero">
+        <h1>AWS エラー一覧</h1>
+        <p class="mb-0">
+          EC2・S3・RDS・Lambda・VPC・IAMなどクラウド開発で頻出する障害を体系化
+        </p>
+      </div>
+
+      <h2 class="mt-5 mb-3">記事一覧</h2>
+
+      <div class="row g-3">
+        <!-- 1 -->
+        <div class="col-md-4 col-sm-6">
+          <a href="aws_ec2_ssh_error.html">
+            <div class="card-box">
+              <div class="tag">初心者</div>
+              <h5>EC2にSSH接続できない原因</h5>
+              <p class="text-muted small">最初に詰まる定番エラー</p>
+            </div>
+          </a>
+        </div>
+
+        <!-- 2 -->
+        <div class="col-md-4 col-sm-6">
+          <a href="aws_s3_access_denied.html">
+            <div class="card-box">
+              <div class="tag">IAM</div>
+              <h5>S3 Access Deniedエラー</h5>
+              <p class="text-muted small">権限・ポリシー設定ミス</p>
+            </div>
+          </a>
+        </div>
+
+        <!-- 3 -->
+        <div class="col-md-4 col-sm-6">
+          <a href="aws_rds_connection_error.html">
+            <div class="card-box">
+              <div class="tag">DB</div>
+              <h5>RDS接続できない原因</h5>
+              <p class="text-muted small">Spring Boot連携で頻出</p>
+            </div>
+          </a>
+        </div>
+
+        <!-- 4 -->
+        <div class="col-md-4 col-sm-6">
+          <a href="aws_eb_deploy_error.html">
+            <div class="card-box">
+              <div class="tag">デプロイ</div>
+              <h5>Elastic Beanstalk失敗</h5>
+              <p class="text-muted small">デプロイ系トラブル対策</p>
+            </div>
+          </a>
+        </div>
+
+        <!-- 5 -->
+        <div class="col-md-4 col-sm-6">
+          <a href="aws_ec2_port_error.html">
+            <div class="card-box">
+              <div class="tag">ネットワーク</div>
+              <h5>EC2ポートが開かない</h5>
+              <p class="text-muted small">セキュリティグループ問題</p>
+            </div>
+          </a>
+        </div>
+
+        <!-- 6 -->
+        <div class="col-md-4 col-sm-6">
+          <a href="aws_lambda_error.html">
+            <div class="card-box">
+              <div class="tag">Lambda</div>
+              <h5>Lambdaが実行されない</h5>
+              <p class="text-muted small">権限・トリガーミス</p>
+            </div>
+          </a>
+        </div>
+
+        <!-- 7 -->
+        <div class="col-md-4 col-sm-6">
+          <a href="aws_cloudwatch_log_error.html">
+            <div class="card-box">
+              <div class="tag">監視</div>
+              <h5>CloudWatchログが出ない</h5>
+              <p class="text-muted small">ログ設定・IAM問題</p>
+            </div>
+          </a>
+        </div>
+
+        <!-- 8 -->
+        <div class="col-md-4 col-sm-6">
+          <a href="aws_cli_error.html">
+            <div class="card-box">
+              <div class="tag">CLI</div>
+              <h5>AWS CLIが動かない</h5>
+              <p class="text-muted small">認証・リージョン設定ミス</p>
+            </div>
+          </a>
+        </div>
+
+        <!-- 9 -->
+        <div class="col-md-4 col-sm-6">
+          <a href="aws_iam_permission_error.html">
+            <div class="card-box">
+              <div class="tag">IAM</div>
+              <h5>IAM権限エラー</h5>
+              <p class="text-muted small">最小権限設計の考え方</p>
+            </div>
+          </a>
+        </div>
+
+        <!-- 10 -->
+        <div class="col-md-4 col-sm-6">
+          <a href="aws_vpc_network_error.html">
+            <div class="card-box">
+              <div class="tag">VPC</div>
+              <h5>VPC通信できない問題</h5>
+              <p class="text-muted small">ネットワーク設計ミス</p>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="mt-5">
+        <a href="/" class="btn btn-outline-secondary">← トップへ戻る</a>
+      </div>
+    </main>
+
+    <footer class="text-center py-4 text-muted">Copyright (C) nori</footer>
+  </body>
+</html>
