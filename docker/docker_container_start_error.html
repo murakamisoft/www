@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: docker_container_start_error.html
+CATEGORY: Docker
+TITLE: Dockerコンテナが起動しない原因と解決方法
+DESCRIPTION: 最頻出トラブル
+SEO META END -->
+
+    <!-- SEO -->
+    <title>Dockerコンテナが起動しない原因と解決方法 | Programming Lab</title>
+    <meta
+      name="description"
+      content="Dockerコンテナが起動しない原因と解決方法を解説します。Exited状態になる原因、ポート競合、環境変数ミス、ボリューム設定エラー、Spring BootやMySQLの起動失敗など実務で多いトラブルの対処法を紹介します。"
+    />
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/docker/docker_container_start_error.html"
+    />
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <!-- Highlight.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!-- Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <!-- タイトル -->
+        <h1 class="mt-5">Dockerコンテナが起動しない原因と解決方法</h1>
+        <!-- リード文 -->
+        <p class="lead">
+          Dockerコンテナが起動しない、すぐ停止する、Exited状態になる場合の原因と解決方法を解説します。
+          Docker初心者から実務利用まで役立つトラブルシューティング手順をまとめています。
+        </p>
+        <p class="text-muted">最終更新日：2026-06-13</p>
+
+        <!-- 目次 -->
+        <h2>目次</h2>
+        <ul>
+          <li><a href="#section1">1. Dockerコンテナが起動しない主な原因</a></li>
+          <li><a href="#section2">2. コンテナ状態の確認方法</a></li>
+          <li><a href="#section3">3. 原因別の解決方法</a></li>
+          <li><a href="#section4">4. よくあるエラーと対処法</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <!-- TODO ここから記事を書く -->
+        <h2 id="section1">1. Dockerコンテナが起動しない主な原因</h2>
+        <p>
+          Dockerコンテナが起動しない場合、多くはコンテナ自体の問題ではなく、
+          コンテナ内で動作するアプリケーションや設定ファイルに原因があります。
+          特にSpring
+          BootやMySQLを利用した開発環境では、設定ミスや接続エラーによって
+          コンテナが即終了（Exited状態）になるケースが頻発します。
+        </p>
+        <table class="table table-bordered">
+          <tr>
+            <th>原因</th>
+            <th>発生頻度</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>アプリケーションエラー</td>
+            <td>★★★★★</td>
+            <td>Spring BootやNode.jsが異常終了している</td>
+          </tr>
+          <tr>
+            <td>環境変数不足</td>
+            <td>★★★★☆</td>
+            <td>DB接続情報などが設定されていない</td>
+          </tr>
+          <tr>
+            <td>ポート競合</td>
+            <td>★★★★☆</td>
+            <td>同じポートを別プロセスが利用している</td>
+          </tr>
+          <tr>
+            <td>Volume設定ミス</td>
+            <td>★★★☆☆</td>
+            <td>ファイルのマウントに失敗している</td>
+          </tr>
+          <tr>
+            <td>Dockerfile設定ミス</td>
+            <td>★★★☆☆</td>
+            <td>CMDやENTRYPOINTが誤っている</td>
+          </tr>
+        </table>
+        <hr />
+        <h2 id="section2">2. コンテナ状態の確認方法</h2>
+        <p>まずはコンテナがどのような状態になっているのか確認します。</p>
+        <h3>2-1. コンテナ一覧を確認する</h3>
+        <pre><code class="bash"> docker ps -a </code></pre>
+        <p>出力例です。</p>
+        <pre><code class="text"> CONTAINER ID IMAGE STATUS 123456789abc sample-app Exited (1) </code></pre>
+        <p>
+          Exitedになっている場合は、コンテナ内のアプリケーションが異常終了しています。
+        </p>
+        <h3>2-2. ログを確認する</h3>
+        <pre><code class="bash"> docker logs コンテナ名 </code></pre>
+        <p>ほとんどの問題はログを見ることで原因を特定できます。</p>
+        <h3>2-3. リアルタイムでログを確認する</h3>
+        <pre><code class="bash"> docker logs -f コンテナ名 </code></pre>
+        <p>起動直後に停止する場合はリアルタイム監視が有効です。</p>
+        <hr />
+        <h2 id="section3">3. 原因別の解決方法</h2>
+        <h3>3-1. Spring Bootが起動に失敗している</h3>
+        <pre><code class="text"> APPLICATION FAILED TO START </code></pre>
+        <p>
+          application.ymlやapplication.propertiesの設定ミス、
+          DB接続エラーが考えられます。
+        </p>
+        <h3>3-2. ポート競合が発生している</h3>
+        <pre><code class="text"> Bind for 0.0.0.0:8080 failed port is already allocated </code></pre>
+        <p>既に8080ポートを別プロセスが利用しています。</p>
+        <pre><code class="bash"> netstat -ano | findstr 8080 </code></pre>
+        <p>使用中のプロセスを確認してください。</p>
+        <h3>3-3. 環境変数が不足している</h3>
+        <pre><code class="bash"> docker inspect コンテナ名 </code></pre>
+        <p>環境変数が正しく設定されているか確認します。</p>
+        <h3>3-4. イメージを再作成する</h3>
+        <pre><code class="bash"> docker build --no-cache -t sample . </code></pre>
+        <p>キャッシュされたイメージが原因の場合があります。</p>
+        <h3>3-5. Docker Compose利用時の再作成</h3>
+        <pre><code class="bash"> docker compose down docker compose up --build </code></pre>
+        <p>コンテナやネットワークを再作成することで解決することがあります。</p>
+        <hr />
+        <h2 id="section4">4. よくあるエラーと対処法</h2>
+        <h3>Exited (1)</h3>
+        <pre><code class="text"> Exited (1) </code></pre>
+        <p>アプリケーション例外による終了です。 ログを確認してください。</p>
+        <h3>Exited (137)</h3>
+        <pre><code class="text"> Exited (137) </code></pre>
+        <p>
+          メモリ不足によりOSから強制終了された可能性があります。 Docker
+          Desktopのメモリ設定を見直してください。
+        </p>
+        <h3>Exited (143)</h3>
+        <pre><code class="text"> Exited (143) </code></pre>
+        <p>
+          正常停止時にも発生します。
+          コンテナ停止操作を実施していないか確認してください。
+        </p>
+        <h3>Restarting状態を繰り返す</h3>
+        <pre><code class="text"> Restarting (1) </code></pre>
+        <p>
+          起動後すぐに異常終了している状態です。 docker
+          logsで原因を調査してください。
+        </p>
+        <h3>ContainerCreatingのまま進まない</h3>
+        <p>
+          Volumeマウントやイメージ取得に失敗している可能性があります。 Docker
+          Desktopの再起動も有効です。
+        </p>
+        <hr />
+        <h2 id="section5">5. まとめ</h2>
+        <ul>
+          <li>まず docker ps -a で状態を確認する</li>
+          <li>docker logs で原因を調査する</li>
+          <li>Exited (1) はアプリケーションエラーが多い</li>
+          <li>Exited (137) はメモリ不足を疑う</li>
+          <li>ポート競合や環境変数設定も確認する</li>
+          <li>Docker Compose利用時は再作成を試す</li>
+        </ul>
+
+        <!--  関連記事 -->
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul class="row">
+          <li class="col-sm-6">
+            <a href="/docker/docker_compose_error.html">
+              Docker Composeが動かない原因と対処法
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="/docker/docker_build_error.html">
+              Docker buildエラーの原因まとめ
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="/docker/docker_port_conflict.html">
+              ポート競合エラー（Port already in use）の解決方法
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="/docker/docker_springboot_error.html">
+              コンテナ内でSpring Bootが起動しない原因
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="/docker/docker_volume_error.html">
+              volumeマウントが効かない原因と解決方法
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="/docker/docker_log_error.html">
+              Dockerログが見れない原因と対処法
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>
