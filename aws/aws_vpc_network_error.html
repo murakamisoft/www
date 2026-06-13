@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: aws_vpc_network_error.html
+CATEGORY: AWS
+TITLE: VPC設定ミスで通信できない原因まとめ
+DESCRIPTION: ネットワーク設計ミス対策
+SEO META END -->
+
+    <!-- SEO -->
+    <title>VPC設定ミスで通信できない原因まとめ | Programming Lab</title>
+
+    <meta
+      name="description"
+      content="AWS VPCで通信できない場合の原因と対処法を解説します。ルートテーブル、サブネット、インターネットゲートウェイ、NAT Gateway、セキュリティグループ、NACLなどネットワーク設計でよくある設定ミスをまとめています。"
+    />
+
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/aws/aws_vpc_network_error.html"
+    />
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <!-- Highlight.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!-- Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">VPC設定ミスで通信できない原因まとめ</h1>
+
+        <p class="lead">
+          AWSのVPC環境でEC2へ接続できない、インターネットに出られない、サーバー間通信ができない場合の原因と対処法をまとめます。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-13</p>
+
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. VPC通信トラブルの概要</a></li>
+          <li><a href="#section2">2. 確認すべき設定項目</a></li>
+          <li><a href="#section3">3. 通信確認コマンド例</a></li>
+          <li><a href="#section4">4. よくあるネットワークエラー</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. VPC通信トラブルの概要</h2>
+
+        <p>
+          AWSでネットワーク障害が発生した場合、多くはVPC関連設定の不備が原因です。
+          特にルートテーブル、セキュリティグループ、NACL(Network
+          ACL)の設定ミスが頻発します。
+        </p>
+
+        <p>
+          通信障害の切り分けでは、通信経路を上流から順番に確認することが重要です。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>確認項目</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>VPC</td>
+            <td>CIDR設定が正しいか</td>
+          </tr>
+          <tr>
+            <td>サブネット</td>
+            <td>適切なAZ・CIDRになっているか</td>
+          </tr>
+          <tr>
+            <td>ルートテーブル</td>
+            <td>通信経路が定義されているか</td>
+          </tr>
+          <tr>
+            <td>Security Group</td>
+            <td>必要ポートが許可されているか</td>
+          </tr>
+          <tr>
+            <td>NACL</td>
+            <td>通信を拒否していないか</td>
+          </tr>
+          <tr>
+            <td>Internet Gateway</td>
+            <td>インターネット接続設定があるか</td>
+          </tr>
+          <tr>
+            <td>NAT Gateway</td>
+            <td>プライベートサブネット用に設定されているか</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. 確認すべき設定項目</h2>
+
+        <h3>2-1. ルートテーブルの確認</h3>
+
+        <p>
+          EC2からインターネットへ接続できない場合、まずルートテーブルを確認します。
+        </p>
+
+        <pre><code class="text">
+Destination      Target
+0.0.0.0/0        igw-xxxxxxxx
+10.0.0.0/16      local
+        </code></pre>
+
+        <p>
+          インターネット接続には0.0.0.0/0がInternet
+          Gatewayへ向いている必要があります。
+        </p>
+
+        <h3>2-2. Security Groupの確認</h3>
+
+        <p>SSHやWebアクセスができない場合はSecurity Groupを確認します。</p>
+
+        <pre><code class="text">
+Type      Port
+SSH       22
+HTTP      80
+HTTPS     443
+        </code></pre>
+
+        <p>必要ポートが許可されていないと通信できません。</p>
+
+        <h3>2-3. NACL(Network ACL)の確認</h3>
+
+        <p>Security Groupが正しくてもNACLで拒否されているケースがあります。</p>
+
+        <p>
+          特にアウトバウンドルールが閉じられている場合は通信できなくなります。
+        </p>
+
+        <h3>2-4. NAT Gatewayの確認</h3>
+
+        <p>プライベートサブネットのEC2は直接インターネットへ接続できません。</p>
+
+        <p>OSアップデートや外部API接続を行う場合はNAT Gatewayが必要です。</p>
+
+        <hr />
+
+        <h2 id="section3">3. 通信確認コマンド例</h2>
+
+        <p>EC2へログインできる場合は通信状況を確認します。</p>
+
+        <pre><code class="bash">
+ping 8.8.8.8
+
+curl https://www.google.com
+
+nslookup amazon.com
+
+traceroute 8.8.8.8
+        </code></pre>
+
+        <p>
+          DNSだけ失敗しているのか、ネットワーク全体が失敗しているのかを切り分けられます。
+        </p>
+
+        <hr />
+
+        <div class="my-4 text-center">
+          <!-- Adsense -->
+        </div>
+
+        <hr />
+
+        <h2 id="section4">4. よくあるネットワークエラー</h2>
+
+        <h3>EC2へSSH接続できない</h3>
+
+        <pre><code class="text">
+Connection timed out
+        </code></pre>
+
+        <p>主な原因は以下です。</p>
+
+        <ul>
+          <li>Security Groupで22番ポート未許可</li>
+          <li>パブリックIP未割当</li>
+          <li>Internet Gateway未設定</li>
+          <li>ルートテーブル設定ミス</li>
+        </ul>
+
+        <h3>インターネットへ接続できない</h3>
+
+        <pre><code class="text">
+curl: (7) Failed to connect
+        </code></pre>
+
+        <p>NAT GatewayやInternet Gatewayの設定を確認してください。</p>
+
+        <h3>VPC間通信できない</h3>
+
+        <pre><code class="text">
+Request timeout
+        </code></pre>
+
+        <p>
+          VPC PeeringやTransit Gateway設定、ルートテーブル設定漏れを確認します。
+        </p>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>通信障害の多くはルートテーブル設定ミス</li>
+          <li>Security GroupとNACLは両方確認する</li>
+          <li>プライベートサブネットにはNAT Gatewayが必要</li>
+          <li>Internet Gateway未設定は頻出トラブル</li>
+          <li>通信経路を上流から順番に確認する</li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li>
+            <a href="/aws/aws_s3_access_denied.html">
+              S3のAccess Deniedエラーの原因と対処法
+            </a>
+          </li>
+          <li>
+            <a href="/aws/aws_iam_permission_error.html">
+              IAM権限エラーの原因と対処法
+            </a>
+          </li>
+          <li>
+            <a href="/aws/aws_cloudformation_error.html">
+              CloudFormationデプロイ失敗の原因まとめ
+            </a>
+          </li>
+          <li>
+            <a href="/hub/aws_error_hub.html"> AWSエラー総合ハブ </a>
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: aws_eb_deploy_error.html
+CATEGORY: AWS
+TITLE: Elastic Beanstalkデプロイ失敗の原因まとめ
+DESCRIPTION: デプロイ系トラブル対策
+SEO META END -->
+
+    <title>Elastic Beanstalkデプロイ失敗の原因まとめ | Programming Lab</title>
+
+    <meta
+      name="description"
+      content="AWS Elastic Beanstalkのデプロイ失敗原因と解決方法を解説します。Spring Bootアプリのデプロイエラー、ヘルスチェック失敗、ポート設定ミス、環境変数設定漏れなど実務でよく発生するトラブルをまとめています。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/aws/aws_eb_deploy_error.html"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">Elastic Beanstalkデプロイ失敗の原因まとめ</h1>
+
+        <p class="lead">
+          AWS Elastic BeanstalkへSpring
+          Bootアプリをデプロイした際に発生するエラーの原因と対処法を解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-13</p>
+
+        <h2>目次</h2>
+
+        <ul>
+          <li>
+            <a href="#section1">1. Elastic Beanstalkデプロイ失敗の主な原因</a>
+          </li>
+          <li><a href="#section2">2. デプロイ前の確認項目</a></li>
+          <li><a href="#section3">3. Spring Bootデプロイ手順</a></li>
+          <li><a href="#section4">4. よくあるエラーと対処法</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. Elastic Beanstalkデプロイ失敗の主な原因</h2>
+
+        <p>
+          Elastic
+          Beanstalkのデプロイ失敗は、アプリケーションの不具合よりも設定ミスが原因であることが多くあります。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>原因</th>
+            <th>発生頻度</th>
+            <th>影響</th>
+          </tr>
+          <tr>
+            <td>ポート設定ミス</td>
+            <td>高</td>
+            <td>起動失敗</td>
+          </tr>
+          <tr>
+            <td>jar作成失敗</td>
+            <td>高</td>
+            <td>デプロイ不可</td>
+          </tr>
+          <tr>
+            <td>環境変数未設定</td>
+            <td>高</td>
+            <td>DB接続失敗</td>
+          </tr>
+          <tr>
+            <td>ヘルスチェック失敗</td>
+            <td>高</td>
+            <td>環境異常判定</td>
+          </tr>
+          <tr>
+            <td>メモリ不足</td>
+            <td>中</td>
+            <td>起動途中で停止</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. デプロイ前の確認項目</h2>
+
+        <h3>2-1. jarファイル作成確認</h3>
+
+        <p>Spring Bootアプリが正常にビルドできることを確認します。</p>
+
+        <pre><code class="bash">
+mvn clean package
+        </code></pre>
+
+        <p>targetフォルダにjarファイルが生成されている必要があります。</p>
+
+        <h3>2-2. ローカル起動確認</h3>
+
+        <pre><code class="bash">
+java -jar app.jar
+        </code></pre>
+
+        <p>
+          ローカルで起動できないアプリはElastic Beanstalkでも起動できません。
+        </p>
+
+        <h3>2-3. DB接続情報確認</h3>
+
+        <p>
+          application.propertiesに固定値を書かず、環境変数から取得する構成が推奨です。
+        </p>
+
+        <pre><code class="properties">
+spring.datasource.url=${DB_URL}
+spring.datasource.username=${DB_USER}
+spring.datasource.password=${DB_PASSWORD}
+        </code></pre>
+
+        <hr />
+
+        <h2 id="section3">3. Spring Bootデプロイ手順</h2>
+
+        <h3>手順1：アプリケーション作成</h3>
+
+        <p>Elastic Beanstalkコンソールから新規アプリケーションを作成します。</p>
+
+        <h3>手順2：プラットフォーム選択</h3>
+
+        <p>Javaプラットフォームを選択します。</p>
+
+        <h3>手順3：jarアップロード</h3>
+
+        <p>作成したjarファイルをアップロードします。</p>
+
+        <h3>手順4：環境変数設定</h3>
+
+        <p>Configuration → Softwareから設定します。</p>
+
+        <h3>手順5：ログ確認</h3>
+
+        <p>デプロイ失敗時はログを確認します。</p>
+
+        <pre><code class="bash">
+eb logs
+        </code></pre>
+
+        <hr />
+
+        <div class="my-4 text-center">
+          <!-- Adsense -->
+        </div>
+
+        <hr />
+
+        <h2 id="section4">4. よくあるエラーと対処法</h2>
+
+        <h3>Application deployment failed</h3>
+
+        <pre><code class="text">
+Application deployment failed
+        </code></pre>
+
+        <p><strong>原因</strong></p>
+
+        <ul>
+          <li>jarファイル破損</li>
+          <li>ビルド失敗</li>
+        </ul>
+
+        <p><strong>対処法</strong></p>
+
+        <ul>
+          <li>再ビルド実施</li>
+          <li>ローカル起動確認</li>
+        </ul>
+
+        <h3>Environment health has transitioned</h3>
+
+        <pre><code class="text">
+Environment health has transitioned from Ok to Severe
+        </code></pre>
+
+        <p><strong>原因</strong></p>
+
+        <ul>
+          <li>アプリ起動失敗</li>
+          <li>ヘルスチェック失敗</li>
+        </ul>
+
+        <p><strong>対処法</strong></p>
+
+        <ul>
+          <li>ログ確認</li>
+          <li>ポート設定確認</li>
+        </ul>
+
+        <h3>Port 8080 already in use</h3>
+
+        <pre><code class="text">
+Port 8080 was already in use
+        </code></pre>
+
+        <p><strong>原因</strong></p>
+
+        <ul>
+          <li>ポート競合</li>
+        </ul>
+
+        <p><strong>対処法</strong></p>
+
+        <pre><code class="properties">
+server.port=5000
+        </code></pre>
+
+        <p>Elastic Beanstalkの設定に合わせてポート番号を確認します。</p>
+
+        <h3>Database connection failed</h3>
+
+        <p><strong>原因</strong></p>
+
+        <ul>
+          <li>RDS接続失敗</li>
+          <li>環境変数未設定</li>
+          <li>セキュリティグループ設定ミス</li>
+        </ul>
+
+        <p><strong>対処法</strong></p>
+
+        <ul>
+          <li>RDS接続確認</li>
+          <li>環境変数確認</li>
+          <li>ポート開放確認</li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>デプロイ失敗の多くは設定ミスが原因</li>
+          <li>まずローカルでjar起動確認を行う</li>
+          <li>環境変数とDB接続設定を確認する</li>
+          <li>ヘルスチェックエラーはログから調査する</li>
+          <li>eb logsで詳細ログを確認する</li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul class="row">
+          <li class="col-sm-6">
+            <a href="aws_rds_connection_error.html">
+              RDSに接続できない原因と解決方法
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="aws_ec2_port_error.html">
+              EC2でポートが開かない原因と解決方法
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="aws_cloudwatch_log_error.html">
+              CloudWatchログが出ない原因と解決方法
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="aws_cli_error.html"> AWS CLIが動かない原因と対処法 </a>
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted">Copyright (C) nori</span>
+      </div>
+    </footer>
+  </body>
+</html>

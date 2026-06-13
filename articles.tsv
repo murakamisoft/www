@@ -1,8 +1,4 @@
-Jenkins	Jenkins Pipeline（Declarative）の書き方と基本構造	CI/CDの標準構文・初心者脱却用	jenkins_pipeline_declarative.html
-Jenkins	Jenkins Pipelineが動かない原因とデバッグ方法	Jenkinsfileエラー・構文ミス対策	jenkins_pipeline_debug.html
-Jenkins	JenkinsとGit連携（Webhook設定・自動ビルド）	実務必須の自動化フロー	jenkins_git_webhook.html
-Jenkins	Jenkinsのジョブがキューに溜まる原因と解決方法	実運用トラブル系（需要高）	jenkins_queue_issue.html
-Jenkins	Jenkinsの権限設定（Role Strategy Plugin）の使い方	チーム開発・セキュリティ設計	jenkins_role_strategy.html
-Jenkins	Jenkinsで環境変数が反映されない原因まとめ	ビルド失敗の定番原因	jenkins_env_variable.html
-Jenkins	JenkinsのDocker連携構築手順	現代CI/CDの主流構成	jenkins_docker_setup.html
-Jenkins	Jenkinsの定期実行（cronビルド）の設定方法	バッチ・夜間処理需要	jenkins_cron_build.html
+AWS	S3のAccess Deniedエラーの原因と対処法	権限設定ミス・IAM問題	aws_s3_access_denied.html
+AWS	RDSに接続できない原因と解決方法	Spring Boot連携で頻出	aws_rds_connection_error.html
+AWS	Lambdaが実行されない原因と対処法	権限・トリガー設定ミス	aws_lambda_error.html
+AWS	IAM権限エラーの原因と最小権限設計	セキュリティ設計系	aws_iam_permission_error.html
