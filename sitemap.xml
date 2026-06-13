@@ -22,6 +22,7 @@
 
   <!-- hub -->
   <url><loc>https://vbminigame.sakura.ne.jp/hub/java_error_hub.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/hub/aws_error_hub.html</loc></url>
 
   <!-- jenkins -->
   <url><loc>https://vbminigame.sakura.ne.jp/jenkins/jenkins_build_error.html</loc></url>
@@ -65,6 +66,50 @@
   <url><loc>https://vbminigame.sakura.ne.jp/springboot/springboot_setup.html</loc></url>
   <url><loc>https://vbminigame.sakura.ne.jp/springboot/springboot_whitelabel.html</loc></url>
   <url><loc>https://vbminigame.sakura.ne.jp/springboot/spring_security_loop.html</loc></url>
+
+  <!-- aws -->
+  <url><loc>https://vbminigame.sakura.ne.jp/aws/aws_cli_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/aws/aws_cloudwatch_log_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/aws/aws_eb_deploy_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/aws/aws_ec2_port_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/aws/aws_ec2_ssh_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/aws/aws_iam_permission_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/aws/aws_lambda_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/aws/aws_rds_connection_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/aws/aws_s3_access_denied.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/aws/aws_vpc_network_error.html</loc></url>
+
+  <!-- docker -->
+  <url><loc>https://vbminigame.sakura.ne.jp/docker/docker_build_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/docker/docker_compose_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/docker/docker_container_start_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/docker/docker_image_size.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/docker/docker_log_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/docker/docker_mysql_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/docker/docker_network_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/docker/docker_port_conflict.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/docker/docker_springboot_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/docker/docker_volume_error.html</loc></url>
+
+  <!-- api_design -->
+  <url><loc>https://vbminigame.sakura.ne.jp/api_design/api_design_filter.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/api_design/api_design_frontend_bff.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/api_design/api_design_idempotency.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/api_design/api_design_logging_trace.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/api_design/api_design_pagination.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/api_design/api_design_rate_limit.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/api_design/api_design_sort.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/api_design/api_design_timeout_retry.html</loc></url>
+
+  <!-- jenkins -->
+  <url><loc>https://vbminigame.sakura.ne.jp/jenkins/jenkins_cron_build.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/jenkins/jenkins_docker_setup.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/jenkins/jenkins_env_variable.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/jenkins/jenkins_git_webhook.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/jenkins/jenkins_pipeline_debug.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/jenkins/jenkins_pipeline_declarative.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/jenkins/jenkins_queue_issue.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/jenkins/jenkins_role_strategy.html</loc></url>
 
   <!-- vbminigame -->
   <url><loc>https://vbminigame.sakura.ne.jp/vbminigame/index.html</loc></url>

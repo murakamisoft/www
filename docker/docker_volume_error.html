@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: docker_volume_error.html
+CATEGORY: Docker
+TITLE: volumeマウントが効かない原因と解決方法
+DESCRIPTION: データ永続化問題
+SEO META END -->
+
+    <!-- SEO -->
+    <title>volumeマウントが効かない原因と解決方法 | Programming Lab</title>
+
+    <meta
+      name="description"
+      content="Dockerのvolumeマウントが効かない原因と解決方法を解説します。ファイルが反映されない、権限エラー、パス指定ミス、Docker Compose設定ミスなど実務で発生しやすいトラブルをまとめました。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/docker/docker_volume_error.html"
+    />
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <!-- Highlight.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!-- Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">volumeマウントが効かない原因と解決方法</h1>
+        <p class="lead">
+          Dockerでvolumeマウントが反映されない、ファイルが見えない、データが消える場合の原因と対処法を解説します。
+        </p>
+        <p class="text-muted">最終更新日：2026-06-13</p>
+        <h2>目次</h2>
+        <ul>
+          <li><a href="#section1">1. volumeマウントが効かない主な原因</a></li>
+          <li><a href="#section2">2. 確認手順</a></li>
+          <li><a href="#section3">3. 正しい設定例</a></li>
+          <li><a href="#section4">4. よくあるエラーと対処法</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+        <hr />
+        <h2 id="section1">1. volumeマウントが効かない主な原因</h2>
+        <p>
+          Dockerのvolume関連トラブルは開発環境・本番環境ともによく発生します。
+          特にDocker Desktop利用時やDocker Compose利用時に起こりやすい問題です。
+        </p>
+        <table class="table table-bordered">
+          <tr>
+            <th>原因</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>パス指定ミス</td>
+            <td>ホスト側ディレクトリが間違っている</td>
+          </tr>
+          <tr>
+            <td>権限不足</td>
+            <td>コンテナからアクセスできない</td>
+          </tr>
+          <tr>
+            <td>匿名Volume</td>
+            <td>想定外のVolumeが生成される</td>
+          </tr>
+          <tr>
+            <td>Compose設定ミス</td>
+            <td>マウント先の記述誤り</td>
+          </tr>
+          <tr>
+            <td>キャッシュ問題</td>
+            <td>変更が即時反映されない</td>
+          </tr>
+        </table>
+        <hr />
+        <h2 id="section2">2. 確認手順</h2>
+        <h3>2-1. マウント状況確認</h3>
+        <pre><code class="bash"> docker inspect コンテナ名 </code></pre>
+        <p>Mountsセクションを確認します。</p>
+        <h3>2-2. コンテナ内部確認</h3>
+        <pre><code class="bash"> docker exec -it コンテナ名 sh </code></pre>
+        <pre><code class="bash"> ls -la </code></pre>
+        <p>マウント先ディレクトリにファイルが存在するか確認します。</p>
+        <h3>2-3. Volume一覧確認</h3>
+        <pre><code class="bash"> docker volume ls </code></pre>
+        <p>不要なVolumeが大量に作成されていないか確認します。</p>
+        <h3>2-4. Volume詳細確認</h3>
+        <pre><code class="bash"> docker volume inspect volume名 </code></pre>
+        <p>実際の保存場所を確認できます。</p>
+        <hr />
+        <h2 id="section3">3. 正しい設定例</h2>
+        <h3>docker runの場合</h3>
+        <pre><code class="bash"> docker run \ -v $(pwd)/data:/app/data \ sample-app </code></pre>
+        <p>ホスト側のdataディレクトリをコンテナへマウントします。</p>
+        <h3>Docker Composeの場合</h3>
+        <pre><code class="yaml"> services: app: image: sample-app volumes: - ./data:/app/data </code></pre>
+        <p>ローカル開発では最もよく利用される設定です。</p>
+        <h3>Named Volume利用例</h3>
+        <pre><code class="yaml"> services: mysql: image: mysql:8 volumes: - mysql-data:/var/lib/mysql volumes: mysql-data: </code></pre>
+        <p>データベースの永続化にはNamed Volumeを推奨します。</p>
+        <hr />
+        <div class="my-4 text-center"><!-- Adsense --></div>
+        <hr />
+        <h2 id="section4">4. よくあるエラーと対処法</h2>
+        <h3>ファイルが反映されない</h3>
+        <p>
+          ホスト側で変更したファイルがコンテナに反映されない場合があります。
+        </p>
+        <p>原因:</p>
+        <ul>
+          <li>パス指定ミス</li>
+          <li>キャッシュ</li>
+          <li>別ディレクトリを参照している</li>
+        </ul>
+        <p>docker inspectでMountsを確認してください。</p>
+        <h3>Permission denied</h3>
+        <pre><code class="text"> Permission denied </code></pre>
+        <p>権限不足です。</p>
+        <pre><code class="bash"> chmod -R 755 data </code></pre>
+        <p>Linux環境ではファイル権限を確認します。</p>
+        <h3>Volumeが消える</h3>
+        <p>docker compose down実行後にデータが消える場合があります。</p>
+        <p>匿名Volume利用時によく発生します。</p>
+        <p>Named Volumeへ変更してください。</p>
+        <h3>Mountsが空になる</h3>
+        <p>マウント元ディレクトリが存在しない場合に発生します。</p>
+        <pre><code class="bash"> mkdir -p data </code></pre>
+        <p>事前にディレクトリを作成してください。</p>
+        <h3>Windows環境でマウントできない</h3>
+        <p>Docker Desktopの共有設定不足が原因です。</p>
+        <ul>
+          <li>Settings</li>
+          <li>Resources</li>
+          <li>File Sharing</li>
+        </ul>
+        <p>対象ドライブが共有対象になっているか確認してください。</p>
+        <h3>MySQLデータが保存されない</h3>
+        <p>
+          MySQLコンテナ再作成時にデータが消える場合はVolume設定が不足しています。
+        </p>
+        <pre><code class="yaml"> volumes: - mysql-data:/var/lib/mysql </code></pre>
+        <p>データディレクトリを永続化してください。</p>
+        <hr />
+        <h2>VolumeとBind Mountの違い</h2>
+        <table class="table table-bordered">
+          <tr>
+            <th>種類</th>
+            <th>用途</th>
+          </tr>
+          <tr>
+            <td>Bind Mount</td>
+            <td>開発環境向け</td>
+          </tr>
+          <tr>
+            <td>Named Volume</td>
+            <td>本番環境向け</td>
+          </tr>
+        </table>
+        <p>
+          開発中はBind Mount、本番ではNamed Volumeを利用するケースが一般的です。
+        </p>
+        <hr />
+        <h2 id="section5">5. まとめ</h2>
+        <ul>
+          <li>docker inspectでMountsを確認する</li>
+          <li>パス指定ミスを疑う</li>
+          <li>権限設定を確認する</li>
+          <li>MySQLはNamed Volumeで永続化する</li>
+          <li>Windows環境では共有設定を確認する</li>
+        </ul>
+        <hr />
+        <h2>関連記事</h2>
+        <ul class="row">
+          <li class="col-sm-6">
+            <a href="/docker/docker_container_start_error.html">
+              Dockerコンテナが起動しない原因と解決方法
+            </a>
+          </li>
+          <li class="col-sm-6">
+            <a href="/docker/docker_build_error.html">
+              Docker buildエラーの原因まとめ
+            </a>
+          </li>
+          <li class="col-sm-6">
+            <a href="/docker/docker_compose_error.html">
+              Docker Composeが動かない原因と対処法
+            </a>
+          </li>
+          <li class="col-sm-6">
+            <a href="/docker/docker_port_conflict.html">
+              ポート競合エラー（Port already in use）の解決方法
+            </a>
+          </li>
+          <li class="col-sm-6">
+            <a href="/docker/docker_springboot_error.html">
+              コンテナ内でSpring Bootが起動しない原因
+            </a>
+          </li>
+          <li class="col-sm-6">
+            <a href="/docker/docker_network_error.html">
+              ネットワーク接続できないDockerエラーの原因
+            </a>
+          </li>
+          <li class="col-sm-6">
+            <a href="/docker/docker_log_error.html">
+              Dockerログが見れない原因と対処法
+            </a>
+          </li>
+          <li class="col-sm-6">
+            <a href="/docker/docker_mysql_error.html">
+              DockerとMySQL接続エラーの原因まとめ
+            </a>
+          </li>
+          <li class="col-sm-6">
+            <a href="/docker/docker_image_size.html">
+              Dockerイメージが大きすぎる原因と最適化方法
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

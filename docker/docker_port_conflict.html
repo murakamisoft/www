@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: docker_port_conflict.html
+CATEGORY: Docker
+TITLE: ポート競合エラー（Port already in use）の解決方法
+DESCRIPTION: Spring Bootと連動
+SEO META END -->
+
+    <!-- SEO -->
+    <title>
+      ポート競合エラー（Port already in use）の解決方法 | Programming Lab
+    </title>
+
+    <meta
+      name="description"
+      content="DockerでPort already in useエラーが発生する原因と解決方法を解説。Spring Boot、MySQL、Docker Compose環境でよくあるポート競合の調査方法と対処手順を紹介します。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/docker/docker_port_conflict.html"
+    />
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <!-- Highlight.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!-- Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">ポート競合エラー（Port already in use）の解決方法</h1>
+
+        <p class="lead">
+          Docker起動時に発生する「Port already in use」「Bind for 0.0.0.0
+          failed」などのポート競合エラーの原因と解決方法を解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-13</p>
+
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. ポート競合エラーとは</a></li>
+          <li><a href="#section2">2. 原因調査手順</a></li>
+          <li><a href="#section3">3. 解決方法</a></li>
+          <li><a href="#section4">4. よくあるエラーと対処法</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. ポート競合エラーとは</h2>
+
+        <p>
+          Dockerコンテナ起動時にホスト側で同じポート番号が既に利用されている場合、コンテナは起動できません。
+        </p>
+
+        <p>
+          特にSpring
+          Boot（8080）、MySQL（3306）、PostgreSQL（5432）、Redis（6379）で頻繁に発生します。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>サービス</th>
+            <th>デフォルトポート</th>
+          </tr>
+          <tr>
+            <td>Spring Boot</td>
+            <td>8080</td>
+          </tr>
+          <tr>
+            <td>MySQL</td>
+            <td>3306</td>
+          </tr>
+          <tr>
+            <td>PostgreSQL</td>
+            <td>5432</td>
+          </tr>
+          <tr>
+            <td>Redis</td>
+            <td>6379</td>
+          </tr>
+          <tr>
+            <td>Nginx</td>
+            <td>80</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. 原因調査手順</h2>
+
+        <h3>2-1. エラーメッセージを確認する</h3>
+
+        <pre><code class="text">
+Bind for 0.0.0.0:8080 failed:
+port is already allocated
+</code></pre>
+
+        <p>既に8080ポートが利用されていることを示しています。</p>
+
+        <h3>2-2. 使用中ポートを確認する（Windows）</h3>
+
+        <pre><code class="bash">
+netstat -ano | findstr :8080
+</code></pre>
+
+        <p>PID（プロセスID）を確認します。</p>
+
+        <pre><code class="bash">
+tasklist | findstr PID番号
+</code></pre>
+
+        <h3>2-3. 使用中ポートを確認する（Linux/Mac）</h3>
+
+        <pre><code class="bash">
+lsof -i :8080
+</code></pre>
+
+        または
+
+        <pre><code class="bash">
+netstat -tulpn | grep 8080
+</code></pre>
+
+        <h3>2-4. Dockerコンテナ確認</h3>
+
+        <pre><code class="bash">
+docker ps
+</code></pre>
+
+        <p>以前起動したコンテナが残っている場合があります。</p>
+
+        <hr />
+
+        <h2 id="section3">3. 解決方法</h2>
+
+        <h3>方法1: 既存プロセスを停止する</h3>
+
+        <p>Windows:</p>
+
+        <pre><code class="bash">
+taskkill /PID 12345 /F
+</code></pre>
+
+        <p>Linux:</p>
+
+        <pre><code class="bash">
+kill -9 12345
+</code></pre>
+
+        <h3>方法2: Dockerコンテナを停止する</h3>
+
+        <pre><code class="bash">
+docker ps
+</code></pre>
+
+        <pre><code class="bash">
+docker stop コンテナ名
+</code></pre>
+
+        <p>不要なコンテナが同じポートを使用している場合があります。</p>
+
+        <h3>方法3: ポート番号を変更する</h3>
+
+        <p>Docker実行例:</p>
+
+        <pre><code class="bash">
+docker run -p 8081:8080 sample-app
+</code></pre>
+
+        <p>ホスト側8081へ変更しています。</p>
+
+        <h3>方法4: Docker Compose修正</h3>
+
+        <pre><code class="yaml">
+services:
+
+  app:
+    image: sample-app
+    ports:
+      - "8081:8080"
+</code></pre>
+
+        <p>ホストポートを変更することで競合を回避できます。</p>
+
+        <hr />
+
+        <h2>Spring Bootでよくある競合</h2>
+
+        <p>
+          ローカルでSpring Bootを実行したままDocker版も起動すると競合します。
+        </p>
+
+        <pre><code class="properties">
+server.port=8081
+</code></pre>
+
+        <p>開発環境ではポート変更も有効です。</p>
+
+        <hr />
+
+        <div class="my-4 text-center">
+          <!-- Adsense -->
+        </div>
+
+        <hr />
+
+        <h2 id="section4">4. よくあるエラーと対処法</h2>
+
+        <h3>port is already allocated</h3>
+
+        <pre><code class="text">
+port is already allocated
+</code></pre>
+
+        <p>最も一般的なエラーです。</p>
+
+        <p>対処:</p>
+
+        <ul>
+          <li>利用中プロセス確認</li>
+          <li>Dockerコンテナ停止</li>
+          <li>ポート変更</li>
+        </ul>
+
+        <h3>Bind for 0.0.0.0 failed</h3>
+
+        <pre><code class="text">
+Bind for 0.0.0.0:3306 failed
+</code></pre>
+
+        <p>MySQLやPostgreSQLでよく発生します。</p>
+
+        <p>ローカルDBが起動中でないか確認してください。</p>
+
+        <h3>Address already in use</h3>
+
+        <pre><code class="text">
+Address already in use
+</code></pre>
+
+        <p>Spring Bootアプリケーション側で発生するエラーです。</p>
+
+        <p>server.port設定を変更することで解決できます。</p>
+
+        <h3>Docker Compose再起動後も解消しない</h3>
+
+        <pre><code class="bash">
+docker compose down
+</code></pre>
+
+        <pre><code class="bash">
+docker compose up -d
+</code></pre>
+
+        <p>コンテナを完全停止して再作成します。</p>
+
+        <h3>どのコンテナが使っているかわからない</h3>
+
+        <pre><code class="bash">
+docker ps --format "table {{.Names}}\t{{.Ports}}"
+</code></pre>
+
+        <p>ポート利用状況を一覧で確認できます。</p>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>ポート競合は同じポートを複数プロセスが利用することで発生する</li>
+          <li>まず利用中ポートを特定する</li>
+          <li>docker psで稼働コンテナを確認する</li>
+          <li>不要なプロセスやコンテナを停止する</li>
+          <li>必要に応じてポート番号を変更する</li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul class="row">
+          <li class="col-sm-6">
+            <a href="/docker/docker_container_start_error.html">
+              Dockerコンテナが起動しない原因と解決方法
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="/docker/docker_compose_error.html">
+              Docker Composeが動かない原因と対処法
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="/docker/docker_network_error.html">
+              ネットワーク接続できないDockerエラーの原因
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="/docker/docker_mysql_error.html">
+              DockerとMySQL接続エラーの原因まとめ
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="/docker/docker_log_error.html">
+              Dockerログが見れない原因と対処法
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="/docker/docker_springboot_error.html">
+              コンテナ内でSpring Bootが起動しない原因
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="/docker/docker_build_error.html">
+              Docker buildエラーの原因まとめ
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="/docker/docker_volume_error.html">
+              volumeマウントが効かない原因と解決方法
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="/docker/docker_image_size.html">
+              Dockerイメージが大きすぎる原因と最適化方法
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

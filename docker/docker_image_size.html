@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: docker_image_size.html
+CATEGORY: Docker
+TITLE: Dockerイメージが大きすぎる原因と最適化方法
+DESCRIPTION: 軽量化・実務改善
+SEO META END -->
+
+    <!-- SEO -->
+    <title>Dockerイメージが大きすぎる原因と最適化方法 | Programming Lab</title>
+
+    <meta
+      name="description"
+      content="Dockerイメージが肥大化する原因と最適化方法を解説。multi-stage build、不要ファイル削除、軽量ベースイメージの利用など実務で使えるDocker軽量化テクニックを紹介します。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/docker/docker_image_size.html"
+    />
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <!-- Highlight.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!-- Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">Dockerイメージが大きすぎる原因と最適化方法</h1>
+
+        <p class="lead">
+          Dockerイメージが数GBまで肥大化する原因と、実務で効果の高い軽量化手法を解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-13</p>
+
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. Dockerイメージ肥大化の原因</a></li>
+          <li><a href="#section2">2. 軽量化の具体的方法</a></li>
+          <li><a href="#section3">3. 実践的なDockerfile例</a></li>
+          <li><a href="#section4">4. よくある失敗例</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. Dockerイメージ肥大化の原因</h2>
+
+        <p>
+          Dockerイメージが大きくなると、ビルド時間・デプロイ時間・レジストリ保存容量・ネットワーク転送量が増加します。
+          特にCI/CD環境では処理時間増加によるコスト悪化につながります。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>原因</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>不要ファイルをコピー</td>
+            <td>target、node_modules、ログなどを含めている</td>
+          </tr>
+          <tr>
+            <td>重いベースイメージ</td>
+            <td>ubuntuやfull JDKを利用している</td>
+          </tr>
+          <tr>
+            <td>ビルドツールを残している</td>
+            <td>MavenやGradleを本番イメージに含めている</td>
+          </tr>
+          <tr>
+            <td>レイヤーが多い</td>
+            <td>不要なRUN命令が大量に存在する</td>
+          </tr>
+          <tr>
+            <td>キャッシュファイル</td>
+            <td>aptやyumのキャッシュが残っている</td>
+          </tr>
+        </table>
+
+        <p>
+          Spring
+          Bootプロジェクトでは何も考えずに作成すると1GBを超えるケースも珍しくありません。
+        </p>
+
+        <hr />
+
+        <h2 id="section2">2. 軽量化の具体的方法</h2>
+
+        <h3>2-1. .dockerignoreを利用する</h3>
+
+        <p>
+          不要ファイルをDockerビルド対象から除外します。
+          もっとも効果が高く、最初に実施すべき対策です。
+        </p>
+
+        <pre><code class="bash">
+target/
+.git/
+.idea/
+*.log
+node_modules/
+</code></pre>
+
+        <h3>2-2. 軽量ベースイメージを利用する</h3>
+
+        <p>
+          公式イメージでもサイズは大きく異なります。
+          Alpine系やJRE専用イメージを利用すると大幅な削減が可能です。
+        </p>
+
+        <pre><code class="dockerfile">
+FROM eclipse-temurin:21-jre-alpine
+</code></pre>
+
+        <h3>2-3. Multi-stage Buildを利用する</h3>
+
+        <p>
+          ビルド用コンテナと実行用コンテナを分離します。
+          本番環境では最重要のベストプラクティスです。
+        </p>
+
+        <pre><code class="dockerfile">
+FROM maven:3.9-eclipse-temurin-21 AS build
+
+WORKDIR /app
+
+COPY . .
+
+RUN mvn clean package -DskipTests
+
+FROM eclipse-temurin:21-jre-alpine
+
+WORKDIR /app
+
+COPY --from=build /app/target/app.jar app.jar
+
+ENTRYPOINT ["java","-jar","app.jar"]
+</code></pre>
+
+        <h3>2-4. キャッシュを削除する</h3>
+
+        <p>
+          パッケージインストール後にキャッシュを削除します。
+          不要データを含めないことが重要です。
+        </p>
+
+        <pre><code class="dockerfile">
+RUN apt-get update && \
+    apt-get install -y curl && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+</code></pre>
+
+        <hr />
+
+        <h2 id="section3">3. 実践的なDockerfile例</h2>
+
+        <p>Spring Bootアプリで実務利用しやすい構成例です。</p>
+
+        <pre><code class="dockerfile">
+FROM maven:3.9-eclipse-temurin-21 AS build
+
+WORKDIR /app
+
+COPY pom.xml .
+COPY src ./src
+
+RUN mvn clean package -DskipTests
+
+FROM eclipse-temurin:21-jre-alpine
+
+WORKDIR /app
+
+COPY --from=build /app/target/*.jar app.jar
+
+EXPOSE 8080
+
+ENTRYPOINT ["java","-jar","app.jar"]
+</code></pre>
+
+        <p>
+          この構成により、ビルドツールやソースコードを本番イメージに含めずに済みます。
+        </p>
+
+        <hr />
+
+        <div class="my-4 text-center">
+          <!-- Adsense -->
+        </div>
+
+        <hr />
+
+        <h2 id="section4">4. よくある失敗例</h2>
+
+        <h3>targetフォルダを丸ごとコピーしている</h3>
+
+        <pre><code class="dockerfile">
+COPY . .
+</code></pre>
+
+        <p>
+          一見便利ですが、大量の不要ファイルまで取り込む原因になります。
+          必ず.dockerignoreを設定しましょう。
+        </p>
+
+        <h3>JDKを本番環境で利用している</h3>
+
+        <pre><code class="dockerfile">
+FROM eclipse-temurin:21
+</code></pre>
+
+        <p>
+          実行だけならJREで十分です。
+          JDKを利用すると数百MB増える場合があります。
+        </p>
+
+        <h3>Multi-stage Buildを使っていない</h3>
+
+        <p>
+          MavenやGradleがそのまま含まれ、数百MB〜数GBになるケースがあります。
+        </p>
+
+        <h3>イメージサイズを確認していない</h3>
+
+        <pre><code class="bash">
+docker images
+</code></pre>
+
+        <p>定期的にサイズを確認し、肥大化を早期発見しましょう。</p>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>.dockerignoreで不要ファイルを除外する</li>
+          <li>JREやAlpineベースの軽量イメージを利用する</li>
+          <li>Multi-stage Buildを採用する</li>
+          <li>キャッシュや不要ツールを削除する</li>
+          <li>CI/CD環境ではサイズ監視を実施する</li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul class="row">
+          <li class="col-sm-6">
+            <a href="/docker/docker_build_error.html">
+              Docker buildエラーの原因まとめ
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="/docker/docker_container_start_error.html">
+              Dockerコンテナが起動しない原因と解決方法
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="/docker/docker_compose_error.html">
+              Docker Composeが動かない原因と対処法
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="/docker/docker_port_conflict.html">
+              ポート競合エラー（Port already in use）の解決方法
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="/docker/docker_springboot_error.html">
+              コンテナ内でSpring Bootが起動しない原因
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="/docker/docker_volume_error.html">
+              volumeマウントが効かない原因と解決方法
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="/docker/docker_network_error.html">
+              ネットワーク接続できないDockerエラーの原因
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="/docker/docker_log_error.html">
+              Dockerログが見れない原因と対処法
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="/docker/docker_mysql_error.html">
+              DockerとMySQL接続エラーの原因まとめ
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

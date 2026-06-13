@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: docker_log_error.html
+CATEGORY: Docker
+TITLE: Dockerログが見れない原因と対処法
+DESCRIPTION: デバッグ系
+SEO META END -->
+
+    <!-- SEO -->
+    <title>Dockerログが見れない原因と対処法 | Programming Lab</title>
+
+    <meta
+      name="description"
+      content="Dockerログが表示されない、docker logsが空になる、コンテナ起動直後に停止するなどの原因と対処法を解説。ログ出力設定やSpring Boot連携時の確認ポイントも紹介します。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/docker/docker_log_error.html"
+    />
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <!-- Highlight.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!-- Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">Dockerログが見れない原因と対処法</h1>
+
+        <p class="lead">
+          docker
+          logsでログが表示されない、コンテナが停止して確認できない場合の原因と解決方法を解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-13</p>
+
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. Dockerログが見れない主な原因</a></li>
+          <li><a href="#section2">2. ログ確認手順</a></li>
+          <li><a href="#section3">3. Spring Bootでのログ出力設定</a></li>
+          <li><a href="#section4">4. よくあるエラーと対処法</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. Dockerログが見れない主な原因</h2>
+
+        <p>
+          Dockerのトラブル調査ではログ確認が最優先です。しかし設定ミスやアプリケーションの実装方法によってはログが表示されないことがあります。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>原因</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>コンテナが停止済み</td>
+            <td>起動直後に異常終了している</td>
+          </tr>
+          <tr>
+            <td>標準出力へ出力していない</td>
+            <td>ファイルログのみになっている</td>
+          </tr>
+          <tr>
+            <td>ログドライバ設定</td>
+            <td>json-file以外を使用している</td>
+          </tr>
+          <tr>
+            <td>権限不足</td>
+            <td>Docker実行権限が不足している</td>
+          </tr>
+          <tr>
+            <td>アプリケーション異常終了</td>
+            <td>ログ出力前にプロセスが終了している</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. ログ確認手順</h2>
+
+        <h3>2-1. コンテナ状態を確認する</h3>
+
+        <p>まずはコンテナが実行中か確認します。</p>
+
+        <pre><code class="bash">
+docker ps -a
+</code></pre>
+
+        <p>STATUS列がExitedになっている場合は異常終了しています。</p>
+
+        <h3>2-2. コンテナログを確認する</h3>
+
+        <pre><code class="bash">
+docker logs コンテナ名
+</code></pre>
+
+        <p>例:</p>
+
+        <pre><code class="bash">
+docker logs springboot-app
+</code></pre>
+
+        <h3>2-3. リアルタイム監視する</h3>
+
+        <pre><code class="bash">
+docker logs -f springboot-app
+</code></pre>
+
+        <p>アプリケーション起動時の問題調査に有効です。</p>
+
+        <h3>2-4. 最新100行だけ確認する</h3>
+
+        <pre><code class="bash">
+docker logs --tail 100 springboot-app
+</code></pre>
+
+        <p>大量ログ環境で便利です。</p>
+
+        <h3>2-5. コンテナ内部へ接続する</h3>
+
+        <pre><code class="bash">
+docker exec -it springboot-app sh
+</code></pre>
+
+        <p>アプリケーションログファイルを直接確認できます。</p>
+
+        <hr />
+
+        <h2 id="section3">3. Spring Bootでのログ出力設定</h2>
+
+        <p>Dockerでは標準出力へログを出力するのが基本です。</p>
+
+        <p>悪い例:</p>
+
+        <pre><code class="properties">
+logging.file.name=/logs/application.log
+</code></pre>
+
+        <p>この場合、docker logsでは確認できません。</p>
+
+        <p>推奨:</p>
+
+        <pre><code class="properties">
+logging.level.root=INFO
+</code></pre>
+
+        <p>Spring Boot標準設定であればログは標準出力へ出力されます。</p>
+
+        <h3>Docker Composeの場合</h3>
+
+        <pre><code class="yaml">
+services:
+  app:
+    image: sample-app
+</code></pre>
+
+        <p>特別な設定をしなければ標準出力がdocker logsに表示されます。</p>
+
+        <hr />
+
+        <div class="my-4 text-center">
+          <!-- Adsense -->
+        </div>
+
+        <hr />
+
+        <h2 id="section4">4. よくあるエラーと対処法</h2>
+
+        <h3>docker logs が空になる</h3>
+
+        <pre><code class="bash">
+docker logs springboot-app
+</code></pre>
+
+        <p>原因:</p>
+
+        <ul>
+          <li>ログ出力がファイルのみ</li>
+          <li>アプリケーションが即終了</li>
+          <li>ログドライバ変更</li>
+        </ul>
+
+        <p>対処:</p>
+
+        <ul>
+          <li>標準出力へログ出力する</li>
+          <li>docker inspectで設定確認する</li>
+          <li>コンテナ内部のログファイル確認</li>
+        </ul>
+
+        <h3>No such container</h3>
+
+        <pre><code class="bash">
+Error: No such container
+</code></pre>
+
+        <p>コンテナ名が間違っています。</p>
+
+        <pre><code class="bash">
+docker ps -a
+</code></pre>
+
+        <p>で正しいコンテナ名を確認してください。</p>
+
+        <h3>permission denied</h3>
+
+        <pre><code class="bash">
+Got permission denied while trying to connect
+</code></pre>
+
+        <p>Docker実行権限不足です。</p>
+
+        <pre><code class="bash">
+sudo docker logs コンテナ名
+</code></pre>
+
+        <p>またはdockerグループへユーザーを追加します。</p>
+
+        <h3>コンテナが即終了する</h3>
+
+        <pre><code class="bash">
+docker ps -a
+</code></pre>
+
+        <p>
+          STATUSがExitedになっている場合は起動コマンドやアプリケーションエラーを確認します。
+        </p>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>まずdocker ps -aで状態確認する</li>
+          <li>docker logsでログを取得する</li>
+          <li>docker logs -fでリアルタイム監視する</li>
+          <li>Spring Bootは標準出力へログを出す</li>
+          <li>ログが無い場合はコンテナ内部も調査する</li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul class="row">
+          <li class="col-sm-6">
+            <a href="/docker/docker_container_start_error.html">
+              Dockerコンテナが起動しない原因と解決方法
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="/docker/docker_build_error.html">
+              Docker buildエラーの原因まとめ
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="/docker/docker_compose_error.html">
+              Docker Composeが動かない原因と対処法
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="/docker/docker_port_conflict.html">
+              ポート競合エラー（Port already in use）の解決方法
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="/docker/docker_springboot_error.html">
+              コンテナ内でSpring Bootが起動しない原因
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="/docker/docker_image_size.html">
+              Dockerイメージが大きすぎる原因と最適化方法
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="/docker/docker_volume_error.html">
+              volumeマウントが効かない原因と解決方法
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="/docker/docker_network_error.html">
+              ネットワーク接続できないDockerエラーの原因
+            </a>
+          </li>
+
+          <li class="col-sm-6">
+            <a href="/docker/docker_mysql_error.html">
+              DockerとMySQL接続エラーの原因まとめ
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>
