@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: react_build_error.html
+CATEGORY: React
+TITLE: React buildエラーの原因まとめ
+DESCRIPTION: 本番ビルド失敗対策
+SEO META END -->
+
+    <!-- SEO -->
+    <title>
+      React buildエラーの原因まとめ（本番環境デプロイ完全対策） | Programming
+      Lab
+    </title>
+
+    <meta
+      name="description"
+      content="Reactのbuildエラー原因を網羅的に解説。環境変数ミス・依存関係エラー・メモリ不足・TypeScriptエラーなど本番失敗を防ぐ実務向けガイド。"
+    />
+
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/React/react_build_error.html"
+    />
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <!-- Highlight.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!-- Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <!-- タイトル -->
+        <h1 class="mt-5">
+          React buildエラーの原因まとめ（本番環境デプロイ完全対策）
+        </h1>
+
+        <!-- リード文 -->
+        <p class="lead">
+          Reactのbuildエラーは「ローカルでは動くのに本番で失敗する」典型的なトラブルです。本記事では環境差分・依存関係・メモリ・TypeScriptエラーなど実務で頻出する原因を体系的に解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-13</p>
+
+        <!-- 目次 -->
+        <h2>目次</h2>
+        <ul>
+          <li><a href="#section1">1. 概要</a></li>
+          <li><a href="#section2">2. 主な原因</a></li>
+          <li><a href="#section3">3. ビルド手順と確認方法</a></li>
+          <li><a href="#section4">4. よくあるエラーと対処法</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <!-- 概要 -->
+        <h2 id="section1">1. 概要</h2>
+
+        <p>
+          Reactのbuildは本番用の最適化処理を行うため、開発環境では発生しないエラーが顕在化します。
+          特に環境変数・型エラー・依存関係の不整合が主要な原因です。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>項目</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>対象</td>
+            <td>React / Vite / Next.js</td>
+          </tr>
+          <tr>
+            <td>エラー発生箇所</td>
+            <td>build / CI / デプロイ時</td>
+          </tr>
+          <tr>
+            <td>主な原因</td>
+            <td>環境変数 / 型エラー / 依存関係 / メモリ不足</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <!-- 手順 -->
+        <h2 id="section2">2. 主な原因</h2>
+
+        <h3>2-1. 環境変数の未設定</h3>
+        <p>.envが本番環境で読み込まれていないケース。</p>
+
+        <pre><code class="bash">
+
+REACT_APP_API_URL is undefined
+</code></pre>
+
+        <p><b>対処：</b>CI/CD環境に環境変数を追加</p>
+
+        <h3>2-2. TypeScriptエラー</h3>
+        <p>型エラーがあるとbuildは失敗します。</p>
+
+        <pre><code class="text">
+
+Type error: Property 'name' does not exist
+</code></pre>
+
+        <h3>2-3. 依存関係エラー</h3>
+        <p>node_modules不整合やバージョン差分で失敗します。</p>
+
+        <pre><code class="bash">
+
+npm ERR! peer dependency conflict
+</code></pre>
+
+        <h3>2-4. メモリ不足</h3>
+        <p>大規模プロジェクトではNodeのメモリ不足でbuildが止まります。</p>
+
+        <pre><code class="bash">
+
+FATAL ERROR: JavaScript heap out of memory
+</code></pre>
+
+        <hr />
+
+        <!-- サンプルコード -->
+        <h2 id="section3">3. ビルド手順と確認方法</h2>
+
+        <p>基本的なビルドコマンド：</p>
+
+        <pre><code class="bash">
+
+npm run build
+</code></pre>
+
+        <p>キャッシュクリア手順：</p>
+
+        <pre><code class="bash">
+
+rm -rf node_modules package-lock.json
+npm install
+</code></pre>
+
+        <p>メモリ増加オプション：</p>
+
+        <pre><code class="bash">
+
+NODE_OPTIONS=--max_old_space_size=4096 npm run build
+</code></pre>
+
+        <hr />
+
+        <!-- 広告 -->
+        <div class="my-4 text-center">
+          <!-- Adsense -->
+        </div>
+
+        <hr />
+
+        <!-- エラー -->
+        <h2 id="section4">4. よくあるエラーと対処法</h2>
+
+        <h3>① build成功するが画面が真っ白</h3>
+        <p>JSエラーやルーティングミス。</p>
+
+        <h3>② CIだけ失敗する</h3>
+        <p>環境変数・Nodeバージョン差分。</p>
+
+        <h3>③ importエラー</h3>
+        <p>大文字小文字の違い（Linuxで顕在化）。</p>
+
+        <h3>④ chunk size exceeded</h3>
+        <p>コード分割が必要。</p>
+
+        <hr />
+
+        <!-- まとめ -->
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>buildエラーの7割は環境差分</li>
+          <li>TypeScriptエラーは本番で必ず止まる</li>
+          <li>CI環境はローカルと完全一致させる</li>
+          <li>メモリ不足はNodeオプションで解決可能</li>
+        </ul>
+
+        <p>
+          Reactのbuildエラーは「再現性のある環境管理」でほぼ防げます。感覚ではなく構成管理が重要です。
+        </p>
+
+        <!-- 関連記事 -->
+        <hr />
+
+        <h2>関連記事</h2>
+        <ul>
+          <li>
+            <a href="/React/react_start_error.html"
+              >Reactアプリが起動しない原因と解決方法</a
+            >
+          </li>
+          <li>
+            <a href="/React/react_api_error.html"
+              >ReactでAPI通信が失敗する原因まとめ</a
+            >
+          </li>
+          <li>
+            <a href="/React/react_blank_screen.html"
+              >Reactで画面が真っ白になる原因まとめ</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

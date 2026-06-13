@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: react_router_error.html
+CATEGORY: React
+TITLE: React Routerが動かない原因と解決方法
+DESCRIPTION: ルーティング問題
+SEO META END -->
+
+    <!-- SEO -->
+    <title>
+      React Routerが動かない原因と解決方法（ルーティング完全トラブルシュート） |
+      Programming Lab
+    </title>
+
+    <meta
+      name="description"
+      content="React Routerが動かない原因を体系的に整理。ルート未設定・パス不一致・SPA設定ミス・本番環境リロード問題などを解説。"
+    />
+
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/React/react_router_error.html"
+    />
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <!-- Highlight.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!-- Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <!-- タイトル -->
+    <h1 class="mt-5">React Routerが動かない原因と解決方法（ルーティング完全トラブルシュート）</h1>
+
+    <!-- リード文 -->
+    <p class="lead">
+      React Routerが動かない問題は、設計ミスというより設定ミスがほとんどです。本記事ではルート定義・URL不一致・本番環境設定など、現場で頻出する原因を整理します。
+    </p>
+
+    <p class="text-muted">最終更新日：2026-06-13</p>
+
+    <!-- 目次 -->
+    <h2>目次</h2>
+    <ul>
+      <li><a href="#section1">1. 概要</a></li>
+      <li><a href="#section2">2. 主な原因</a></li>
+      <li><a href="#section3">3. 正しい実装例</a></li>
+      <li><a href="#section4">4. よくあるエラー</a></li>
+      <li><a href="#section5">5. まとめ</a></li>
+    </ul>
+
+    <hr />
+
+    <!-- 概要 -->
+    <h2 id="section1">1. 概要</h2>
+
+    <p>
+      React RouterはSPA（シングルページアプリ）の画面遷移を制御する仕組みです。
+      しかし設定を1つ間違えるだけで「真っ白」「遷移しない」「404になる」などの問題が発生します。
+    </p>
+
+    <table class="table table-bordered">
+      <tr>
+        <th>項目</th>
+        <th>内容</th>
+      </tr>
+      <tr>
+        <td>対象</td>
+        <td>React / React Router</td>
+      </tr>
+      <tr>
+        <td>問題領域</td>
+        <td>ルーティング / SPA設定</td>
+      </tr>
+      <tr>
+        <td>主な原因</td>
+        <td>パス不一致 / ルート未定義 / サーバ設定ミス</td>
+      </tr>
+    </table>
+
+    <hr />
+
+    <!-- 手順 -->
+    <h2 id="section2">2. 主な原因</h2>
+
+    <h3>2-1. Route未定義</h3>
+    <p>URLに対応するRouteが存在しないケース。</p>
+
+    <pre><code class="javascript">
+
+import { Route, Routes } from "react-router-dom";
+
+<Routes> <Route path="/home" element={<Home />} /> </Routes> </code></pre>
+    <h3>2-2. パスの不一致</h3>
+    <p>リンクとRouteのURLがズレている。</p>
+
+    <pre><code class="javascript">
+<Link to="/home" /> <Route path="/Home" /> // 大文字違い </code></pre>
+    <h3>2-3. BrowserRouter未設定</h3>
+    <p>アプリ全体がRouterで囲まれていない。</p>
+
+    <pre><code class="javascript">
+
+import { BrowserRouter } from "react-router-dom";
+
+root.render(
+<BrowserRouter>
+<App />
+</BrowserRouter>
+);
+</code></pre>
+
+    <h3>2-4. 本番環境リロードエラー</h3>
+    <p>サーバ側でSPA対応していないと404になる。</p>
+
+    <hr />
+
+    <!-- サンプルコード -->
+    <h2 id="section3">3. 正しい実装例</h2>
+
+    <pre><code class="javascript">
+
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./Home";
+
+function App() {
+return (
+<BrowserRouter>
+<Routes>
+<Route path="/" element={<Home />} />
+</Routes>
+</BrowserRouter>
+);
+}
+</code></pre>
+
+    <p>ポイント：全体をBrowserRouterで囲うこと。</p>
+
+    <hr />
+
+    <!-- 広告 -->
+    <div class="my-4 text-center">
+      <!-- Adsense -->
+    </div>
+
+    <hr />
+
+    <!-- エラー -->
+    <h2 id="section4">4. よくあるエラー</h2>
+
+    <h3>① Blank page</h3>
+    <p>Route未定義またはRouter未設定。</p>
+
+    <h3>② Cannot match any routes</h3>
+    <p>パス不一致。</p>
+
+    <h3>③ 404 on refresh</h3>
+    <p>本番サーバがSPA対応していない。</p>
+
+    <hr />
+
+    <!-- まとめ -->
+    <h2 id="section5">5. まとめ</h2>
+
+    <ul>
+      <li>Router設定ミスが9割</li>
+      <li>パスは大小文字含め完全一致必須</li>
+      <li>BrowserRouterの有無を必ず確認</li>
+      <li>本番はサーバ設定も重要</li>
+    </ul>
+
+    <p>
+      React Routerは単純ですが「見落としやすい設定ミス」が多い領域です。構造でチェックするのが最短解決です。
+    </p>
+
+    <!-- 関連記事 -->
+    <hr />
+
+    <h2>関連記事</h2>
+    <ul>
+      <li><a href="/React/react_state_error.html">stateが更新されない原因と解決方法</a></li>
+      <li><a href="/React/react_blank_screen.html">Reactで画面が真っ白になる原因まとめ</a></li>
+      <li><a href="/React/react_start_error.html">Reactアプリが起動しない原因と解決方法</a></li>
+    </ul>
+
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

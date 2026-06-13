@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: react_props_error.html
+CATEGORY: React
+TITLE: propsが渡らない原因と対処法
+DESCRIPTION: コンポーネント設計ミス
+SEO META END -->
+
+    <!-- SEO -->
+    <title>
+      propsが渡らない原因と対処法（コンポーネント設計ミス完全解決） |
+      Programming Lab
+    </title>
+
+    <meta
+      name="description"
+      content="Reactでpropsが渡らない原因を体系的に解説。名前ミス・分割代入ミス・再レンダリング問題など、現場で頻出するバグと対処法を整理。"
+    />
+
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/React/react_props_error.html"
+    />
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <!-- Highlight.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!-- Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <!-- タイトル -->
+        <h1 class="mt-5">
+          propsが渡らない原因と対処法（コンポーネント設計ミス完全解決）
+        </h1>
+
+        <!-- リード文 -->
+        <p class="lead">
+          Reactで最も多いバグの1つが「propsが渡っていないように見える問題」です。本記事では名前ミス・分割代入・レンダリング構造など、現場で頻出する原因を体系的に整理します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-13</p>
+
+        <!-- 目次 -->
+        <h2>目次</h2>
+        <ul>
+          <li><a href="#section1">1. 概要</a></li>
+          <li><a href="#section2">2. 主な原因</a></li>
+          <li><a href="#section3">3. 正しい実装例</a></li>
+          <li><a href="#section4">4. よくあるエラー</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <!-- 概要 -->
+        <h2 id="section1">1. 概要</h2>
+
+        <p>
+          propsは親コンポーネントから子コンポーネントへデータを渡す基本機能ですが、
+          名前の不一致や分割代入ミスにより「渡っていないように見える」ケースが多発します。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>項目</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>対象</td>
+            <td>React</td>
+          </tr>
+          <tr>
+            <td>問題領域</td>
+            <td>コンポーネント設計 / データ受け渡し</td>
+          </tr>
+          <tr>
+            <td>主な原因</td>
+            <td>名前ミス / 分割代入 / 再レンダリング / undefined</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <!-- 手順 -->
+        <h2 id="section2">2. 主な原因</h2>
+
+        <h3>2-1. props名のミス</h3>
+        <p>親と子で名前が一致していないケース。</p>
+
+        <pre><code class="javascript">
+
+<Child userName="Taro" />
+
+// 子
+function Child(props) {
+console.log(props.username); // NG（小文字違い）
+}
+</code></pre>
+
+        <h3>2-2. 分割代入ミス</h3>
+        <p>propsの取り出し方が間違っているケース。</p>
+
+        <pre><code class="javascript">
+
+function Child({ userName }) {
+return <div>{userName}</div>;
+}
+</code></pre>
+
+        <h3>2-3. 親から渡していない</h3>
+        <p>単純にprops未指定。</p>
+
+        <pre><code class="javascript">
+
+<Child /> // userName未設定
+</code></pre>
+
+        <hr />
+
+        <!-- サンプルコード -->
+        <h2 id="section3">3. 正しい実装例</h2>
+
+        <p>基本形：</p>
+
+        <pre><code class="javascript">
+
+function Parent() {
+return <Child userName="Taro" />;
+}
+
+function Child({ userName }) {
+return <div>{userName}</div>;
+}
+</code></pre>
+
+        <p>デバッグ方法：</p>
+
+        <pre><code class="javascript">
+
+console.log(props);
+</code></pre>
+
+        <hr />
+
+        <!-- 広告 -->
+        <div class="my-4 text-center">
+          <!-- Adsense -->
+        </div>
+
+        <hr />
+
+        <!-- エラー -->
+        <h2 id="section4">4. よくあるエラー</h2>
+
+        <h3>① undefinedが表示される</h3>
+        <p>props未定義または名前ミス。</p>
+
+        <h3>② 値が更新されない</h3>
+        <p>stateとpropsの混同。</p>
+
+        <h3>③ 子コンポーネントが再レンダリングされない</h3>
+        <p>memo化の影響。</p>
+
+        <hr />
+
+        <!-- まとめ -->
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>propsは名前一致が絶対条件</li>
+          <li>分割代入ミスが頻出</li>
+          <li>親の渡し忘れも多い</li>
+          <li>console.logで即確認するのが最速</li>
+        </ul>
+
+        <p>
+          props問題は「構造確認」でほぼ解決できます。バグというより設計チェックの問題です。
+        </p>
+
+        <!-- 関連記事 -->
+        <hr />
+
+        <h2>関連記事</h2>
+        <ul>
+          <li>
+            <a href="/React/react_state_error.html"
+              >stateが更新されない原因と解決方法</a
+            >
+          </li>
+          <li>
+            <a href="/React/react_useeffect_loop.html"
+              >useEffectが無限ループする原因と対処法</a
+            >
+          </li>
+          <li>
+            <a href="/React/react_blank_screen.html"
+              >Reactで画面が真っ白になる原因まとめ</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

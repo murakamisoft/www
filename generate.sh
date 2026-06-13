@@ -1,7 +1,7 @@
 #!/bin/bash
 
 TEMPLATE="_templete.html"
-OUTPUT_DIR="docker"
+OUTPUT_DIR="react"
 INPUT_FILE="articles.tsv"
 
 mkdir -p "$OUTPUT_DIR"

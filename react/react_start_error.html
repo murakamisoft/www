@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: react_start_error.html
+CATEGORY: React
+TITLE: Reactアプリが起動しない原因と解決方法
+DESCRIPTION: npm start系トラブル
+SEO META END -->
+
+    <!-- SEO -->
+    <title>
+      Reactアプリが起動しない原因と解決方法（npm startトラブル完全解決） |
+      Programming Lab
+    </title>
+
+    <meta
+      name="description"
+      content="Reactアプリが起動しない原因を体系的に解説。ポート競合・依存関係破損・node_modules問題・スクリプト不備などを網羅。"
+    />
+
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/React/react_start_error.html"
+    />
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <!-- Highlight.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!-- Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <!-- タイトル -->
+        <h1 class="mt-5">
+          Reactアプリが起動しない原因と解決方法（npm startトラブル完全解決）
+        </h1>
+
+        <!-- リード文 -->
+        <p class="lead">
+          Reactアプリが起動しない原因は「環境問題」がほとんどです。本記事ではnpm
+          startで発生する代表的なエラーと即解決できる手順を整理します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-13</p>
+
+        <!-- 目次 -->
+        <h2>目次</h2>
+        <ul>
+          <li><a href="#section1">1. 概要</a></li>
+          <li><a href="#section2">2. 主な原因</a></li>
+          <li><a href="#section3">3. 解決手順</a></li>
+          <li><a href="#section4">4. よくあるエラー</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <!-- 概要 -->
+        <h2 id="section1">1. 概要</h2>
+
+        <p>
+          ReactアプリはNode.js環境上で動作するため、依存関係やポート、スクリプト設定などの影響を強く受けます。
+          特に初学者は「起動できない＝環境破損」と考えるケースが多いです。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>項目</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>対象</td>
+            <td>React / Node.js</td>
+          </tr>
+          <tr>
+            <td>発生箇所</td>
+            <td>npm start / yarn start</td>
+          </tr>
+          <tr>
+            <td>主な原因</td>
+            <td>依存関係破損 / ポート競合 / スクリプト不備</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <!-- 手順 -->
+        <h2 id="section2">2. 主な原因</h2>
+
+        <h3>2-1. node_modules破損</h3>
+        <p>最も多い原因。インストール途中の失敗など。</p>
+
+        <h3>2-2. ポート競合</h3>
+        <p>3000番ポートが他プロセスで使用中。</p>
+
+        <h3>2-3. package.json不備</h3>
+        <p>startスクリプトが存在しないケース。</p>
+
+        <pre><code class="json">
+
+"scripts": {
+"start": "react-scripts start"
+}
+</code></pre>
+
+        <h3>2-4. Nodeバージョン不一致</h3>
+        <p>古いNode.jsで最新Reactが動かない。</p>
+
+        <hr />
+
+        <!-- サンプルコード -->
+        <h2 id="section3">3. 解決手順</h2>
+
+        <p>基本リセット：</p>
+
+        <pre><code class="bash">
+
+rm -rf node_modules package-lock.json
+npm install
+npm start
+</code></pre>
+
+        <p>ポート変更：</p>
+
+        <pre><code class="bash">
+
+PORT=3001 npm start
+</code></pre>
+
+        <p>強制起動：</p>
+
+        <pre><code class="bash">
+
+npm cache clean --force
+</code></pre>
+
+        <hr />
+
+        <!-- 広告 -->
+        <div class="my-4 text-center">
+          <!-- Adsense -->
+        </div>
+
+        <hr />
+
+        <!-- エラー -->
+        <h2 id="section4">4. よくあるエラー</h2>
+
+        <h3>① Module not found</h3>
+        <p>依存関係不足。</p>
+
+        <h3>② EADDRINUSE</h3>
+        <p>ポート使用中。</p>
+
+        <h3>③ react-scripts not found</h3>
+        <p>node_modules破損。</p>
+
+        <h3>④ blank screen</h3>
+        <p>JSエラーで描画失敗。</p>
+
+        <hr />
+
+        <!-- まとめ -->
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>起動失敗の8割は環境問題</li>
+          <li>node_modules削除で解決するケースが多い</li>
+          <li>ポート競合は意外と頻出</li>
+          <li>Nodeバージョン管理は必須</li>
+        </ul>
+
+        <p>
+          React起動エラーは「再現手順の固定化」でほぼ防げます。場当たり対応を減らすことが重要です。
+        </p>
+
+        <!-- 関連記事 -->
+        <hr />
+
+        <h2>関連記事</h2>
+        <ul>
+          <li>
+            <a href="/React/react_npm_install_error.html"
+              >npm installエラーの原因と解決方法</a
+            >
+          </li>
+          <li>
+            <a href="/React/react_build_error.html"
+              >React buildエラーの原因まとめ</a
+            >
+          </li>
+          <li>
+            <a href="/React/react_blank_screen.html"
+              >Reactで画面が真っ白になる原因まとめ</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

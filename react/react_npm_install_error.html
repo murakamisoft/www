@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: react_npm_install_error.html
+CATEGORY: React
+TITLE: npm installエラーの原因と解決方法
+DESCRIPTION: 環境構築系
+SEO META END -->
+
+    <!-- SEO -->
+    <title>
+      npm installエラーの原因と解決方法（環境構築トラブル完全対策） |
+      Programming Lab
+    </title>
+
+    <meta
+      name="description"
+      content="npm installで発生するエラーの原因と解決方法を網羅。node_modules破損・依存関係競合・キャッシュ問題など開発初期で詰まるポイントを整理。"
+    />
+
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/React/react_npm_install_error.html"
+    />
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <!-- Highlight.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!-- Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <!-- タイトル -->
+        <!-- タイトル -->
+        <h1 class="mt-5">
+          npm installエラーの原因と解決方法（環境構築トラブル完全対策）
+        </h1>
+
+        <!-- リード文 -->
+        <p class="lead">
+          npm
+          installエラーはReact開発の最初の関門です。本記事では依存関係の競合・キャッシュ破損・Nodeバージョン不一致など、現場で頻出する原因と即解決手順を整理します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-13</p>
+
+        <!-- 目次 -->
+        <h2>目次</h2>
+        <ul>
+          <li><a href="#section1">1. 概要</a></li>
+          <li><a href="#section2">2. 主な原因</a></li>
+          <li><a href="#section3">3. 解決手順</a></li>
+          <li><a href="#section4">4. よくあるエラー</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <!-- 概要 -->
+        <h2 id="section1">1. 概要</h2>
+
+        <p>
+          npm
+          installは依存関係を自動解決する仕組みですが、バージョン差分やキャッシュ破損があると簡単に失敗します。
+          特にチーム開発やCI環境で頻繁に発生します。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>項目</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>対象</td>
+            <td>React / Node.js</td>
+          </tr>
+          <tr>
+            <td>発生タイミング</td>
+            <td>初回構築 / CI / クローン直後</td>
+          </tr>
+          <tr>
+            <td>主な原因</td>
+            <td>依存関係競合 / キャッシュ破損 / Node差分</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <!-- 手順 -->
+        <h2 id="section2">2. 主な原因</h2>
+
+        <h3>2-1. package-lock不整合</h3>
+        <p>lockファイルとnode_modulesのズレで発生。</p>
+
+        <h3>2-2. Nodeバージョン違い</h3>
+        <p>チームメンバー間でNodeバージョンが違うと依存解決が崩れます。</p>
+
+        <h3>2-3. キャッシュ破損</h3>
+        <p>npmキャッシュが壊れているケース。</p>
+
+        <pre><code class="bash">
+
+npm cache verify
+</code></pre>
+
+        <h3>2-4. 依存関係競合</h3>
+        <p>peer dependencyの不一致で発生。</p>
+
+        <hr />
+
+        <!-- サンプルコード -->
+        <h2 id="section3">3. 解決手順</h2>
+
+        <p>基本リセット手順：</p>
+
+        <pre><code class="bash">
+
+rm -rf node_modules package-lock.json
+npm install
+</code></pre>
+
+        <p>強制解決：</p>
+
+        <pre><code class="bash">
+
+npm install --legacy-peer-deps
+</code></pre>
+
+        <p>キャッシュクリア：</p>
+
+        <pre><code class="bash">
+
+npm cache clean --force
+</code></pre>
+
+        <hr />
+
+        <!-- 広告 -->
+        <div class="my-4 text-center">
+          <!-- Adsense -->
+        </div>
+
+        <hr />
+
+        <!-- エラー -->
+        <h2 id="section4">4. よくあるエラー</h2>
+
+        <h3>① ERESOLVE unable to resolve dependency tree</h3>
+        <p>最も頻出。依存関係競合。</p>
+
+        <h3>② ENOENT package.json</h3>
+        <p>ディレクトリ間違い。</p>
+
+        <h3>③ network timeout</h3>
+        <p>ネットワーク・proxy問題。</p>
+
+        <h3>④ permission denied</h3>
+        <p>権限問題（特にLinux）。</p>
+
+        <hr />
+
+        <!-- まとめ -->
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>npm installエラーの大半は依存関係</li>
+          <li>node_modules削除で解決するケースが多い</li>
+          <li>チーム開発はNodeバージョン統一が必須</li>
+          <li>CI環境はキャッシュ管理が重要</li>
+        </ul>
+
+        <p>
+          npm
+          installエラーは「仕組み理解」でほぼ防げます。場当たり対応ではなく再現性ある手順を持つことが重要です。
+        </p>
+
+        <!-- 関連記事 -->
+        <hr />
+
+        <h2>関連記事</h2>
+        <ul>
+          <li>
+            <a href="/React/react_build_error.html"
+              >React buildエラーの原因まとめ</a
+            >
+          </li>
+          <li>
+            <a href="/React/react_start_error.html"
+              >Reactアプリが起動しない原因と解決方法</a
+            >
+          </li>
+          <li>
+            <a href="/React/react_blank_screen.html"
+              >Reactで画面が真っ白になる原因まとめ</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

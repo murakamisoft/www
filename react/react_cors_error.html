@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: react_cors_error.html
+CATEGORY: React
+TITLE: CORSエラーの原因とフロント側対処法
+DESCRIPTION: API連携で頻出
+SEO META END -->
+
+    <!-- SEO -->
+    <title>
+      CORSエラーの原因と対処法（API連携エラー完全ガイド） | Programming Lab
+    </title>
+
+    <meta
+      name="description"
+      content="Reactで頻出するCORSエラーの原因と対処法を解説。フロントエンド・バックエンド両面から実務レベルでの解決方法を整理。"
+    />
+
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/React/react_cors_error.html"
+    />
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <!-- Highlight.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!-- Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <!-- タイトル -->
+        <h1 class="mt-5">
+          CORSエラーの原因と対処法（API連携エラー完全ガイド）
+        </h1>
+
+        <!-- リード文 -->
+        <p class="lead">
+          CORSエラーはReact開発で最も頻出する通信エラーの1つです。本記事では「なぜブラウザがブロックするのか」から「フロント・バック両面での正しい解決方法」まで実務ベースで整理します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-13</p>
+
+        <!-- 目次 -->
+        <h2>目次</h2>
+        <ul>
+          <li><a href="#section1">1. 概要</a></li>
+          <li><a href="#section2">2. CORSの仕組み</a></li>
+          <li><a href="#section3">3. 対処方法</a></li>
+          <li><a href="#section4">4. よくあるエラーと落とし穴</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <!-- 概要 -->
+        <h2 id="section1">1. 概要</h2>
+
+        <p>
+          CORS（Cross-Origin Resource
+          Sharing）は、異なるドメイン間の通信を制御するブラウザのセキュリティ機構です。
+          ReactからAPIを呼び出す際に最もよく発生するエラーです。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>項目</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>対象</td>
+            <td>React / Vue / Angular</td>
+          </tr>
+          <tr>
+            <td>発生場所</td>
+            <td>ブラウザ（クライアント側）</td>
+          </tr>
+          <tr>
+            <td>原因</td>
+            <td>異なるオリジン間通信の制限</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <!-- 手順 -->
+        <h2 id="section2">2. CORSの仕組み</h2>
+
+        <p>
+          ブラウザは「同一オリジンポリシー」により、異なるドメインのAPI通信をデフォルトで禁止しています。
+        </p>
+
+        <pre><code class="text">
+
+例：
+フロント: http://localhost:3000
+API : http://localhost:8080
+→ 別オリジン扱い
+</code></pre>
+
+        <p>この制限を解除するにはサーバー側で明示的に許可が必要です。</p>
+
+        <hr />
+
+        <!-- サンプルコード -->
+        <h2 id="section3">3. 対処方法</h2>
+
+        <h3>3-1. サーバー側でCORS許可（推奨）</h3>
+
+        <pre><code class="java">
+
+@CrossOrigin(origins = "http://localhost:3000")
+@RestController
+public class ApiController {
+}
+</code></pre>
+
+        <h3>3-2. Spring Boot設定</h3>
+
+        <pre><code class="java">
+
+@Configuration
+public class CorsConfig {
+
+@Bean
+public WebMvcConfigurer corsConfigurer() {
+return new WebMvcConfigurer() {
+@Override
+public void addCorsMappings(CorsRegistry registry) {
+registry.addMapping("/**")
+.allowedOrigins("")
+.allowedMethods("");
+}
+};
+}
+}
+</code></pre>
+
+        <h3>3-3. フロント側Proxy（開発用）</h3>
+
+        <pre><code class="json">
+
+"proxy": "http://localhost:8080"
+</code></pre>
+
+        <hr />
+
+        <!-- 広告 -->
+        <div class="my-4 text-center">
+          <!-- Adsense -->
+        </div>
+
+        <hr />
+
+        <!-- エラー -->
+        <h2 id="section4">4. よくあるエラーと落とし穴</h2>
+
+        <h3>① Preflight（OPTIONS）エラー</h3>
+        <p>PUT/DELETEなどで事前リクエストが失敗するケース。</p>
+
+        <h3>② credentialsエラー</h3>
+        <p>cookieを使う場合に発生。</p>
+
+        <h3>③ allow-origin '*' 問題</h3>
+        <p>認証付き通信では使用不可。</p>
+
+        <h3>④ フロント側で解決しようとする誤り</h3>
+        <p>基本的にCORSはサーバー側の責任。</p>
+
+        <hr />
+
+        <!-- まとめ -->
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>CORSはブラウザのセキュリティ制御</li>
+          <li>基本はサーバー側で解決する</li>
+          <li>開発中はproxyで回避可能</li>
+          <li>本番では正しいオリジン設定が必須</li>
+        </ul>
+
+        <p>CORSは「フロントで直す問題ではない」という理解が最重要です。</p>
+
+        <!-- 関連記事 -->
+        <hr />
+
+        <h2>関連記事</h2>
+        <ul>
+          <li>
+            <a href="/React/react_api_error.html"
+              >ReactでAPI通信が失敗する原因まとめ</a
+            >
+          </li>
+          <li>
+            <a href="/React/react_build_error.html"
+              >React buildエラーの原因まとめ</a
+            >
+          </li>
+          <li>
+            <a href="/React/react_blank_screen.html"
+              >Reactで画面が真っ白になる原因まとめ</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>
