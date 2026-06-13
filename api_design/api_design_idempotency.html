@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: api_design_idempotency.html
+CATEGORY: API設計
+TITLE: APIの冪等性（idempotency）設計とは何か
+DESCRIPTION: POST/PUTの違いと安全な再実行設計。二重送信・リトライ・決済APIなどで必須となる冪等性設計を実務視点で解説。
+SEO META END -->
+
+    <title>APIの冪等性（idempotency）設計とは何か | Programming Lab</title>
+
+    <meta
+      name="description"
+      content="POST/PUTの違いと冪等性設計を実務レベルで解説。二重送信防止、リトライ安全設計、決済APIでの必須パターンまで網羅。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/api/api_design_idempotency.html"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">APIの冪等性（idempotency）設計とは何か</h1>
+
+        <p class="lead">
+          APIの冪等性とは「同じリクエストを何回送っても結果が変わらない設計」です。決済・登録・リトライ処理で必須となる重要概念です。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-13</p>
+
+        <h2>目次</h2>
+        <ul>
+          <li><a href="#section1">1. 冪等性とは何か</a></li>
+          <li><a href="#section2">2. なぜ必要か</a></li>
+          <li><a href="#section3">3. 正しい設計パターン</a></li>
+          <li><a href="#section4">4. Spring Boot実装例</a></li>
+          <li><a href="#section5">5. よくあるエラー</a></li>
+          <li><a href="#section6">6. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. 冪等性とは何か</h2>
+
+        <p>冪等性とは「同じ操作を何回実行しても結果が同じになる性質」です。</p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>HTTPメソッド</th>
+            <th>冪等性</th>
+          </tr>
+          <tr>
+            <td>GET</td>
+            <td>冪等（何回実行しても同じ）</td>
+          </tr>
+          <tr>
+            <td>POST</td>
+            <td>通常は非冪等</td>
+          </tr>
+          <tr>
+            <td>PUT</td>
+            <td>冪等（設計次第で保証可能）</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. なぜ必要か</h2>
+
+        <h3>問題① ネットワークリトライ</h3>
+        <p>通信失敗時に同じリクエストが再送される。</p>
+
+        <h3>問題② 二重送信</h3>
+        <p>ボタン連打やUI不具合で重複登録が発生する。</p>
+
+        <h3>問題③ 決済事故</h3>
+        <p>最も危険。二重課金につながる。</p>
+
+        <hr />
+
+        <h2 id="section3">3. 正しい設計パターン</h2>
+
+        <h3>3-1. Idempotency Key方式</h3>
+
+        <p>クライアントから一意キーを送る方式。</p>
+
+        <pre><code class="text">
+Idempotency-Key: 123e4567-e89b
+        </code></pre>
+
+        <h3>3-2. DBユニーク制約方式</h3>
+
+        <pre><code class="sql">
+CREATE UNIQUE INDEX idx_order_key ON orders(request_id);
+        </code></pre>
+
+        <h3>3-3. 状態管理方式</h3>
+
+        <p>処理済みフラグで重複実行を防止。</p>
+
+        <hr />
+
+        <h2 id="section4">4. Spring Boot実装例</h2>
+
+        <pre><code class="java">
+@RestController
+@RequestMapping("/orders")
+public class OrderController {
+
+    @PostMapping
+    public String createOrder(
+        @RequestHeader("Idempotency-Key") String key
+    ) {
+        if (orderService.exists(key)) {
+            return "ALREADY_PROCESSED";
+        }
+
+        orderService.create(key);
+        return "OK";
+    }
+}
+        </code></pre>
+
+        <p>冪等キーをDBに保存することで二重処理を防止できます。</p>
+
+        <hr />
+
+        <!-- AdSense -->
+        <div class="my-4 text-center">
+          <!-- 広告枠 -->
+        </div>
+
+        <hr />
+
+        <h2 id="section5">5. よくあるエラー</h2>
+
+        <h3>二重登録が発生する</h3>
+
+        <pre><code class="text">
+POST /order が2回実行される
+        </code></pre>
+
+        <p>原因：冪等性設計がない</p>
+
+        <h3>対処法</h3>
+
+        <ul>
+          <li>Idempotency-Key導入</li>
+          <li>DBユニーク制約</li>
+          <li>処理済みチェック</li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section6">6. まとめ</h2>
+
+        <ul>
+          <li>冪等性はAPI安全設計の必須要素</li>
+          <li>POSTは必ず対策が必要</li>
+          <li>決済・登録系では必須レベル</li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li><a href="api_design_frontend_bff.html">BFF設計パターン</a></li>
+          <li><a href="api_design_timeout_retry.html">リトライ設計</a></li>
+          <li>
+            <a href="/springboot/springboot_error_list.html"
+              >Spring Bootエラー一覧</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted">Copyright (C) Programming Lab</span>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: api_design_pagination.html
+CATEGORY: API設計
+TITLE: REST APIのページング設計（offset vs cursor徹底比較）
+DESCRIPTION: 大量データ取得時のページング設計を実務視点で解説。offset方式とcursor方式の違い、使い分け、Spring Boot実装例まで網羅。
+SEO META END -->
+
+    <title>REST APIのページング設計（offset vs cursor徹底比較） | Programming Lab</title>
+
+    <meta name="description" content="大量データ取得時のページング設計を解説。offsetとcursorの違い、使い分け、性能問題、Spring Boot実装例まで網羅。" />
+
+    <link rel="canonical" href="https://vbminigame.sakura.ne.jp/api/api_design_pagination.html" />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+
+        <h1 class="mt-5">REST APIのページング設計（offset vs cursor徹底比較）</h1>
+
+        <p class="lead">
+          大量データを扱うAPIではページング設計が性能とユーザー体験を決定します。本記事ではoffset方式とcursor方式の違いと実務判断を解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-13</p>
+
+        <h2>目次</h2>
+        <ul>
+          <li><a href="#section1">1. ページングとは何か</a></li>
+          <li><a href="#section2">2. offset方式の特徴</a></li>
+          <li><a href="#section3">3. cursor方式の特徴</a></li>
+          <li><a href="#section4">4. どちらを使うべきか</a></li>
+          <li><a href="#section5">5. Spring Boot実装例</a></li>
+          <li><a href="#section6">6. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. ページングとは何か</h2>
+
+        <p>
+          ページングとは、大量データを分割して取得する仕組みです。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>方式</th>
+            <th>特徴</th>
+          </tr>
+          <tr>
+            <td>offset</td>
+            <td>ページ番号で取得</td>
+          </tr>
+          <tr>
+            <td>cursor</td>
+            <td>位置情報で取得</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. offset方式の特徴</h2>
+
+        <h3>メリット</h3>
+        <ul>
+          <li>実装が簡単</li>
+          <li>ページ番号指定が可能</li>
+        </ul>
+
+        <h3>デメリット</h3>
+        <ul>
+          <li>データ増加で遅くなる</li>
+          <li>途中追加でズレる</li>
+        </ul>
+
+        <pre><code class="sql">
+SELECT * FROM users
+LIMIT 10 OFFSET 20;
+        </code></pre>
+
+        <hr />
+
+        <h2 id="section3">3. cursor方式の特徴</h2>
+
+        <h3>メリット</h3>
+        <ul>
+          <li>高速（インデックス利用）</li>
+          <li>データずれが起きない</li>
+        </ul>
+
+        <h3>デメリット</h3>
+        <ul>
+          <li>実装がやや複雑</li>
+          <li>ページ番号指定できない</li>
+        </ul>
+
+        <pre><code class="sql">
+SELECT * FROM users
+WHERE id > :cursor
+LIMIT 10;
+        </code></pre>
+
+        <hr />
+
+        <h2 id="section4">4. どちらを使うべきか</h2>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>ケース</th>
+            <th>推奨方式</th>
+          </tr>
+          <tr>
+            <td>管理画面・小規模データ</td>
+            <td>offset</td>
+          </tr>
+          <tr>
+            <td>SNS・大量データ</td>
+            <td>cursor</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section5">5. Spring Boot実装例</h2>
+
+        <pre><code class="java">
+@GetMapping("/users")
+public List<User> getUsers(
+    @RequestParam int limit,
+    @RequestParam(required = false) Long cursor
+) {
+    return userService.fetch(limit, cursor);
+}
+        </code></pre>
+
+        <hr />
+
+        <!-- AdSense -->
+        <div class="my-4 text-center">
+          <!-- 広告枠 -->
+        </div>
+
+        <hr />
+
+        <h2 id="section6">6. まとめ</h2>
+
+        <ul>
+          <li>ページングはAPI性能の核心</li>
+          <li>小規模はoffset、大規模はcursor</li>
+          <li>設計ミスは性能劣化に直結</li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li><a href="api_design_filter.html">フィルタ設計</a></li>
+          <li><a href="api_design_sort.html">ソート設計</a></li>
+          <li><a href="api_design_rate_limit.html">レート制限設計</a></li>
+        </ul>
+
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted">Copyright (C) Programming Lab</span>
+      </div>
+    </footer>
+  </body>
+</html>

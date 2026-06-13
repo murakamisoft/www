@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: api_design_timeout_retry.html
+CATEGORY: API設計
+TITLE: APIのタイムアウト設計とリトライ戦略
+DESCRIPTION: APIのタイムアウト設計とリトライ戦略を実務視点で解説。障害耐性、再試行設計、Spring Boot実装、注意点まで網羅。
+SEO META END -->
+
+    <title>APIのタイムアウト設計とリトライ戦略 | Programming Lab</title>
+
+    <meta
+      name="description"
+      content="APIのタイムアウト設計とリトライ戦略を解説。障害耐性、再試行設計、Spring Boot実装、注意点まで網羅。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/api/api_design_timeout_retry.html"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">APIのタイムアウト設計とリトライ戦略</h1>
+
+        <p class="lead">
+          外部APIやDBアクセスでは「必ず失敗する前提」で設計する必要があります。本記事ではタイムアウトとリトライ設計を実務レベルで解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-13</p>
+
+        <h2>目次</h2>
+        <ul>
+          <li><a href="#section1">1. タイムアウト設計とは</a></li>
+          <li><a href="#section2">2. リトライ設計の考え方</a></li>
+          <li><a href="#section3">3. 設計パターン</a></li>
+          <li><a href="#section4">4. Spring Boot実装例</a></li>
+          <li><a href="#section5">5. よくあるエラー</a></li>
+          <li><a href="#section6">6. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. タイムアウト設計とは</h2>
+
+        <p>タイムアウトとは「一定時間で処理を強制終了する設計」です。</p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>項目</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>目的</td>
+            <td>無限待機の防止・障害波及防止</td>
+          </tr>
+          <tr>
+            <td>対象</td>
+            <td>API・DB・外部サービス</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. リトライ設計の考え方</h2>
+
+        <h3>やってはいけない例</h3>
+        <ul>
+          <li>無制限リトライ</li>
+          <li>即時リトライ連打</li>
+        </ul>
+
+        <h3>正しい考え方</h3>
+        <ul>
+          <li>回数制限（例：3回まで）</li>
+          <li>指数バックオフ（待機時間増加）</li>
+          <li>対象エラー限定（5xxのみ）</li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section3">3. 設計パターン</h2>
+
+        <h3>3-1. 固定リトライ</h3>
+        <p>一定間隔で再試行するシンプル方式。</p>
+
+        <h3>3-2. 指数バックオフ</h3>
+        <p>リトライごとに待機時間を増やす方式。</p>
+
+        <pre><code class="text">
+1秒 → 2秒 → 4秒 → 8秒
+        </code></pre>
+
+        <h3>3-3. サーキットブレーカー連携</h3>
+        <p>障害時に自動遮断する高度設計。</p>
+
+        <hr />
+
+        <h2 id="section4">4. Spring Boot実装例</h2>
+
+        <pre><code class="java">
+public String callApi() {
+
+    int retry = 0;
+
+    while (retry < 3) {
+        try {
+            return externalService.call();
+        } catch (Exception e) {
+
+            retry++;
+
+            try {
+                Thread.sleep(1000L * retry);
+            } catch (InterruptedException ignored) {}
+        }
+    }
+
+    throw new RuntimeException("API failed after retry");
+}
+        </code></pre>
+
+        <p>実務ではResilience4jやSpring Retryを使うのが一般的です。</p>
+
+        <hr />
+
+        <!-- AdSense -->
+        <div class="my-4 text-center">
+          <!-- 広告枠 -->
+        </div>
+
+        <hr />
+
+        <h2 id="section5">5. よくあるエラー</h2>
+
+        <h3>無限リトライ</h3>
+
+        <p>障害時にシステム全体を圧迫する。</p>
+
+        <h3>対処法</h3>
+
+        <ul>
+          <li>最大リトライ回数を設定</li>
+          <li>指数バックオフ導入</li>
+          <li>サーキットブレーカー併用</li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section6">6. まとめ</h2>
+
+        <ul>
+          <li>タイムアウトは必須の防御設計</li>
+          <li>リトライは制御しないと危険</li>
+          <li>外部依存は必ず失敗前提で設計</li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li><a href="api_design_rate_limit.html">レート制限設計</a></li>
+          <li><a href="api_design_logging_trace.html">ログ設計</a></li>
+          <li>
+            <a href="/springboot/springboot_error_list.html"
+              >Spring Bootエラー一覧</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted">Copyright (C) Programming Lab</span>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: api_design_logging_trace.html
+CATEGORY: API設計
+TITLE: APIのログ設計とトレーサビリティ設計
+DESCRIPTION: 障害調査できるAPI設計の考え方。ログ設計、トレースID、監視設計、Spring Boot実装まで実務レベルで解説。
+SEO META END -->
+
+    <title>APIのログ設計とトレーサビリティ設計 | Programming Lab</title>
+
+    <meta
+      name="description"
+      content="障害調査できるAPI設計の考え方を解説。ログ設計、トレースID、監視設計、Spring Boot実装まで実務レベルで網羅。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/api/api_design_logging_trace.html"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">APIのログ設計とトレーサビリティ設計</h1>
+
+        <p class="lead">
+          APIのログ設計は「障害が起きたときに原因を追えるか」を決める重要な設計です。トレースIDを中心に実務レベルで解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-13</p>
+
+        <h2>目次</h2>
+        <ul>
+          <li><a href="#section1">1. ログ設計とは何か</a></li>
+          <li><a href="#section2">2. なぜ重要か</a></li>
+          <li><a href="#section3">3. 正しい設計パターン</a></li>
+          <li><a href="#section4">4. Spring Boot実装例</a></li>
+          <li><a href="#section5">5. よくあるエラー</a></li>
+          <li><a href="#section6">6. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. ログ設計とは何か</h2>
+
+        <p>
+          ログ設計とは、システムの動作記録を「あとから追える形で残す設計」です。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>項目</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>対象</td>
+            <td>API・バッチ・非同期処理</td>
+          </tr>
+          <tr>
+            <td>目的</td>
+            <td>障害調査・監視・分析</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. なぜ重要か</h2>
+
+        <h3>問題① 障害原因が追えない</h3>
+        <p>ログが不足していると原因特定に時間がかかる。</p>
+
+        <h3>問題② 分散システムで追跡不能</h3>
+        <p>複数API間でリクエストが分断される。</p>
+
+        <h3>問題③ 運用コスト増大</h3>
+        <p>調査に時間がかかり運用負荷が増える。</p>
+
+        <hr />
+
+        <h2 id="section3">3. 正しい設計パターン</h2>
+
+        <h3>3-1. トレースID設計</h3>
+
+        <p>すべてのリクエストに一意IDを付与します。</p>
+
+        <pre><code class="text">
+traceId: 7f3a9c2b-xxxx
+        </code></pre>
+
+        <h3>3-2. ログ出力レベル設計</h3>
+
+        <ul>
+          <li>INFO：正常処理</li>
+          <li>WARN：異常の予兆</li>
+          <li>ERROR：障害</li>
+        </ul>
+
+        <h3>3-3. 構造化ログ</h3>
+
+        <pre><code class="json">
+{
+  "traceId": "123",
+  "userId": "u001",
+  "action": "login"
+}
+        </code></pre>
+
+        <hr />
+
+        <h2 id="section4">4. Spring Boot実装例</h2>
+
+        <pre><code class="java">
+@RestController
+public class LogController {
+
+    @GetMapping("/test")
+    public String test() {
+
+        String traceId = UUID.randomUUID().toString();
+
+        System.out.println("[TRACE]" + traceId + " start");
+
+        return "OK";
+    }
+}
+        </code></pre>
+
+        <p>
+          実務ではMDC（Mapped Diagnostic
+          Context）を使って自動付与するのが一般的です。
+        </p>
+
+        <hr />
+
+        <!-- AdSense -->
+        <div class="my-4 text-center">
+          <!-- 広告枠 -->
+        </div>
+
+        <hr />
+
+        <h2 id="section5">5. よくあるエラー</h2>
+
+        <h3>ログが分断される</h3>
+
+        <p>traceIdがないため関連ログが追えない。</p>
+
+        <h3>対処法</h3>
+
+        <ul>
+          <li>全リクエストにtraceId付与</li>
+          <li>MDC導入</li>
+          <li>構造化ログ採用</li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section6">6. まとめ</h2>
+
+        <ul>
+          <li>ログ設計は障害対応の生命線</li>
+          <li>traceIdは必須</li>
+          <li>構造化ログで運用効率が大幅改善</li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li><a href="api_design_timeout_retry.html">リトライ設計</a></li>
+          <li><a href="api_design_rate_limit.html">レート制限設計</a></li>
+          <li>
+            <a href="/springboot/springboot_error_list.html"
+              >Spring Bootエラー一覧</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted">Copyright (C) Programming Lab</span>
+      </div>
+    </footer>
+  </body>
+</html>

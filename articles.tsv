@@ -1,7 +1,8 @@
-MyBatis	MyBatisのSQLログが出ない原因と解決方法	SQLログ設定（application.yml/logback）不備・debug設定ミス	mybatis_sql_log_error.html
-MyBatis	MyBatisでSELECT結果がnullになる原因まとめ	resultType/resultMap不一致・カラム名ミスマッチ	mybatis_select_null.html
-MyBatis	MyBatisのMapperが読み込まれない原因と解決方法	@MapperScan漏れ・XMLパス設定ミス・DI失敗	mybatis_mapper_not_found.html
-MyBatis	MyBatisのINSERT/UPDATEが反映されない原因	トランザクション未設定・@Transactional漏れ・commit不足	mybatis_commit_error.html
-MyBatis	MyBatisのパラメータバインドエラー（#と$の違い）	#{}と${}の違い・SQLインジェクション・バインドミス	mybatis_parameter_binding_error.html
-MyBatis	MyBatisのN+1問題とパフォーマンス改善方法	不正なSELECTループ・JOIN最適化・SQLチューニング	mybatis_n1_problem.html
-MyBatis	MyBatisで動的SQLが動かない原因（if/where/foreach）	OGNL条件ミス・タグ構文エラー・動的SQLバグ	mybatis_dynamic_sql_error.html
+API設計	REST APIのページング設計（offset vs cursor徹底比較）	大量データ取得時の設計判断と実装パターン	api_design_pagination.html
+API設計	APIのフィルタ設計ベストプラクティス（検索条件設計）	WHERE条件をAPIにどう落とすかの実務設計	api_design_filter.html
+API設計	APIの並び順（sort設計）と安全な実装方法	複数ソート条件・不正値対策・設計ルール	api_design_sort.html
+API設計	APIの冪等性（idempotency）設計とは何か	POST/PUTの違いと安全な再実行設計	api_design_idempotency.html
+API設計	APIのタイムアウト設計とリトライ戦略	障害耐性を上げる実務設計パターン	api_design_timeout_retry.html
+API設計	APIのレート制限（rate limit）設計方法	スロットリング・API保護・実装方式	api_design_rate_limit.html
+API設計	APIのログ設計とトレーサビリティ設計	障害調査できるAPI設計の考え方	api_design_logging_trace.html
+API設計	API設計とフロント連携のベストパターン（BFF含む）	フロント都合を吸収するAPI設計手法	api_design_frontend_bff.html
