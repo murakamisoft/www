@@ -1,11 +1,10 @@
-カテゴリ	記事タイトル	説明	HTMLファイル名
-Git	git pullでコンフリクトが発生する原因と解決方法	他の人の変更と自分の変更がぶつかったときの解決手順	git_pull_conflict.html
-Git	git push rejectedエラーの原因と対処法	pushできない原因と安全な対応方法を解説	git_push_rejected.html
-Git	merge conflictの解決方法まとめ	コンフリクト発生時の確認方法と修正手順	git_merge_conflict.html
-Git	rebaseでエラーになる原因と対処法	rebase失敗時によくある原因と復旧方法	git_rebase_error.html
-Git	detached HEAD状態の原因と復旧方法	ブランチが消えたように見える状態の直し方	git_detached_head.html
-Git	git stashの使い方とよくある失敗例	作業内容を一時退避する方法と注意点	git_stash.html
-Git	git cherry-pickが失敗する原因と対処法	特定コミット取り込み時のエラー対策	git_cherry_pick_error.html
-Git	git resetとgit revertの違い	変更取り消しコマンドの使い分けを解説	git_reset_revert.html
-Git	.gitignoreが効かない原因と解決方法	無視設定したファイルが管理対象になる問題を解説	gitignore_not_working.html
-Git	ブランチ削除できない原因と対処法	不要ブランチ削除時のエラー解決方法	git_branch_delete_error.html
+Linux	Permission deniedの原因と解決方法	権限エラーが発生する原因と対応手順	linux_permission_denied.html
+Linux	command not foundエラーの原因と対処法	コマンドが見つからないときの確認ポイント	linux_command_not_found.html
+Linux	systemctlが失敗する原因と解決方法	サービス起動・停止できない原因を解説	linux_systemctl_error.html
+Linux	ポート使用状況を確認する方法	アプリが起動できないときのポート確認手順	linux_port_check.html
+Linux	ディスク容量不足の確認と対処法	サーバー容量不足時の調査と解消方法	linux_disk_full.html
+Linux	tailコマンドでログ監視する方法	障害調査で役立つログ確認方法を解説	linux_tail_log.html
+Linux	grepコマンドの使い方まとめ	ログやファイルから文字列を検索する方法	linux_grep_usage.html
+Linux	findコマンドの使い方と検索例	ファイル検索でよく使う実践コマンド集	linux_find_command.html
+Linux	chmodとchownの違いを解説	権限変更と所有者変更の違いを理解する	linux_chmod_chown.html
+Linux	cronが動かない原因と対処法	定期実行ジョブが動かないときの確認手順	linux_cron_error.html

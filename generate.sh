@@ -1,7 +1,7 @@
 #!/bin/bash
 
 TEMPLATE="_templete.html"
-OUTPUT_DIR="git"
+OUTPUT_DIR="linux"
 INPUT_FILE="articles.tsv"
 
 mkdir -p "$OUTPUT_DIR"

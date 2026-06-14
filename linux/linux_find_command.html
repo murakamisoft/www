@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>findコマンドの使い方と検索例｜Linuxファイル検索の決定版</title>
+
+    <meta
+      name="description"
+      content="Linuxで必須のfindコマンドの使い方を徹底解説。名前、種類、サイズ、更新日時など、実務で頻出する検索パターンを網羅。ファイル操作の効率が劇的に上がります。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/linux/linux_find_command.html"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">findコマンドの使い方と検索例</h1>
+
+        <p class="lead">
+          Linuxにおいて、膨大なファイルの中から目的のものを探し出す「find」コマンドは、システム管理や開発環境で必須のツールです。よく使う検索パターンを中心に、実務で役立つテクニックを解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-14</p>
+
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. findコマンドの基本構文</a></li>
+          <li><a href="#section2">2. 実践的な検索パターン</a></li>
+          <li><a href="#section3">3. 検索結果に対する操作</a></li>
+          <li><a href="#section4">4. よくあるエラー</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. findコマンドの基本構文</h2>
+
+        <p>
+          findコマンドは、指定したディレクトリ以下のファイルを階層的に検索します。
+        </p>
+
+        <pre><code class="bash">
+find [検索場所] [検索オプション]
+  </code></pre>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>オプション</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>-name</td>
+            <td>ファイル名で検索</td>
+          </tr>
+          <tr>
+            <td>-type</td>
+            <td>ファイルタイプ（f:ファイル, d:ディレクトリ）で検索</td>
+          </tr>
+          <tr>
+            <td>-mtime</td>
+            <td>更新日時で検索</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. 実践的な検索パターン</h2>
+
+        <h3>2-1. 名前で検索する</h3>
+        <p>
+          特定のファイル名のものを探します。ワイルドカードを使う際は引用符で囲むのがコツです。
+        </p>
+
+        <pre><code class="bash">
+# .log で終わるファイルをカレントディレクトリ以下から検索
+find . -name "*.log"
+  </code></pre>
+
+        <h3>2-2. 種類とサイズで検索する</h3>
+        <p>
+          ディレクトリだけを探す、または容量が大きいファイルを探す際に便利です。
+        </p>
+
+        <pre><code class="bash">
+# 100MB以上のファイルを探す
+find / -type f -size +100M
+  </code></pre>
+
+        <hr />
+
+        <h2 id="section3">3. 検索結果に対する操作</h2>
+
+        <p>見つけたファイルに対して、削除や権限変更を一括で実行できます。</p>
+
+        <pre><code class="bash">
+# 見つけたファイルを一括削除する（慎重に！）
+find . -name "*.tmp" -exec rm -f {} \;
+
+# 見つけたファイルの所有者を一括変更する
+find . -name "*.sh" -exec chown user:group {} \;
+  </code></pre>
+
+        <hr />
+
+        <div class="my-4 text-center"></div>
+
+        <hr />
+
+        <h2 id="section4">4. よくあるエラー</h2>
+
+        <h3>Permission deniedエラー</h3>
+
+        <pre><code class="bash">
+find: ‘./root’: Permission denied
+  </code></pre>
+
+        <p>
+          <strong>原因と対処法：</strong><br />
+          一般ユーザーで閲覧権限のないディレクトリにアクセスした際に発生します。エラーを出さないためには、後ろに
+          <code>2>/dev/null</code> を追加してエラー出力を捨てるのが一般的です。
+        </p>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>`find [場所] -name [条件]`で基本検索。</li>
+          <li>`-type f` や `-size` を組み合わせて目的のファイルを絞り込む。</li>
+          <li>`-exec` を使えば、検索と同時に削除や権限変更ができる。</li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li class="col-sm-6"><a href="index.html">Linux記事一覧</a></li>
+          <li>
+            <a href="linux_grep_usage.html">grepコマンドの使い方まとめ</a>
+          </li>
+          <li>
+            <a href="linux_disk_full.html">ディスク容量不足の確認と対処法</a>
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

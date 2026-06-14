@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Permission deniedの原因と解決方法｜Linux権限エラー対処ガイド</title>
+
+    <meta
+      name="description"
+      content="Linuxで「Permission denied」エラーが発生する原因と対処法を解説。ファイル権限の仕組みや、sudoを使った解決手順をわかりやすく紹介します。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/linux/linux_permission_denied.html"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">Permission deniedの原因と解決方法</h1>
+
+        <p class="lead">
+          Linuxを使用していて遭遇する最も一般的なエラー「Permission
+          denied」。なぜこのエラーが発生するのか、その仕組みと正しい対処法を解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-14</p>
+
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. Permission deniedとは</a></li>
+          <li><a href="#section2">2. 原因の確認手順</a></li>
+          <li><a href="#section3">3. 解決するためのアプローチ</a></li>
+          <li><a href="#section4">4. よくあるエラーケース</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. Permission deniedとは</h2>
+
+        <p>
+          「Permission
+          denied」は、実行しようとした操作に対して、現在のユーザーに十分な権限がないことを示すエラーです。Linuxでは「誰が(User/Group/Other)」「何ができるか(Read/Write/Execute)」が厳格に制御されています。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>権限種類</th>
+            <th>意味</th>
+          </tr>
+          <tr>
+            <td>r (read)</td>
+            <td>読み取り権限</td>
+          </tr>
+          <tr>
+            <td>w (write)</td>
+            <td>書き込み・編集・削除権限</td>
+          </tr>
+          <tr>
+            <td>x (execute)</td>
+            <td>実行権限（ディレクトリの場合は移動権限）</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. 原因の確認手順</h2>
+
+        <p>まず、対象ファイルの所有者と権限を確認します。</p>
+
+        <pre><code class="bash">
+ls -l ファイル名
+  </code></pre>
+
+        <p>
+          出力結果の左端に表示される `-rwxr-xr--`
+          といった文字列を確認し、自分のユーザーIDやグループが適切な権限を持っているかチェックします。
+        </p>
+
+        <hr />
+
+        <h2 id="section3">3. 解決するためのアプローチ</h2>
+
+        <p>
+          解決には主に「権限を付与する(chmod)」か「管理者権限を使う(sudo)」の2つがあります。
+        </p>
+
+        <pre><code class="bash">
+# 1. 自分が所有者である場合、権限を追加する
+chmod u+w ファイル名
+
+# 2. システム設定ファイルなど、管理者権限が必要な場合
+sudo コマンド名
+  </code></pre>
+
+        <hr />
+
+        <div class="my-4 text-center"></div>
+
+        <hr />
+
+        <h2 id="section4">4. よくあるエラー</h2>
+
+        <h3>sudoせずにシステム操作</h3>
+
+        <pre><code class="bash">
+# 例：システムログを直接編集しようとする
+vim /var/log/syslog
+# 結果：E45: 'readonly' option is set (add ! to override)
+  </code></pre>
+
+        <p>
+          <strong>原因：</strong
+          >rootユーザーしか書き込めないファイルを一般ユーザーで開いているため。対処として`sudo
+          vim /var/log/syslog`と入力し、root権限で実行してください。
+        </p>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>まずは`ls -l`で現在のファイル権限を確認する。</li>
+          <li>必要な操作が「所有者の変更」か「権限の変更」かを見極める。</li>
+          <li>
+            むやみに全てのファイルを777にせず、必要最小限の権限付与を心がける。
+          </li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li class="col-sm-6"><a href="index.html">Linux記事一覧</a></li>
+          <li><a href="linux_chmod_chown.html">chmodとchownの違いを解説</a></li>
+          <li>
+            <a href="linux_command_not_found.html"
+              >command not foundエラーの原因と対処法</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

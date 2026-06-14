@@ -158,4 +158,46 @@
   <url><loc>https://vbminigame.sakura.ne.jp/git/gitignore_not_working.html</loc></url>
   <url><loc>https://vbminigame.sakura.ne.jp/git/git_branch_delete_error.html</loc></url>
 
+  <!-- linux -->
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/linux/linux_permission_denied.html</loc>
+    <lastmod>2026-06-14</lastmod>
+  </url>
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/linux/linux_command_not_found.html</loc>
+    <lastmod>2026-06-14</lastmod>
+  </url>
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/linux/linux_systemctl_error.html</loc>
+    <lastmod>2026-06-14</lastmod>
+  </url>
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/linux/linux_port_check.html</loc>
+    <lastmod>2026-06-14</lastmod>
+  </url>
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/linux/linux_disk_full.html</loc>
+    <lastmod>2026-06-14</lastmod>
+  </url>
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/linux/linux_tail_log.html</loc>
+    <lastmod>2026-06-14</lastmod>
+  </url>
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/linux/linux_grep_usage.html</loc>
+    <lastmod>2026-06-14</lastmod>
+  </url>
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/linux/linux_find_command.html</loc>
+    <lastmod>2026-06-14</lastmod>
+  </url>
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/linux/linux_chmod_chown.html</loc>
+    <lastmod>2026-06-14</lastmod>
+  </url>
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/linux/linux_cron_error.html</loc>
+    <lastmod>2026-06-14</lastmod>
+  </url>
+
 </urlset>

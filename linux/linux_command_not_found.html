@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>
+      command not foundエラーの原因と対処法｜Linuxコマンドトラブル解決
+    </title>
+
+    <meta
+      name="description"
+      content="Linuxでコマンド実行時に発生する「command not found」エラーの原因を解説。PATH設定のミスや未インストールなど、トラブル時の確認ポイントを網羅的に紹介します。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/linux/linux_command_not_found.html"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">command not foundエラーの原因と対処法</h1>
+
+        <p class="lead">
+          Linuxでコマンドを入力した際に「command not
+          found（コマンドが見つかりません）」と表示されて実行できない場合の主な原因と、解決のためのチェックリストを解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-14</p>
+
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. エラー発生の仕組み</a></li>
+          <li><a href="#section2">2. 主な原因と確認ポイント</a></li>
+          <li><a href="#section3">3. PATHの確認方法</a></li>
+          <li><a href="#section4">4. 解決策まとめ</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. エラー発生の仕組み</h2>
+
+        <p>
+          Linuxシェルは、ユーザーが入力したコマンド名から実行ファイルを探しに行きます。この際、環境変数「PATH」に指定されたディレクトリ内を順番に検索しますが、どこにも見つからない場合にこのエラーが発生します。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>主な原因</th>
+            <th>詳細</th>
+          </tr>
+          <tr>
+            <td>スペルミス</td>
+            <td>入力したコマンド名が間違っている</td>
+          </tr>
+          <tr>
+            <td>未インストール</td>
+            <td>そもそもそのソフトウェアがインストールされていない</td>
+          </tr>
+          <tr>
+            <td>PATH設定漏れ</td>
+            <td>実行ファイルがある場所が環境変数PATHに含まれていない</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. 主な原因と確認ポイント</h2>
+
+        <h3>2-1. スペルを確認する</h3>
+        <p>
+          まずは単純な入力ミスがないか確認します。特にハイフン（-）の有無や大文字小文字の違いに注意してください。
+        </p>
+
+        <h3>2-2. インストール済みか確認する</h3>
+        <p>
+          パッケージがインストールされていない場合があります。例えば`git`コマンドがない場合は以下のように確認します。
+        </p>
+
+        <pre><code class="bash">
+# パッケージ管理システムで検索してみる（Debian/Ubuntu系）
+apt list --installed | grep git
+  </code></pre>
+
+        <hr />
+
+        <h2 id="section3">3. PATHの確認方法</h2>
+
+        <p>
+          「インストールしたはずなのに見つからない」という場合、PATH設定が正しくない可能性が高いです。現在のPATH設定は以下のコマンドで確認できます。
+        </p>
+
+        <pre><code class="bash">
+# 現在のPATHを表示
+echo $PATH
+
+# 特定のコマンドがどこにあるか（または存在するか）を確認
+which コマンド名
+  </code></pre>
+
+        <p>
+          もし実行ファイルがある場所（例:
+          <code>/usr/local/bin</code>など）が含まれていない場合は、<code
+            >~/.bashrc</code
+          >
+          や <code>~/.bash_profile</code> にPATHを追記する必要があります。
+        </p>
+
+        <hr />
+
+        <div class="my-4 text-center"></div>
+
+        <hr />
+
+        <h2 id="section4">4. よくあるエラー</h2>
+
+        <h3>パスを通し忘れる例</h3>
+
+        <pre><code class="bash">
+# コマンドを実行
+my-custom-script
+# 結果：-bash: my-custom-script: command not found
+  </code></pre>
+
+        <p>
+          この場合、スクリプトのフルパス（<code>/opt/scripts/my-custom-script</code>）を直接指定して実行できるか確認してください。実行できるなら、そのディレクトリへのPATHを通すことで解決します。
+        </p>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>まずはコマンドのスペルミスを疑う。</li>
+          <li>`which`コマンドを使ってファイルが存在するか確認する。</li>
+          <li>
+            PATHが通っていない場合は、設定ファイル（.bashrc等）を編集する。
+          </li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li class="col-sm-6"><a href="index.html">Linux記事一覧</a></li>
+          <li>
+            <a href="linux_permission_denied.html"
+              >Permission deniedの原因と解決方法</a
+            >
+          </li>
+          <li><a href="linux_chmod_chown.html">chmodとchownの違いを解説</a></li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

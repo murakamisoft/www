@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>grepコマンドの使い方まとめ｜Linux文字列検索の基本テクニック</title>
+
+    <meta
+      name="description"
+      content="Linuxでの文字列検索の基本、grepコマンドの使い方を徹底解説。正規表現による検索やログファイルからの特定文字列抽出など、実務で必須のテクニックを紹介します。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/linux/linux_grep_usage.html"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">grepコマンドの使い方まとめ</h1>
+
+        <p class="lead">
+          Linuxにおいて、ファイルやログから特定の文字列を検索するために欠かせない「grep」コマンド。基本的な使い方から、実務で役立つ便利なオプションまでを体系的に解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-14</p>
+
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. grepコマンドとは</a></li>
+          <li><a href="#section2">2. 基本的な使用手順</a></li>
+          <li><a href="#section3">3. 便利な検索オプション</a></li>
+          <li><a href="#section4">4. よくあるエラーと対処法</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. grepコマンドとは</h2>
+
+        <p>
+          grepは、指定したファイルや標準入力から、特定のパターン（文字列や正規表現）に一致する行を検索し、その行を表示するコマンドです。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>主な用途</th>
+            <th>説明</th>
+          </tr>
+          <tr>
+            <td>エラーログの調査</td>
+            <td>ログファイルから "Error" を抽出する</td>
+          </tr>
+          <tr>
+            <td>設定ファイルの確認</td>
+            <td>特定のプロパティ設定を探す</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. 基本的な使用手順</h2>
+
+        <h3>2-1. 特定の文字列を検索</h3>
+        <p>ファイル内で文字列を検索する最も基本的な形式です。</p>
+
+        <pre><code class="bash">
+grep "検索したい文字列" ファイル名
+  </code></pre>
+
+        <h3>2-2. 複数ファイルから検索</h3>
+        <p>ディレクトリ内の全ファイルから検索したい場合に使用します。</p>
+
+        <pre><code class="bash">
+grep "keyword" ./*
+  </code></pre>
+
+        <hr />
+
+        <h2 id="section3">3. 便利な検索オプション</h2>
+
+        <p>実務ではオプションを組み合わせて効率的に検索します。</p>
+
+        <pre><code class="bash">
+# 大文字小文字を区別せず検索 (-i)
+grep -i "error" log.txt
+
+# 見つかった行番号も表示 (-n)
+grep -n "todo" main.c
+
+# 再帰的にディレクトリ内を検索 (-r)
+grep -r "function_name" ./src
+  </code></pre>
+
+        <hr />
+
+        <div class="my-4 text-center"></div>
+
+        <hr />
+
+        <h2 id="section4">4. よくあるエラー</h2>
+
+        <h3>検索できない場合</h3>
+
+        <pre><code class="bash">
+grep: ファイル名: No such file or directory
+  </code></pre>
+
+        <p>
+          <strong>原因：</strong
+          >指定したファイルパスが間違っている、または権限がない場合に発生します。検索対象のファイルが正しい場所にあるか`ls`コマンドで確認してください。
+        </p>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>`grep "文字列" ファイル名` で単純検索。</li>
+          <li>`-i`（大文字小文字無視）、`-n`（行番号表示）を使いこなす。</li>
+          <li>`-r`を使えば大規模プロジェクトのコード検索も一瞬。</li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li class="col-sm-6"><a href="index.html">Linux記事一覧</a></li>
+          <li>
+            <a href="linux_tail_log.html">tailコマンドでログ監視する方法</a>
+          </li>
+          <li>
+            <a href="linux_find_command.html">findコマンドの使い方と検索例</a>
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

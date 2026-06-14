@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>chmodとchownの違いを解説｜Linuxファイル権限と所有者の管理</title>
+
+    <meta
+      name="description"
+      content="Linuxの権限変更chmodと所有者変更chownの違いをわかりやすく解説。実務で頻出するファイル操作の基本コマンドを、使い分けと具体例を交えて習得しましょう。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/linux/linux_chmod_chown.html"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">chmodとchownの違いを解説</h1>
+
+        <p class="lead">
+          Linuxサーバー管理において、ファイルやディレクトリの「権限」と「所有者」を制御することはセキュリティの基本です。本記事では、混同しやすいchmodとchownの違いと、実務での正しい使い分けを解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-14</p>
+
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. chmodとchownの概念的な違い</a></li>
+          <li><a href="#section2">2. chmodの使い方（権限変更）</a></li>
+          <li><a href="#section3">3. chownの使い方（所有者変更）</a></li>
+          <li><a href="#section4">4. よくあるエラーと対処法</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. chmodとchownの概念的な違い</h2>
+
+        <p>
+          Linuxではファイルごとに「誰が」「何ができるか」が細かく管理されています。この管理を大きく二つに分けると「権限（パーミッション）」と「所有者」になります。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>コマンド</th>
+            <th>目的</th>
+            <th>対象</th>
+          </tr>
+          <tr>
+            <td><strong>chmod</strong></td>
+            <td>権限の変更 (Change Mode)</td>
+            <td>読み・書き・実行の可否</td>
+          </tr>
+          <tr>
+            <td><strong>chown</strong></td>
+            <td>所有者の変更 (Change Owner)</td>
+            <td>ファイルの所有ユーザー・グループ</td>
+          </tr>
+        </table>
+
+        <p>
+          例えるなら、<strong>chmodは「ドアの鍵を持っているか（開けられるか）」</strong>を管理し、<strong>chownは「その部屋の持ち主（誰のものか）」</strong>を変更する操作にあたります。
+        </p>
+
+        <hr />
+
+        <h2 id="section2">2. chmodの使い方（権限変更）</h2>
+
+        <p>
+          chmodは、対象のファイルに対して「読み込み(r)」「書き込み(w)」「実行(x)」の許可を与えたり、剥奪したりします。
+        </p>
+
+        <pre><code class="bash">
+# 数値で指定する例（755: 所有者はフル権限、他は読み書きのみ）
+chmod 755 sample.sh
+
+# 記号で指定する例（所有者に実行権限を追加）
+chmod u+x sample.sh
+  </code></pre>
+
+        <h2 id="section3">3. chownの使い方（所有者変更）</h2>
+
+        <p>
+          chownは、ファイルの所有者（ユーザー）や所属グループを変更する際に使用します。システム管理者がファイルを特定のユーザーに譲渡する際によく使われます。
+        </p>
+
+        <pre><code class="bash">
+# 所有者を変更する
+chown username filename
+
+# 所有者とグループを同時に変更する
+chown username:groupname filename
+  </code></pre>
+
+        <hr />
+
+        <h2 id="section3">4. よくあるエラー</h2>
+
+        <p>
+          特に多いのは、権限不足による「Operation not permitted」エラーです。
+        </p>
+
+        <pre><code class="bash">
+# 一般ユーザーで他人のファイルをchownしようとした場合
+chown: changing ownership of 'file.txt': Operation not permitted
+  </code></pre>
+
+        <p>
+          <strong>原因と対処法：</strong><br />
+          chownコマンドは基本的に「スーパーユーザー（root）」の権限が必要です。自分の所有物ではないファイルを変更しようとすると拒否されます。`sudo`を先頭につけて実行してください。
+        </p>
+
+        <hr />
+
+        <div class="my-4 text-center"></div>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>
+            <strong>chmod</strong>はファイルの権限（モード）を変更するもの。
+          </li>
+          <li>
+            <strong>chown</strong
+            >はファイルの所有者（ユーザー・グループ）を変更するもの。
+          </li>
+          <li>
+            実務では所有者変更後に、適切な権限が付与されているか`ls
+            -l`で確認する癖をつけましょう。
+          </li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li class="col-sm-6"><a href="index.html">Linux記事一覧</a></li>
+          <li>
+            <a href="linux_permission_denied.html"
+              >Permission deniedの原因と解決方法</a
+            >
+          </li>
+          <li>
+            <a href="linux_grep_usage.html">grepコマンドの使い方まとめ</a>
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

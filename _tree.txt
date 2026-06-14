@@ -1,5 +1,5 @@
 ﻿フォルダー パスの一覧:  ボリューム Windows-SSD
-ボリューム シリアル番号は 00000079 64B9:5F8F です
+ボリューム シリアル番号は 0000007F 64B9:5F8F です
 C:.
 │  ads.txt
 │  articles.tsv
@@ -57,6 +57,19 @@ C:.
 │      docker_port_conflict.html
 │      docker_springboot_error.html
 │      docker_volume_error.html
+│      index.html
+│      
+├─git
+│      gitignore_not_working.html
+│      git_branch_delete_error.html
+│      git_cherry_pick_error.html
+│      git_detached_head.html
+│      git_merge_conflict.html
+│      git_pull_conflict.html
+│      git_push_rejected.html
+│      git_rebase_error.html
+│      git_reset_revert.html
+│      git_stash.html
 │      index.html
 │      
 ├─hub

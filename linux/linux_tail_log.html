@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>tailコマンドでログ監視する方法｜Linuxリアルタイム調査術</title>
+
+    <meta
+      name="description"
+      content="Linuxサーバーでリアルタイムにログを監視するためのtailコマンドの使い方を解説。-fオプションを活用したエラー調査や、ログのフィルタリング方法を実務例とともに紹介します。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/linux/linux_tail_log.html"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">tailコマンドでログ監視する方法</h1>
+
+        <p class="lead">
+          Linuxサーバーでアプリケーションの障害が発生した際、真っ先に確認すべきなのがログファイルです。「tail」コマンドを使うと、ファイルの末尾を表示したり、追加された行をリアルタイムで追跡したりすることができます。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-14</p>
+
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. tailコマンドとは</a></li>
+          <li><a href="#section2">2. リアルタイム監視の手順</a></li>
+          <li><a href="#section3">3. 便利な応用例</a></li>
+          <li><a href="#section4">4. よくあるエラー</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. tailコマンドとは</h2>
+
+        <p>
+          tailコマンドは、指定されたファイルの末尾部分を標準出力するコマンドです。サーバーログのように、常に新しい情報が追記されるファイルの監視に最適です。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>オプション</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>-f</td>
+            <td>ファイルを監視し、追加分をリアルタイム表示</td>
+          </tr>
+          <tr>
+            <td>-n [行数]</td>
+            <td>末尾から指定した行数を表示（デフォルトは10）</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. リアルタイム監視の手順</h2>
+
+        <p>
+          サーバー起動後やエラー発生時に、ログをリアルタイムで眺めるには
+          <code>-f</code> (follow) オプションを使用します。
+        </p>
+
+        <pre><code class="bash">
+# ログファイルをリアルタイムで監視する
+tail -f /var/log/syslog
+  </code></pre>
+
+        <p>
+          この状態でコマンドを実行すると、新しいログが書き込まれるたびに画面に表示されます。終了するには
+          <code>Ctrl + C</code> を押します。
+        </p>
+
+        <hr />
+
+        <h2 id="section3">3. 便利な応用例</h2>
+
+        <p>
+          grepと組み合わせることで、エラー発生時のみ検知するような監視も可能です。
+        </p>
+
+        <pre><code class="bash">
+# エラーという文字が含まれる行だけをリアルタイム表示
+tail -f /var/log/app.log | grep "ERROR"
+
+# 末尾100行を表示してから監視を開始
+tail -n 100 -f /var/log/app.log
+  </code></pre>
+
+        <hr />
+
+        <div class="my-4 text-center"></div>
+
+        <hr />
+
+        <h2 id="section4">4. よくあるエラー</h2>
+
+        <h3>Permission deniedエラー</h3>
+
+        <pre><code class="bash">
+tail: cannot open '/var/log/auth.log' for reading: Permission denied
+  </code></pre>
+
+        <p>
+          <strong>原因と対処法：</strong><br />
+          ログファイルがroot権限で保護されているため、一般ユーザーでは開けません。<code
+            >sudo</code
+          >
+          を付けて実行してください。<br />
+          <code>sudo tail -f /var/log/auth.log</code>
+        </p>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>`tail -f` でリアルタイムログ監視ができる。</li>
+          <li>`| grep` を繋げば特定のキーワードのみ抽出できる。</li>
+          <li>権限不足の場合は `sudo` を忘れないようにする。</li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li class="col-sm-6"><a href="index.html">Linux記事一覧</a></li>
+          <li>
+            <a href="linux_grep_usage.html">grepコマンドの使い方まとめ</a>
+          </li>
+          <li>
+            <a href="linux_systemctl_error.html"
+              >systemctlが失敗する原因と解決方法</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>
