@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>
+      VSCodeでデバッグができない！ブレークポイントが止まらない原因と対処法 |
+      Programming Lab
+    </title>
+
+    <meta
+      name="description"
+      content="VSCodeでブレークポイントを置いてもデバッグが止まらない原因を徹底解説。パス設定の不備、launch.jsonの誤り、拡張機能の競合など、実務で頻出するトラブルの解決手順を網羅しました。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/vscode/vscode_debug_error.html"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">VSCodeでデバッグができない原因と対処法</h1>
+
+        <p class="lead">
+          VSCodeで「デバッグを開始したのにブレークポイントで止まらない」という問題に直面していませんか？この記事では、原因の特定から解決まで、開発現場で役立つチェックリストを体系的に解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-14</p>
+
+        <h2>目次</h2>
+        <ul>
+          <li><a href="#section1">1. デバッグが止まらない主な原因</a></li>
+          <li><a href="#section2">2. 基本的なチェック手順</a></li>
+          <li><a href="#section3">3. launch.jsonの設定確認</a></li>
+          <li><a href="#section4">4. よくあるエラーと対処法</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. デバッグが止まらない主な原因</h2>
+        <p>
+          VSCodeのデバッグ機能が正常に動作しない場合、ソースコードの場所と実行環境の認識がずれていることがほとんどです。特にSpring
+          Boot等のプロジェクトでは、ビルド済みのクラスとソースコードの紐付けが重要になります。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>項目</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>設定ミス</td>
+            <td>launch.jsonのパス指定誤り</td>
+          </tr>
+          <tr>
+            <td>環境差異</td>
+            <td>コンパイル済みの古いクラスが優先されている</td>
+          </tr>
+          <tr>
+            <td>拡張機能</td>
+            <td>Debugger for Java等の不具合・競合</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. 基本的なチェック手順</h2>
+        <h3>2-1. ソースコードの配置を確認</h3>
+        <p>
+          VSCodeで開いているワークスペースのルートが正しいか確認してください。ルートが深い階層にあると、正しくデバッガがアタッチされません。
+        </p>
+
+        <pre><code class="bash">
+# プロジェクトのルートディレクトリに移動してVSCodeを開く
+code .
+        </code></pre>
+
+        <h3>2-2. 拡張機能の再読み込み</h3>
+        <p>
+          Java関連の拡張機能がフリーズしていることがあります。コマンドパレット(Ctrl+Shift+P)から「Developer:
+          Reload Window」を実行してみてください。
+        </p>
+
+        <hr />
+
+        <h2 id="section3">3. launch.jsonの設定確認</h2>
+        <p>
+          Javaプロジェクトの場合、<code>launch.json</code>の<code>mainClass</code>や<code>projectName</code>が正しいか再確認しましょう。
+        </p>
+
+        <pre><code class="json">
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Launch Spring Boot",
+      "request": "launch",
+      "mainClass": "com.example.demo.DemoApplication",
+      "projectName": "demo"
+    }
+  ]
+}
+        </code></pre>
+
+        <hr />
+
+        <div class="my-4 text-center">
+          <ins
+            class="adsbygoogle"
+            style="display: block"
+            data-ad-client="ca-pub-3116106279235219"
+            data-ad-slot="YOUR_AD_SLOT"
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+          ></ins>
+          <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+        </div>
+
+        <hr />
+
+        <h2 id="section4">4. よくあるエラー</h2>
+        <h3>ブレークポイントが中空（灰色）になる</h3>
+        <p>
+          ブレークポイントを置いた場所が灰色になる場合は、コンパイル済みのコードとソースコードの同期が取れていません。一度Maven/Gradleで<code>clean</code>を行ってから再度起動してください。
+        </p>
+
+        <pre><code class="bash">
+./mvnw clean install
+        </code></pre>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+        <ul>
+          <li>まずはVSCodeを再読み込みする。</li>
+          <li>
+            <code>launch.json</code>の設定（メインクラスのパス）を再確認。
+          </li>
+          <li>
+            ビルド成果物が古い可能性があるため、一度クリーンビルドを行う。
+          </li>
+        </ul>
+
+        <hr />
+        <h2>関連記事</h2>
+        <ul>
+          <li class="col-sm-6"><a href="index.html">VSCode記事一覧</a></li>
+          <li>
+            <a href="vscode_java_setup.html">Java開発環境を構築する方法</a>
+          </li>
+          <li>
+            <a href="vscode_settings_json.html">settings.jsonおすすめ設定</a>
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>
+      VSCodeでGit連携！初期設定から使い方まで徹底解説 | Programming Lab
+    </title>
+
+    <meta
+      name="description"
+      content="VSCodeでGitを使いこなすための初期設定を完全ガイド。GitのインストールからVSCodeとの連携、GitHubへのプッシュ手順まで、初心者にもわかりやすく図解を交えて解説します。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/vscode/vscode_git_setup.html"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">VSCode Git連携設定方法まとめ</h1>
+
+        <p class="lead">
+          VSCodeに統合されたGit機能を使うことで、コマンド操作を最小限に抑え、視覚的に変更差分を確認しながら開発できます。本記事では、Gitの初期インストールからVSCodeでの連携設定までを網羅しました。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-14</p>
+
+        <h2>目次</h2>
+        <ul>
+          <li><a href="#section1">1. Git連携のメリット</a></li>
+          <li><a href="#section2">2. 初期設定手順</a></li>
+          <li><a href="#section3">3. 基本操作（コミット・プッシュ）</a></li>
+          <li><a href="#section4">4. よくあるエラーと対処法</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. Git連携のメリット</h2>
+        <p>
+          VSCodeをGitと連携させることで、ファイルの変更箇所を色分け表示したり、GUI上でコミットメッセージを入力してそのままリポジトリへ反映させたりと、開発効率が劇的に向上します。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>項目</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>バージョン管理</td>
+            <td>いつでも過去のコード状態に戻せる</td>
+          </tr>
+          <tr>
+            <td>可視化</td>
+            <td>変更箇所をエディタ内で確認可能</td>
+          </tr>
+          <tr>
+            <td>効率化</td>
+            <td>クリック操作でコミット・プッシュが可能</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. 初期設定手順</h2>
+        <h3>2-1. Gitのインストール</h3>
+        <p>
+          まずはPCにGit本体がインストールされているか確認しましょう。コマンドプロンプトで以下のコマンドを打ちます。
+        </p>
+
+        <pre><code class="bash">
+git --version
+        </code></pre>
+
+        <h3>2-2. VSCodeでのパス設定</h3>
+        <p>
+          GitがインストールされているのにVSCodeが認識しない場合は、<code>settings.json</code>で明示的にパスを指定します。
+        </p>
+
+        <pre><code class="json">
+"git.path": "C:\\Program Files\\Git\\bin\\git.exe"
+        </code></pre>
+
+        <hr />
+
+        <h2 id="section3">3. 基本操作（コミット・プッシュ）</h2>
+        <p>
+          VSCodeの左側にある「ソース管理」タブ（枝分かれのアイコン）から、以下の順で操作を行います。
+        </p>
+
+        <ul>
+          <li>変更のステージング（＋ボタンを押す）</li>
+          <li>コミットメッセージを入力</li>
+          <li>コミットボタンを押下</li>
+          <li>同期ボタン（プッシュ）でリモートリポジトリへ送信</li>
+        </ul>
+
+        <hr />
+
+        <div class="my-4 text-center">
+          <ins
+            class="adsbygoogle"
+            style="display: block"
+            data-ad-client="ca-pub-3116106279235219"
+            data-ad-slot="YOUR_AD_SLOT"
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+          ></ins>
+          <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+        </div>
+
+        <hr />
+
+        <h2 id="section4">4. よくあるエラー</h2>
+        <h3>認証エラー（認証情報が求められる）</h3>
+        <p>
+          GitHubへのプッシュ時に「Authentication
+          failed」と表示される場合、認証情報が正しく保存されていません。
+        </p>
+
+        <pre><code class="bash">
+# 認証情報をキャッシュさせる設定
+git config --global credential.helper store
+        </code></pre>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+        <ul>
+          <li>PC本体にGitをインストールし、パスを通す。</li>
+          <li>VSCodeの「ソース管理」タブを使いこなす。</li>
+          <li><code>credential.helper</code>設定で認証を効率化する。</li>
+        </ul>
+
+        <hr />
+        <h2>関連記事</h2>
+        <ul>
+          <li class="col-sm-6"><a href="index.html">VSCode記事一覧</a></li>
+          <li>
+            <a href="vscode_settings_json.html">settings.jsonおすすめ設定</a>
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

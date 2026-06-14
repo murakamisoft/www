@@ -14,6 +14,7 @@
   <url><loc>https://vbminigame.sakura.ne.jp/mybatis/index.html</loc></url>
   <url><loc>https://vbminigame.sakura.ne.jp/aws/index.html</loc></url>
   <url><loc>https://vbminigame.sakura.ne.jp/git/index.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/vscode/index.html</loc></url>
 
   <!-- sample -->
   <url><loc>https://vbminigame.sakura.ne.jp/sample/bookmanager/list.html</loc></url>
@@ -198,6 +199,58 @@
   <url>
     <loc>https://vbminigame.sakura.ne.jp/linux/linux_cron_error.html</loc>
     <lastmod>2026-06-14</lastmod>
+  </url>
+
+  <!-- vscode -->
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/vscode/vscode_start_error.html</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/vscode/vscode_java_setup.html</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/vscode/vscode_debug_error.html</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/vscode/vscode_extension_error.html</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/vscode/vscode_intellisense_error.html</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/vscode/vscode_terminal_error.html</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/vscode/vscode_git_setup.html</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/vscode/vscode_launch_json.html</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/vscode/vscode_settings_json.html</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/vscode/vscode_japanese.html</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
   </url>
 
 </urlset>

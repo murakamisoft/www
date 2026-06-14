@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>
+      VSCodeのsettings.jsonおすすめ設定｜開発効率を劇的に上げる方法 |
+      Programming Lab
+    </title>
+
+    <meta
+      name="description"
+      content="VSCodeをさらに使いやすく！settings.jsonで設定すべきおすすめ項目をまとめました。フォーマット自動化、フォント設定、不要ファイルの除外など、エンジニア必見の効率化テクニックを解説します。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/vscode/vscode_settings_json.html"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">settings.jsonのおすすめ設定</h1>
+
+        <p class="lead">
+          VSCodeの設定ファイルである<code>settings.json</code>を適切に編集することで、開発体験は劇的に向上します。保存時の自動フォーマットや、エディタのUI改善など、今すぐ取り入れたい設定を紹介します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-14</p>
+
+        <h2>目次</h2>
+        <ul>
+          <li><a href="#section1">1. settings.jsonとは</a></li>
+          <li><a href="#section2">2. 基本の設定手順</a></li>
+          <li><a href="#section3">3. おすすめ設定コード</a></li>
+          <li><a href="#section4">4. よくあるエラー</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. 概要</h2>
+        <p>
+          VSCodeの設定はGUIから行えますが、<code>settings.json</code>で直接記述すると、設定のバックアップやチーム間での共有が容易になります。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>項目</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>設定形式</td>
+            <td>JSONフォーマット</td>
+          </tr>
+          <tr>
+            <td>利点</td>
+            <td>設定の高速変更・バックアップ容易性</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. 手順</h2>
+        <h3>2-1. ファイルの開き方</h3>
+        <p>
+          コマンドパレット(Ctrl+Shift+P)で「Open User Settings
+          (JSON)」と検索して選択します。
+        </p>
+
+        <h3>2-2. 設定の適用</h3>
+        <p>
+          開いたJSONファイルに設定したい項目を追記し、保存するだけで即座に反映されます。
+        </p>
+
+        <hr />
+
+        <h2 id="section3">3. サンプルコード</h2>
+        <p>開発効率を上げるための代表的な設定例です。</p>
+
+        <pre><code class="json">
+{
+  // 保存時に自動整形
+  "editor.formatOnSave": true,
+  // 文字サイズ
+  "editor.fontSize": 14,
+  // 行の折り返し
+  "editor.wordWrap": "on",
+  // 隠しファイル・フォルダの除外
+  "files.exclude": {
+    "**/.git": true,
+    "**/node_modules": true
+  }
+}
+        </code></pre>
+
+        <hr />
+
+        <div class="my-4 text-center">
+          <ins
+            class="adsbygoogle"
+            style="display: block"
+            data-ad-client="ca-pub-3116106279235219"
+            data-ad-slot="YOUR_AD_SLOT"
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+          ></ins>
+          <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+        </div>
+
+        <hr />
+
+        <h2 id="section4">4. よくあるエラー</h2>
+        <h3>JSONの文法ミス</h3>
+        <p>
+          最後の行のカンマ忘れなどは、VSCodeがエラーとして警告を出します。JSONとして正しい構造になっているか注意しましょう。
+        </p>
+
+        <pre><code class="json">
+// エラー：最後の項目の後ろにコンマがあるとJSONエラー
+{
+  "editor.fontSize": 14,
+}
+        </code></pre>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+        <ul>
+          <li><code>settings.json</code>で設定を管理すると共有が楽になる。</li>
+          <li><code>formatOnSave</code>は有効にしておくのがおすすめ。</li>
+          <li>
+            不要なファイルを<code>files.exclude</code>で非表示にしてスッキリさせる。
+          </li>
+        </ul>
+
+        <hr />
+        <h2>関連記事</h2>
+        <ul>
+          <li class="col-sm-6"><a href="index.html">VSCode記事一覧</a></li>
+          <li>
+            <a href="vscode_intellisense_error.html"
+              >IntelliSenseが効かない時の対処法</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

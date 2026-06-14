@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="VSCodeの開発トラブルシューティング・設定・環境構築ガイド。"
+    />
+    <title>VSCode 開発トラブルシューティング・ガイド</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/vscode/index.html"
+    />
+
+    <style>
+      body {
+        background: #f8f9fa;
+      }
+      .hero {
+        background: linear-gradient(135deg, #1f2937, #374151);
+        color: white;
+        padding: 40px;
+        border-radius: 12px;
+        margin-top: 20px;
+      }
+      .card-box {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 16px;
+        height: 100%;
+        transition: 0.2s;
+      }
+      .card-box:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+      .tag {
+        font-size: 12px;
+        color: #6b7280;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+      h2 {
+        border-left: 5px solid #374151;
+        padding-left: 15px;
+      }
+    </style>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-dark bg-dark mb-4">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">Programming Lab</a>
+      </div>
+    </nav>
+
+    <main class="container">
+      <div class="hero">
+        <h1>VSCode 開発ガイド</h1>
+        <p class="mb-0">
+          VSCodeの環境構築、設定方法、および開発中に発生するトラブルシューティングを体系化しています。
+        </p>
+      </div>
+
+      <h2 class="mt-5 mb-4">VSCode 活用ガイド一覧</h2>
+      <div class="row g-3">
+        <div class="col-md-4 col-sm-6">
+          <a href="vscode_start_error.html">
+            <div class="card-box">
+              <div class="tag">トラブル</div>
+              <h5>VSCodeが起動しない時の解決策</h5>
+              <p class="text-muted small">起動エラー時の確認ポイント</p>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-4 col-sm-6">
+          <a href="vscode_java_setup.html">
+            <div class="card-box">
+              <div class="tag">環境構築</div>
+              <h5>Java開発環境を構築する方法</h5>
+              <p class="text-muted small">Java開発向けの環境設定手順</p>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-4 col-sm-6">
+          <a href="vscode_debug_error.html">
+            <div class="card-box">
+              <div class="tag">トラブル</div>
+              <h5>デバッグができない原因と対処法</h5>
+              <p class="text-muted small">ブレークポイントが止まらない問題</p>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-4 col-sm-6">
+          <a href="vscode_extension_error.html">
+            <div class="card-box">
+              <div class="tag">トラブル</div>
+              <h5>拡張機能がインストールできない</h5>
+              <p class="text-muted small">Extension導入時のエラー対策</p>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-4 col-sm-6">
+          <a href="vscode_intellisense_error.html">
+            <div class="card-box">
+              <div class="tag">トラブル</div>
+              <h5>IntelliSenseが効かない</h5>
+              <p class="text-muted small">コード補完の不具合解消</p>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-4 col-sm-6">
+          <a href="vscode_terminal_error.html">
+            <div class="card-box">
+              <div class="tag">トラブル</div>
+              <h5>ターミナルが開かない</h5>
+              <p class="text-muted small">内蔵ターミナルのトラブル対策</p>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-4 col-sm-6">
+          <a href="vscode_git_setup.html">
+            <div class="card-box">
+              <div class="tag">設定</div>
+              <h5>Git連携設定方法まとめ</h5>
+              <p class="text-muted small">VSCodeからGitを利用する基本</p>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-4 col-sm-6">
+          <a href="vscode_launch_json.html">
+            <div class="card-box">
+              <div class="tag">設定</div>
+              <h5>launch.jsonの設定方法</h5>
+              <p class="text-muted small">デバッグ設定の基本と実践</p>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-4 col-sm-6">
+          <a href="vscode_settings_json.html">
+            <div class="card-box">
+              <div class="tag">設定</div>
+              <h5>settings.jsonおすすめ設定</h5>
+              <p class="text-muted small">開発効率を上げる便利な設定</p>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-4 col-sm-6">
+          <a href="vscode_japanese.html">
+            <div class="card-box">
+              <div class="tag">基本</div>
+              <h5>VSCodeを日本語化する方法</h5>
+              <p class="text-muted small">初回導入時の手順</p>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="mt-5 mb-5 text-center">
+        <a href="/" class="btn btn-outline-secondary">← トップへ戻る</a>
+      </div>
+    </main>
+
+    <footer class="text-center py-4 text-muted border-top">
+      Copyright (C) nori
+    </footer>
+  </body>
+</html>
