@@ -157,15 +157,15 @@ LEFT JOIN orders o ON u.id = o.user_id;
           複数IDをまとめて取得することでSQL回数を削減できます。
         </p>
 
-        <pre><code class="xml">
-<select id="findOrdersByUserIds">
+<pre><code class="xml">
+&lt;select id="findOrdersByUserIds"&gt;
   SELECT * FROM orders
   WHERE user_id IN
-  <foreach collection="ids" item="id" open="(" close=")" separator=",">
+  &lt;foreach collection="ids" item="id" open="(" close=")" separator=","&gt;
     #{id}
-  </foreach>
-</select>
-        </code></pre>
+  &lt;/foreach&gt;
+&lt;/select&gt;
+</code></pre>
 
         <h3>3-3. DTOでまとめてマッピング</h3>
 

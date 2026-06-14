@@ -13,6 +13,7 @@
   <url><loc>https://vbminigame.sakura.ne.jp/postgres/index.html</loc></url>
   <url><loc>https://vbminigame.sakura.ne.jp/mybatis/index.html</loc></url>
   <url><loc>https://vbminigame.sakura.ne.jp/aws/index.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/git/index.html</loc></url>
 
   <!-- sample -->
   <url><loc>https://vbminigame.sakura.ne.jp/sample/bookmanager/list.html</loc></url>
@@ -144,5 +145,17 @@
   <url><loc>https://vbminigame.sakura.ne.jp/vbminigame/rpg.htm</loc></url>
   <url><loc>https://vbminigame.sakura.ne.jp/vbminigame/action.htm</loc></url>
   <url><loc>https://vbminigame.sakura.ne.jp/vbminigame/javagame.htm</loc></url>
+
+  <!-- git -->
+  <url><loc>https://vbminigame.sakura.ne.jp/git/git_pull_conflict.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/git/git_push_rejected.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/git/git_merge_conflict.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/git/git_rebase_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/git/git_detached_head.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/git/git_stash.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/git/git_cherry_pick_error.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/git/git_reset_revert.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/git/gitignore_not_working.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/git/git_branch_delete_error.html</loc></url>
 
 </urlset>

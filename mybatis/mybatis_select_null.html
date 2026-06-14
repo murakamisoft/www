@@ -137,12 +137,11 @@ FROM users
           複雑なマッピングの場合はresultMapを使わないと正しく格納されません。
         </p>
 
-        <pre><code class="xml">
-<resultMap id="userMap" type="User">
-  <id property="id" column="user_id"/>
-  <result property="name" column="user_name"/>
-</resultMap>
-        </code></pre>
+        <pre><code class="xml">&lt;resultMap id="userMap" type="User"&gt;
+  &lt;id property="id" column="user_id"/&gt;
+  &lt;result property="name" column="user_name"/&gt;
+&lt;/resultMap&gt;
+</code></pre>
 
         <h3>2-3. データはあるがWHERE条件ミス</h3>
         <p>条件が厳しすぎて結果が0件→nullに見えるケースもあります。</p>
@@ -155,13 +154,13 @@ FROM users
         <p>基本的なSELECTマッピング例</p>
 
         <pre><code class="xml">
-<select id="findUser" resultType="User">
+&lt;select id="findUser" resultType="User"&gt;
   SELECT
     user_id AS id,
     user_name AS name
   FROM users
   WHERE user_id = #{id}
-</select>
+&lt;/select&gt;
         </code></pre>
 
         <hr />
