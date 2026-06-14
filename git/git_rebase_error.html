@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>rebaseでエラーになる原因と対処法 | Programming Lab</title>
+
+    <meta
+      name="description"
+      content="Gitのrebase操作で発生するコンフリクトやエラーの解決方法を解説。失敗したときの復旧手順（--abort）から、競合解消後の再開方法まで、安全な運用フローを紹介します。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/git/git_rebase_error.html"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">rebaseでエラーになる原因と対処法</h1>
+
+        <p class="lead">
+          Gitの<code>rebase</code>操作中にコンフリクトが発生し、「どうすれば元に戻せるの？」「この後どう進めればいいの？」と困ったことはありませんか？rebase失敗時の正しい復旧・再開手順を詳しく解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-14</p>
+
+        <h2>目次</h2>
+
+        <ul>
+          <li>
+            <a href="#section1">1. 概要：なぜrebaseでエラーが起きるのか</a>
+          </li>
+          <li>
+            <a href="#section2">2. 手順：コンフリクト発生時の解決フロー</a>
+          </li>
+          <li><a href="#section3">3. 失敗時の復旧：rebaseを中断する</a></li>
+          <li><a href="#section4">4. 注意点：rebaseの運用ルール</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. 概要：なぜrebaseでエラーが起きるのか</h2>
+
+        <p>
+          <code>rebase</code
+          >はコミット履歴を塗り替える操作です。取り込み先のブランチと自分の変更箇所が競合した場合、Gitは自動統合できずプロセスを停止させます。
+        </p>
+
+        <p></p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>項目</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>発生原因</td>
+            <td>履歴の統合中に競合が発生した</td>
+          </tr>
+          <tr>
+            <td>状態</td>
+            <td>rebaseプロセスが一時停止（中断）されている</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. 手順：コンフリクト解決のフロー</h2>
+
+        <h3>2-1. 競合を修正する</h3>
+
+        <p>
+          エラーが発生したファイルを開き、手動でコードを修正します。修正後は以下のコマンドを実行します。
+        </p>
+
+        <pre><code class="bash">
+# 修正したファイルをインデックスに追加
+git add [ファイル名]
+
+# rebaseを続行する
+git rebase --continue
+        </code></pre>
+
+        <p>複数のコミットで競合がある場合、上記を繰り返す必要があります。</p>
+
+        <hr />
+
+        <h2 id="section3">3. 失敗時の復旧：rebaseを中断する</h2>
+
+        <p>
+          「操作が複雑すぎてよく分からない」「元の状態に戻したい」という場合は、無理に続行せず中断しましょう。
+        </p>
+
+        <pre><code class="bash">
+# rebase操作自体をなかったことにする
+git rebase --abort
+        </code></pre>
+
+        <p>
+          このコマンドを実行すれば、<code>rebase</code>を実行する前のブランチの状態に完全に戻ります。
+        </p>
+
+        <hr />
+
+        <div class="my-4 text-center">
+          <div
+            style="background: #f8f9fa; padding: 20px; border: 1px dashed #ccc"
+          >
+            Adsense Ad Unit
+          </div>
+        </div>
+
+        <hr />
+
+        <h2 id="section4">4. 注意点：rebaseの運用ルール</h2>
+
+        <p>
+          <code>rebase</code
+          >は強力なツールですが、以下のルールを守らないとチームに混乱を招きます。
+        </p>
+
+        <ul>
+          <li>
+            <strong>公開済みのブランチには行わない:</strong>
+            他のメンバーがプルしているブランチの履歴を書き換えると、マージが壊れる原因になります。
+          </li>
+          <li>
+            <strong>手元の作業ブランチのみに使う:</strong>
+            自分一人で作業しているブランチでの履歴整理に留めましょう。
+          </li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>rebase中のエラーは競合による一時停止状態。</li>
+          <li>修正後は <code>git rebase --continue</code> で再開する。</li>
+          <li>混乱したら <code>git rebase --abort</code> で安全にやり直す。</li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li>
+            <a href="/git/index.html">Git記事一覧</a>
+          </li>
+          <li>
+            <a href="/git/git_merge_conflict.html"
+              >merge conflictの解決方法まとめ</a
+            >
+          </li>
+          <li>
+            <a href="/git/git_push_rejected.html"
+              >git push rejectedエラーの原因と対処法</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

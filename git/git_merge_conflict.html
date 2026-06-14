@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>merge conflictの解決方法まとめ | Programming Lab</title>
+
+    <meta
+      name="description"
+      content="Gitでマージコンフリクト（競合）が発生した際の正しい対処法を解説。原因の確認から、手動修正の手順、解決後のコミットまで、開発現場で役立つ実践的なフローを分かりやすく紹介します。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/git/git_merge_conflict.html"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">merge conflictの解決方法まとめ</h1>
+
+        <p class="lead">
+          Gitでブランチをマージしようとした際、「CONFLICT (content): Merge
+          conflict
+          in...」と表示されて処理が止まってしまったことはありませんか？本記事では、コンフリクトの発生原因と、安全に解決するための手順を解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-14</p>
+
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. 概要：なぜコンフリクトが起きるのか</a></li>
+          <li><a href="#section2">2. 手順：コンフリクト解決のステップ</a></li>
+          <li><a href="#section3">3. 実践：競合箇所の修正例</a></li>
+          <li><a href="#section4">4. よくあるエラーとQ&A</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. 概要：なぜコンフリクトが起きるのか</h2>
+
+        <p>
+          マージコンフリクトは、異なるブランチで<strong>同じファイルの同じ行</strong>がそれぞれ変更され、Gitがどちらの変更を優先すべきか自動判断できない時に発生します。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>項目</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>発生条件</td>
+            <td>異なるブランチで同一箇所の変更が競合した場合</td>
+          </tr>
+          <tr>
+            <td>Gitの挙動</td>
+            <td>自動マージを停止し、ユーザーに手動での修正を求める</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. 手順：コンフリクト解決のステップ</h2>
+
+        <h3>2-1. 競合しているファイルを確認する</h3>
+
+        <p>
+          まずは以下のコマンドで、どのファイルが競合しているかを特定します。
+        </p>
+
+        <pre><code class="bash">
+git status
+# 「both modified: ファイル名」と表示される箇所が競合中
+        </code></pre>
+
+        <h3>2-2. ファイルを修正してコミットする</h3>
+
+        <p>
+          ファイル内のマークを参考に修正し、再度ステージングしてコミットします。
+        </p>
+
+        <pre><code class="bash">
+# 修正後にステージング
+git add ファイル名
+
+# マージのコミットを完了させる
+git commit -m "Fix merge conflict"
+        </code></pre>
+
+        <hr />
+
+        <h2 id="section3">3. 実践：競合箇所の修正例</h2>
+
+        <p>
+          競合が発生したファイルを開くと、以下のような記号が含まれています。これらを削除し、意図するコードに書き換えます。
+        </p>
+
+        <pre><code class="text">
+<<<<<<< HEAD
+現在のブランチのコード
+=======
+マージしようとしているブランチのコード
+>>>>>>> branch-name
+        </code></pre>
+
+        <p>
+          <strong>修正のポイント:</strong> 上記の <code><<<<<<<</code> から
+          <code>>>>>>>></code>
+          までをすべて削除し、正しい状態のコードに編集してください。
+        </p>
+
+        <hr />
+
+        <div class="my-4 text-center">
+          <div
+            style="background: #f8f9fa; padding: 20px; border: 1px dashed #ccc"
+          >
+            Adsense Ad Unit
+          </div>
+        </div>
+
+        <hr />
+
+        <h2 id="section4">4. よくあるエラーとQ&A</h2>
+
+        <h3>Q: コンフリクトが複雑すぎて元に戻したい</h3>
+
+        <pre><code class="bash">
+# マージを開始する前の状態にリセットする
+git merge --abort
+        </code></pre>
+
+        <p>
+          解決が困難だと感じた場合は、一度<code>--abort</code>コマンドでマージ自体を中止し、状況を整理することをおすすめします。
+        </p>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li><code>git status</code>で競合ファイルを特定する。</li>
+          <li>ファイル内の記号を削除し、正しいコードを記述する。</li>
+          <li>
+            <code>git add</code> と
+            <code>git commit</code> でマージを完了させる。
+          </li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li>
+            <a href="/git/index.html">Git記事一覧</a>
+          </li>
+          <li>
+            <a href="/git/git_detached_head.html"
+              >detached HEAD状態の原因と復旧方法</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

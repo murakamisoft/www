@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>detached HEAD状態の原因と復旧方法 | Programming Lab</title>
+
+    <meta
+      name="description"
+      content="Gitを使用中に突然ブランチが消えたように見える「detached HEAD」状態の解決法を解説。原因の理解から、作業内容を失わずに正しいブランチに戻す手順を初心者にも分かりやすく紹介します。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/git/git_detached_head.html"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">detached HEAD状態の原因と復旧方法</h1>
+
+        <p class="lead">
+          Git操作中に「You are in 'detached HEAD'
+          state.」と表示され、ブランチから切り離されてしまったことはありませんか？本記事では、この状態の意味、原因、そして作成したコミットを失わずにブランチへ復帰する手順を解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-14</p>
+
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. detached HEADとは何か</a></li>
+          <li><a href="#section2">2. なぜdetached HEADになるのか</a></li>
+          <li><a href="#section3">3. 復旧手順：作業内容を残す場合</a></li>
+          <li><a href="#section4">4. よくある勘違いと注意点</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. detached HEADとは何か</h2>
+
+        <p>
+          「detached
+          HEAD」とは、直訳すると「切り離されたHEAD」を意味します。Gitにおいて、HEADは通常「現在のブランチ」を指しますが、detached
+          HEAD状態では<strong>特定のブランチではなく、特定のコミットIDを直接指している状態</strong>を指します。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>項目</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>状態</td>
+            <td>ブランチ名に追従しない</td>
+          </tr>
+          <tr>
+            <td>リスク</td>
+            <td>
+              この状態でコミットしても、ブランチが移動しないため変更が失われやすい
+            </td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. なぜdetached HEADになるのか</h2>
+
+        <p>
+          主に、ブランチ名ではない「コミットハッシュ（ID）」や「タグ」をcheckoutした際に発生します。
+        </p>
+
+        <pre><code class="bash">
+# ブランチではなくコミットIDを指定してチェックアウトした場合
+git checkout a1b2c3d
+        </code></pre>
+
+        <p>
+          上記のように実行すると、Gitは「どのブランチにも属さない過去の地点」を指し示すため、警告としてdetached
+          HEAD状態を通知します。
+        </p>
+
+        <hr />
+
+        <h2 id="section3">3. 復旧手順：作業内容を残す場合</h2>
+
+        <p>
+          detached
+          HEAD状態でうっかり変更・コミットしてしまった場合でも、以下の手順で新しいブランチを作成すれば作業内容を救出できます。
+        </p>
+
+        <pre><code class="bash">
+# 1. 現在のdetached状態のコミット内容を新しいブランチとして保存する
+git checkout -b fix-detached-branch
+
+# 2. 元のブランチに戻る
+git checkout main
+
+# 3. 新しく作ったブランチを元のブランチにマージする
+git merge fix-detached-branch
+        </code></pre>
+
+        <hr />
+
+        <div class="my-4 text-center">
+          <div
+            style="background: #f8f9fa; padding: 20px; border: 1px dashed #ccc"
+          >
+            Adsense Ad Unit
+          </div>
+        </div>
+
+        <hr />
+
+        <h2 id="section4">4. よくある勘違いと注意点</h2>
+
+        <p>
+          よくあるエラーとして「ブランチに戻ったらコミットが消えた」というケースがありますが、これはdetached
+          HEADのままコミットした作業を、別のブランチに紐付けていないことが原因です。
+        </p>
+
+        <pre><code class="bash">
+# エラー: チェックアウトを切り替えるとコミットが消失する
+git checkout main
+        </code></pre>
+
+        <p>
+          <strong>注意点:</strong> detached
+          HEAD状態での作業は一時的なものと考え、開発を継続する場合は必ず新しいブランチを作成（<code
+            >git checkout -b</code
+          >）してください。
+        </p>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>
+            detached HEADは、ブランチではなくコミットIDを直接見ている状態。
+          </li>
+          <li>そのままコミットしてもブランチには反映されないため注意。</li>
+          <li>
+            作業内容を保持したい場合は、すぐに新しいブランチを作成しよう。
+          </li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li>
+            <a href="/git/index.html"> Git記事一覧 </a>
+          </li>
+          <li>
+            <a href="/git/git_basic_commands.html">Gitの基本コマンド一覧</a>
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

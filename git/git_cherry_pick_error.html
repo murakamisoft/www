@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: git_cherry_pick_error.html
+CATEGORY: Git
+TITLE: git cherry-pickが失敗する原因と対処法
+DESCRIPTION: 特定コミット取り込み時のエラー対策
+SEO META END -->
+
+    <!-- SEO -->
+    <title>git cherry-pickが失敗する原因と対処法 | Programming Lab</title>
+    <meta
+      name="description"
+      content="git cherry-pickが失敗する原因と対処法を解説します。コンフリクト、コミット未取得、マージコミットエラーなど実務でよくあるトラブルの解決方法をサンプル付きで紹介します。"
+    />
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/git/git_cherry_pick_error.html"
+    />
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <!-- Highlight.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!-- Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">git cherry-pickが失敗する原因と対処法</h1>
+
+        <p class="lead">
+          Gitで特定コミットだけを別ブランチへ取り込むcherry-pickですが、コンフリクトやコミット未取得などで失敗することがあります。本記事では代表的な原因と解決方法を実例付きで解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-14</p>
+
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. git cherry-pickとは</a></li>
+          <li><a href="#section2">2. 失敗時の確認手順</a></li>
+          <li><a href="#section3">3. cherry-pick実行例</a></li>
+          <li><a href="#section4">4. よくあるエラーと対処法</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. git cherry-pickとは</h2>
+
+        <p>
+          git
+          cherry-pickは、別ブランチに存在する特定コミットだけを現在のブランチへ取り込む機能です。
+        </p>
+
+        <p>開発現場では以下のような場面でよく利用されます。</p>
+
+        <ul>
+          <li>障害修正だけを本番ブランチへ反映したい</li>
+          <li>一部機能のみ別ブランチへ移植したい</li>
+          <li>誤ったブランチで作業したコミットを移動したい</li>
+        </ul>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>項目</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>コマンド</td>
+            <td>git cherry-pick</td>
+          </tr>
+          <tr>
+            <td>用途</td>
+            <td>特定コミットのみ取り込む</td>
+          </tr>
+          <tr>
+            <td>利用頻度</td>
+            <td>高い</td>
+          </tr>
+          <tr>
+            <td>トラブル発生率</td>
+            <td>コンフリクト時に高い</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. 失敗時の確認手順</h2>
+
+        <h3>2-1. コミットが存在するか確認</h3>
+
+        <p>指定したコミットIDが存在しない場合、cherry-pickは失敗します。</p>
+
+        <pre><code class="bash">
+git log --oneline --all
+</code></pre>
+
+        <p>対象コミットが表示されることを確認してください。</p>
+
+        <h3>2-2. リモート最新情報を取得</h3>
+
+        <p>他メンバーのコミットを取り込む場合はfetchを実行します。</p>
+
+        <pre><code class="bash">
+git fetch origin
+git log origin/develop --oneline
+</code></pre>
+
+        <h3>2-3. 作業ブランチを確認</h3>
+
+        <pre><code class="bash">
+git branch
+</code></pre>
+
+        <p>
+          現在のブランチを確認し、正しいブランチ上でcherry-pickを実行してください。
+        </p>
+
+        <hr />
+
+        <h2 id="section3">3. cherry-pick実行例</h2>
+
+        <p>
+          例えばコミット「abc1234」を現在のブランチへ取り込む場合は以下を実行します。
+        </p>
+
+        <pre><code class="bash">
+git cherry-pick abc1234
+</code></pre>
+
+        <p>複数コミットをまとめて取り込む場合は範囲指定も可能です。</p>
+
+        <pre><code class="bash">
+git cherry-pick abc1234..def5678
+</code></pre>
+
+        <p>正常終了すると新しいコミットとして現在のブランチへ反映されます。</p>
+
+        <hr />
+
+        <div class="my-4 text-center">
+          <!-- Adsense -->
+        </div>
+
+        <hr />
+
+        <h2 id="section4">4. よくあるエラーと対処法</h2>
+
+        <h3>fatal: bad revision</h3>
+
+        <pre><code class="bash">
+fatal: bad revision 'abc1234'
+</code></pre>
+
+        <p>原因はコミットIDの誤り、またはfetchしていないことです。</p>
+
+        <p>以下を実行してコミットを確認してください。</p>
+
+        <pre><code class="bash">
+git fetch origin
+git log --all --oneline
+</code></pre>
+
+        <h3>CONFLICT (content)</h3>
+
+        <pre><code class="bash">
+CONFLICT (content): Merge conflict in src/Main.java
+</code></pre>
+
+        <p>
+          同じファイルの同じ箇所を別ブランチで変更している場合に発生します。
+        </p>
+
+        <p>コンフリクトを解消後、以下を実行します。</p>
+
+        <pre><code class="bash">
+git add .
+git cherry-pick --continue
+</code></pre>
+
+        <h3>cherry-pickを中止したい</h3>
+
+        <pre><code class="bash">
+git cherry-pick --abort
+</code></pre>
+
+        <p>作業開始前の状態へ戻せます。</p>
+
+        <h3>マージコミットを指定した場合</h3>
+
+        <pre><code class="bash">
+error: commit is a merge but no -m option was given
+</code></pre>
+
+        <p>マージコミットには親コミット指定が必要です。</p>
+
+        <pre><code class="bash">
+git cherry-pick -m 1 COMMIT_ID
+</code></pre>
+
+        <p>
+          通常は親番号1を指定しますが、プロジェクト運用ルールを確認してください。
+        </p>
+
+        <h3>空コミットになった場合</h3>
+
+        <pre><code class="bash">
+The previous cherry-pick is now empty
+</code></pre>
+
+        <p>既に同じ変更が取り込まれている場合に発生します。</p>
+
+        <p>内容を確認し、問題なければskipします。</p>
+
+        <pre><code class="bash">
+git cherry-pick --skip
+</code></pre>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>cherry-pickは特定コミットのみを取り込める便利な機能</li>
+          <li>失敗時はコミット存在確認とfetchを最初に実施する</li>
+          <li>コンフリクト発生時は解消後に--continueを実行する</li>
+          <li>取り消しは--abort、スキップは--skipを利用する</li>
+          <li>マージコミットは-mオプションが必要になる</li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li>
+            <a href="/git/index.html"> Git記事一覧 </a>
+          </li>
+          <li>
+            <a href="/git/git_conflict_error.html">
+              Gitコンフリクトの原因と解決方法
+            </a>
+          </li>
+          <li>
+            <a href="/git/git_rebase_error.html">
+              Git rebaseエラーの原因と対処法
+            </a>
+          </li>
+          <li>
+            <a href="/git/git_push_rejected.html">
+              git pushがrejectされた場合の対処法
+            </a>
+          </li>
+          <li>
+            <a href="/git/git_branch_delete_error.html">
+              ブランチ削除できない原因と対処法
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

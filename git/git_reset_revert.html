@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>git resetとgit revertの違い | Programming Lab</title>
+
+    <meta
+      name="description"
+      content="Gitで過去の変更を取り消す「git reset」と「git revert」の違いを解説。安全な運用のため、それぞれの動作原理と使い分けの基準を初心者にも分かりやすく紹介します。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/git/git_reset_revert.html"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">git resetとgit revertの違い</h1>
+
+        <p class="lead">
+          Gitで「間違えたコミットを取り消したい」と思った時、<code
+            >git reset</code
+          >と<code>git revert</code
+          >のどちらを使えば良いか迷ったことはありませんか？この2つのコマンドは、取り消し方が全く異なります。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-14</p>
+
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. 概要：それぞれの動作原理</a></li>
+          <li><a href="#section2">2. 使い分けの基準</a></li>
+          <li><a href="#section3">3. コマンドの使い方</a></li>
+          <li><a href="#section4">4. よくある失敗と注意点</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. 概要：それぞれの動作原理</h2>
+
+        <p>
+          簡単に言うと、<strong>resetは「歴史を書き換える（戻す）」</strong>のに対し、<strong>revertは「逆の変更を追加する」</strong>という違いがあります。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>項目</th>
+            <th>git reset</th>
+            <th>git revert</th>
+          </tr>
+          <tr>
+            <td>仕組み</td>
+            <td>ブランチの指し示す位置を強制移動</td>
+            <td>取り消し内容を新しいコミットとして追加</td>
+          </tr>
+          <tr>
+            <td>安全性</td>
+            <td>低い（履歴が消える）</td>
+            <td>高い（履歴が残る）</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. 使い分けの基準</h2>
+
+        <p>チーム開発においては、以下の基準で使い分けるのが基本です。</p>
+
+        <ul>
+          <li>
+            <strong>git reset:</strong>
+            自分しか触っていないローカルブランチで、履歴を綺麗にしたい時に使用。
+          </li>
+          <li>
+            <strong>git revert:</strong>
+            既にGitHub等へプッシュ済みで、他のメンバーと共有しているコミットを取り消したい時に使用。
+          </li>
+        </ul>
+
+        <p>
+          ※既にプッシュしたコミットに対して<code>reset</code>を使うと、チーム全員の履歴に不整合が起きるため<strong>絶対禁止</strong>です。
+        </p>
+
+        <hr />
+
+        <h2 id="section3">3. コマンドの使い方</h2>
+
+        <h3>3-1. git reset の使用例</h3>
+
+        <pre><code class="bash">
+# 直前のコミットを取り消して、変更はステージングに残す
+git reset --soft HEAD~1
+
+# 直前のコミットを完全に抹消する（危険）
+git reset --hard HEAD~1
+        </code></pre>
+
+        <h3>3-2. git revert の使用例</h3>
+
+        <pre><code class="bash">
+# 指定したコミット内容を打ち消す新しいコミットを作成する
+git revert [コミットハッシュ]
+        </code></pre>
+
+        <hr />
+
+        <div class="my-4 text-center">
+          <div
+            style="background: #f8f9fa; padding: 20px; border: 1px dashed #ccc"
+          >
+            Adsense Ad Unit
+          </div>
+        </div>
+
+        <hr />
+
+        <h2 id="section4">4. よくある失敗と注意点</h2>
+
+        <p>
+          一番の注意点は、<strong>共有ブランチでresetを使ってしまうこと</strong>です。
+        </p>
+
+        <p>
+          もし<code>git push</code
+          >した後に<code>reset</code>をして再度<code>push</code>しようとすると、他のメンバーの履歴と競合してしまい、非常に複雑なトラブルを招きます。公開済みのコミットに対しては、必ず<code>revert</code>を選択するようにしましょう。
+        </p>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li><code>reset</code>はローカルの履歴を「やり直す」ためのもの。</li>
+          <li>
+            <code>revert</code>は共有された履歴を安全に「打ち消す」ためのもの。
+          </li>
+          <li>プッシュ済みのコミットには必ず<code>revert</code>を使う。</li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li>
+            <a href="/git/index.html">Git記事一覧</a>
+          </li>
+          <li>
+            <a href="/git/git_push_rejected.html"
+              >git push rejectedエラーの原因と対処法</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

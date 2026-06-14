@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>.gitignoreが効かない原因と解決方法 | Programming Lab</title>
+
+    <meta
+      name="description"
+      content=".gitignoreに設定したはずのファイルがGitの管理対象から外れない！そんな時の原因と解決策を解説。既に追跡されてしまったファイルを無視させる正しい手順を紹介します。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/git/gitignore_not_working.html"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">.gitignoreが効かない原因と解決方法</h1>
+
+        <p class="lead">
+          「<code>.gitignore</code>に設定したのに、なぜかファイルが追跡され続ける」という現象は、Git初心者によくあるトラブルです。原因のほとんどは「既にGitの管理下（インデックス）に入っていること」にあります。その解消方法を解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-14</p>
+
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. 概要：なぜ無視されないのか</a></li>
+          <li><a href="#section2">2. 手順：キャッシュを削除して再適用</a></li>
+          <li><a href="#section3">3. 解決後の確認方法</a></li>
+          <li><a href="#section4">4. 注意点：設定ファイルの書き方</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. 概要：なぜ無視されないのか</h2>
+
+        <p>
+          <code>.gitignore</code
+          >は、<strong>「Gitが追跡を開始する前のファイル」</strong>に対してのみ有効です。一度でも<code
+            >git add</code
+          >されてGitのインデックス（追跡対象）に登録されてしまうと、後から<code>.gitignore</code>に記述しても無視されません。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>状態</th>
+            <th>gitignoreの影響</th>
+          </tr>
+          <tr>
+            <td>新規ファイル</td>
+            <td>有効（無視される）</td>
+          </tr>
+          <tr>
+            <td>既にGit管理下にあるファイル</td>
+            <td>無効（追跡が続く）</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. 手順：キャッシュを削除して再適用</h2>
+
+        <p>
+          既に追跡されてしまったファイルを、Gitの管理から外すための手順です。ファイル自体は削除されず、Gitの追跡対象からのみ除外されます。
+        </p>
+
+        <pre><code class="bash">
+# 1. 既に書いた.gitignoreを保存する
+
+# 2. 現在のインデックスをすべてキャッシュから削除する
+git rm -r --cached .
+
+# 3. 再度すべてのファイルをインデックスに追加する
+# .gitignoreに基づいて、無視対象は自動的に除外される
+git add .
+
+# 4. 変更をコミットする
+git commit -m "Fix .gitignore: remove tracked files"
+        </code></pre>
+
+        <hr />
+
+        <h2 id="section3">3. 解決後の確認方法</h2>
+
+        <p>正しく設定できたか、<code>git status</code>で確認しましょう。</p>
+
+        <pre><code class="bash">
+git status
+        </code></pre>
+
+        <p>
+          無視したいファイルが一覧に表示されなくなっていれば成功です。もし表示されている場合は、<code>.gitignore</code>の記述（パスやワイルドカード）が正しいか再確認してください。
+        </p>
+
+        <hr />
+
+        <div class="my-4 text-center">
+          <div
+            style="background: #f8f9fa; padding: 20px; border: 1px dashed #ccc"
+          >
+            Adsense Ad Unit
+          </div>
+        </div>
+
+        <hr />
+
+        <h2 id="section4">4. 注意点：設定ファイルの書き方</h2>
+
+        <p><code>.gitignore</code>を記述する際の基本的なルールを整理します。</p>
+
+        <ul>
+          <li>
+            <code>/config/</code> : configディレクトリ以下の全ファイルを無視。
+          </li>
+          <li><code>*.log</code> : 拡張子が.logの全ファイルを無視。</li>
+          <li>
+            <code>!important.log</code> :
+            !を付けると、特定のファイルだけを追跡対象に戻す。
+          </li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>
+            一度addされたファイルは<code>.gitignore</code>では無視されない。
+          </li>
+          <li>
+            <code>git rm -r --cached .</code> でインデックスをリセットする。
+          </li>
+          <li>
+            その後 <code>git add .</code> して再コミットすれば反映される。
+          </li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li>
+            <a href="/git/index.html">Git記事一覧</a>
+          </li>
+          <li>
+            <a href="/git/git_reset_revert.html">git resetとgit revertの違い</a>
+          </li>
+          <li>
+            <a href="/git/git_stash.html">git stashの使い方とよくある失敗例</a>
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

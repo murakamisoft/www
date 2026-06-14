@@ -1,10 +1,11 @@
-React	Reactアプリが起動しない原因と解決方法	npm start系トラブル	react_start_error.html
-React	useEffectが無限ループする原因と対処法	初心者最大の詰まりポイント	react_useeffect_loop.html
-React	React buildエラーの原因まとめ	本番ビルド失敗対策	react_build_error.html
-React	stateが更新されない原因と解決方法	useStateの誤用	react_state_error.html
-React	propsが渡らない原因と対処法	コンポーネント設計ミス	react_props_error.html
-React	ReactでAPI通信が失敗する原因まとめ	fetch/axiosエラー	react_api_error.html
-React	CORSエラーの原因とフロント側対処法	API連携で頻出	react_cors_error.html
-React	React Routerが動かない原因と解決方法	ルーティング問題	react_router_error.html
-React	npm installエラーの原因と解決方法	環境構築系	react_npm_install_error.html
-React	Reactで画面が真っ白になる原因まとめ	デバッグ系総合	react_blank_screen.html
+カテゴリ	記事タイトル	説明	HTMLファイル名
+Git	git pullでコンフリクトが発生する原因と解決方法	他の人の変更と自分の変更がぶつかったときの解決手順	git_pull_conflict.html
+Git	git push rejectedエラーの原因と対処法	pushできない原因と安全な対応方法を解説	git_push_rejected.html
+Git	merge conflictの解決方法まとめ	コンフリクト発生時の確認方法と修正手順	git_merge_conflict.html
+Git	rebaseでエラーになる原因と対処法	rebase失敗時によくある原因と復旧方法	git_rebase_error.html
+Git	detached HEAD状態の原因と復旧方法	ブランチが消えたように見える状態の直し方	git_detached_head.html
+Git	git stashの使い方とよくある失敗例	作業内容を一時退避する方法と注意点	git_stash.html
+Git	git cherry-pickが失敗する原因と対処法	特定コミット取り込み時のエラー対策	git_cherry_pick_error.html
+Git	git resetとgit revertの違い	変更取り消しコマンドの使い分けを解説	git_reset_revert.html
+Git	.gitignoreが効かない原因と解決方法	無視設定したファイルが管理対象になる問題を解説	gitignore_not_working.html
+Git	ブランチ削除できない原因と対処法	不要ブランチ削除時のエラー解決方法	git_branch_delete_error.html

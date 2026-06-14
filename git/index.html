@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Gitのコンフリクト・push失敗・rebaseエラー・stash・cherry-pick・gitignore設定ミスなど実務で頻出するGitトラブルを体系的に解説。"
+    />
+
+    <title>
+      Gitエラー一覧｜コンフリクト・push失敗・rebaseトラブル解決まとめ
+    </title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/git/index.html"
+    />
+
+    <style>
+      body {
+        background: #f8f9fa;
+      }
+
+      .hero {
+        background: linear-gradient(135deg, #111827, #0f172a);
+        color: white;
+        padding: 30px;
+        border-radius: 12px;
+        margin-top: 20px;
+      }
+
+      .card-box {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 16px;
+        height: 100%;
+        transition: 0.2s;
+      }
+
+      .card-box:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .tag {
+        font-size: 12px;
+        color: #6b7280;
+      }
+    </style>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/"> Programming Lab </a>
+      </div>
+    </nav>
+    <main class="container">
+      <!-- HERO -->
+      <div class="hero">
+        <h1>Git エラー一覧</h1>
+        <p class="mb-0">
+          コンフリクト・push失敗・rebase・stash・cherry-pick・ブランチ運用などGit実務トラブルを体系化。
+        </p>
+      </div>
+      <h2 class="mt-5">Gitでよくあるトラブル</h2>
+
+      <p>
+        Gitはソフトウェア開発で最も利用されているバージョン管理システムです。
+        しかし、git pull時のコンフリクト、push rejectedエラー、
+        rebase失敗、detached
+        HEAD状態など初心者からベテランまで悩むトラブルが頻繁に発生します。
+      </p>
+
+      <p>
+        本ページでは実務で遭遇しやすいGitエラーの原因と解決方法を体系的にまとめています。
+        エラーメッセージごとの対処法だけでなく、安全な復旧方法や運用上の注意点も解説しています。
+      </p>
+      <div class="mt-4">
+        <p>
+          Gitは現代開発で必須のバージョン管理ツールですが、
+          コンフリクトやpush失敗など初心者から上級者まで悩むトラブルが数多く存在します。
+        </p>
+
+        <p>
+          このページでは実務でよく発生するGitエラーや運用トラブルの原因と解決方法をまとめています。
+        </p>
+      </div>
+
+      <h2 class="mt-5 mb-3">記事一覧</h2>
+
+      <div class="row g-3">
+        <div class="col-md-4 col-sm-6">
+          <a href="git_pull_conflict.html">
+            <div class="card-box">
+              <div class="tag">Conflict</div>
+              <h5>git pullでコンフリクトが発生する原因と解決方法</h5>
+              <p class="text-muted small">
+                他の人の変更と自分の変更がぶつかったときの解決手順
+              </p>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-md-4 col-sm-6">
+          <a href="git_push_rejected.html">
+            <div class="card-box">
+              <div class="tag">Push</div>
+              <h5>git push rejectedエラーの原因と対処法</h5>
+              <p class="text-muted small">
+                pushできない原因と安全な対応方法を解説
+              </p>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-md-4 col-sm-6">
+          <a href="git_merge_conflict.html">
+            <div class="card-box">
+              <div class="tag">Merge</div>
+              <h5>merge conflictの解決方法まとめ</h5>
+              <p class="text-muted small">
+                コンフリクト発生時の確認方法と修正手順
+              </p>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-md-4 col-sm-6">
+          <a href="git_rebase_error.html">
+            <div class="card-box">
+              <div class="tag">Rebase</div>
+              <h5>rebaseでエラーになる原因と対処法</h5>
+              <p class="text-muted small">
+                rebase失敗時によくある原因と復旧方法
+              </p>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-md-4 col-sm-6">
+          <a href="git_detached_head.html">
+            <div class="card-box">
+              <div class="tag">Branch</div>
+              <h5>detached HEAD状態の原因と復旧方法</h5>
+              <p class="text-muted small">
+                ブランチが消えたように見える状態の直し方
+              </p>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-md-4 col-sm-6">
+          <a href="git_stash.html">
+            <div class="card-box">
+              <div class="tag">Stash</div>
+              <h5>git stashの使い方とよくある失敗例</h5>
+              <p class="text-muted small">作業内容を一時退避する方法と注意点</p>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-md-4 col-sm-6">
+          <a href="git_cherry_pick_error.html">
+            <div class="card-box">
+              <div class="tag">Cherry Pick</div>
+              <h5>git cherry-pickが失敗する原因と対処法</h5>
+              <p class="text-muted small">特定コミット取り込み時のエラー対策</p>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-md-4 col-sm-6">
+          <a href="git_reset_revert.html">
+            <div class="card-box">
+              <div class="tag">Reset</div>
+              <h5>git resetとgit revertの違い</h5>
+              <p class="text-muted small">
+                変更取り消しコマンドの使い分けを解説
+              </p>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-md-4 col-sm-6">
+          <a href="gitignore_not_working.html">
+            <div class="card-box">
+              <div class="tag">Git Ignore</div>
+              <h5>.gitignoreが効かない原因と解決方法</h5>
+              <p class="text-muted small">
+                無視設定したファイルが管理対象になる問題を解説
+              </p>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-md-4 col-sm-6">
+          <a href="git_branch_delete_error.html">
+            <div class="card-box">
+              <div class="tag">Branch</div>
+              <h5>ブランチ削除できない原因と対処法</h5>
+              <p class="text-muted small">不要ブランチ削除時のエラー解決方法</p>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="mt-5">
+        <a href="/" class="btn btn-outline-secondary"> ← トップへ戻る </a>
+      </div>
+    </main>
+
+    <footer class="text-center py-4 text-muted">Copyright (C) nori</footer>
+  </body>
+</html>

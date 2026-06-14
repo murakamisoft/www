@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>git push rejectedエラーの原因と対処法 | Programming Lab</title>
+
+    <meta
+      name="description"
+      content="Gitで「error: failed to push some refs」と表示され、プッシュが拒否される原因と正しい対処法を解説。リモートとの差分を安全に解消し、スムーズにプッシュするための手順を紹介します。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/git/git_push_rejected.html"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">git push rejectedエラーの原因と対処法</h1>
+
+        <p class="lead">
+          <code>git push</code
+          >を実行した際に「rejected」エラーが発生して作業が止まってしまったことはありませんか？これはリモートリポジトリがローカルよりも進んでいる場合に発生します。本記事では、この状況を安全に解決する手順を解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-14</p>
+
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. 概要：pushが拒否される理由</a></li>
+          <li><a href="#section2">2. 手順：リモートの変更を取り込む</a></li>
+          <li><a href="#section3">3. 修正のポイント</a></li>
+          <li><a href="#section4">4. 注意点：force pushは避ける</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. 概要：pushが拒否される理由</h2>
+
+        <p>
+          プッシュが拒否される主な原因は、<strong>ローカルリポジトリがリモートリポジトリの最新の状態に追いついていないから</strong>です。他のメンバーが先にプッシュしており、そのままプッシュすると相手の変更を上書きしてしまう恐れがあるため、Gitは安全のために操作を拒否します。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>項目</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>発生エラー</td>
+            <td>error: failed to push some refs to...</td>
+          </tr>
+          <tr>
+            <td>根本原因</td>
+            <td>リモート側に自分にはないコミットが存在する</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. 手順：リモートの変更を取り込む</h2>
+
+        <p>
+          基本的には「リモートの変更を先に取得（pull）して統合し、それから自分の作業をプッシュする」という手順を踏みます。
+        </p>
+
+        <pre><code class="bash">
+# 1. リモートの最新情報を取得して統合する
+git pull origin [ブランチ名]
+
+# 2. コンフリクトが発生した場合は修正してコミットする
+
+# 3. 再度プッシュする
+git push origin [ブランチ名]
+        </code></pre>
+
+        <hr />
+
+        <h2 id="section3">3. 修正のポイント</h2>
+
+        <p>
+          <code>git pull</code
+          >を行った際、コンフリクトが発生した場合は落ち着いて以下の作業を行ってください。
+        </p>
+
+        <ul>
+          <li>対象ファイルをエディタで開き、競合箇所を修正。</li>
+          <li><code>git add</code>で修正したファイルをステージング。</li>
+          <li><code>git commit</code>で統合用のコミットを作成。</li>
+        </ul>
+
+        <hr />
+
+        <div class="my-4 text-center">
+          <div
+            style="background: #f8f9fa; padding: 20px; border: 1px dashed #ccc"
+          >
+            Adsense Ad Unit
+          </div>
+        </div>
+
+        <hr />
+
+        <h2 id="section4">4. 注意点：force pushは避ける</h2>
+
+        <p>
+          ネット上の記事で<code>git push -f</code
+          >（強制プッシュ）が紹介されていることがありますが、<strong>チーム開発では原則禁止</strong>です。
+        </p>
+
+        <p>
+          <strong>理由:</strong>
+          強制プッシュはリモートの歴史を無理やり書き換えるため、他のメンバーの作業内容を消滅させたり、リポジトリ全体を壊したりするリスクがあるからです。必ず<code>pull</code>をして統合してからプッシュする習慣をつけましょう。
+        </p>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>push rejectedは、リモートの方が進んでいる時に発生する。</li>
+          <li>まず<code>git pull</code>を行い、差分を統合する。</li>
+          <li>強制プッシュ（-f）は使わないこと。</li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li>
+            <a href="/git/index.html">Git記事一覧</a>
+          </li>
+          <li>
+            <a href="/git/git_pull_conflict.html"
+              >git pullでコンフリクトが発生する原因と解決方法</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

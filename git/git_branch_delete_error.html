@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: git_branch_delete_error.html
+CATEGORY: Git
+TITLE: ブランチ削除できない原因と対処法
+DESCRIPTION: 不要ブランチ削除時のエラー解決方法
+SEO META END -->
+
+    <!-- SEO -->
+    <title>Gitでブランチ削除できない原因と対処法 | Programming Lab</title>
+    <meta
+      name="description"
+      content="Gitでブランチ削除できない、error: Cannot delete branch、マージされていないブランチを削除できない場合の原因と解決方法を初心者向けに解説します。"
+    />
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/git/git_branch_delete_error.html"
+    />
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <!-- Highlight.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!-- Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">Gitでブランチ削除できない原因と対処法</h1>
+
+        <p class="lead">
+          Gitで不要なブランチを削除しようとした際に発生するエラーの原因と解決方法を解説します。
+          ローカルブランチ・リモートブランチの両方の削除方法を理解しましょう。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-14</p>
+
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. ブランチ削除エラーの概要</a></li>
+          <li><a href="#section2">2. ブランチを削除する方法</a></li>
+          <li><a href="#section3">3. よく使う削除コマンド</a></li>
+          <li><a href="#section4">4. よくあるエラーと対処法</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. ブランチ削除エラーの概要</h2>
+
+        <p>
+          Gitでは誤操作によるデータ消失を防ぐため、安全でない状態のブランチ削除を禁止しています。
+          そのため、単純に git branch -d
+          を実行しても削除できないケースがあります。
+        </p>
+
+        <p>代表的な原因は次の通りです。</p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>原因</th>
+            <th>説明</th>
+          </tr>
+          <tr>
+            <td>現在のブランチを削除している</td>
+            <td>チェックアウト中のブランチは削除できない</td>
+          </tr>
+          <tr>
+            <td>未マージの変更が残っている</td>
+            <td>Gitが安全のため削除を拒否する</td>
+          </tr>
+          <tr>
+            <td>リモートブランチを削除している</td>
+            <td>削除方法が異なる</td>
+          </tr>
+          <tr>
+            <td>権限不足</td>
+            <td>GitHubやGitLabの保護ブランチ設定</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. ブランチを削除する方法</h2>
+
+        <h3>2-1. 現在のブランチを確認する</h3>
+
+        <p>
+          まず削除対象ブランチにいる場合は別ブランチへ切り替える必要があります。
+        </p>
+
+        <pre><code class="bash">
+
+git branch
+
+</code></pre>
+
+        <p>* が付いているブランチが現在作業中のブランチです。</p>
+
+        <pre><code class="bash">
+
+git switch main
+
+</code></pre>
+
+        <h3>2-2. ブランチを削除する</h3>
+
+        <p>マージ済みブランチは -d オプションで削除できます。</p>
+
+        <pre><code class="bash">
+
+git branch -d feature/sample
+
+</code></pre>
+
+        <p>未マージでも強制的に削除する場合は -D を使用します。</p>
+
+        <pre><code class="bash">
+
+git branch -D feature/sample
+
+</code></pre>
+
+        <hr />
+
+        <h2 id="section3">3. よく使う削除コマンド</h2>
+
+        <p>実務でよく利用するブランチ削除コマンドをまとめます。</p>
+
+        <pre><code class="bash">
+ローカルブランチ削除
+
+git branch -d feature/sample
+
+強制削除
+
+git branch -D feature/sample
+
+リモートブランチ削除
+
+git push origin --delete feature/sample
+
+リモート情報更新
+
+git fetch --prune
+
+</code></pre>
+
+        <p>
+          開発チームでは feature ブランチをマージ後に削除する運用が一般的です。
+          定期的に不要ブランチを整理すると管理しやすくなります。
+        </p>
+
+        <hr />
+
+        <div class="my-4 text-center">
+          <!-- Adsense -->
+        </div>
+
+        <hr />
+
+        <h2 id="section4">4. よくあるエラーと対処法</h2>
+
+        <h3>エラー1：現在のブランチを削除している</h3>
+
+        <pre><code class="bash">
+
+error: Cannot delete branch 'feature/sample'
+checked out at ...
+
+</code></pre>
+
+        <p>
+          原因は削除対象ブランチにチェックアウトしていることです。
+          mainやdevelopへ切り替えてから削除してください。
+        </p>
+
+        <pre><code class="bash">
+
+git switch main
+git branch -d feature/sample
+
+</code></pre>
+
+        <h3>エラー2：未マージの変更がある</h3>
+
+        <pre><code class="bash">
+
+error: The branch 'feature/sample'
+is not fully merged.
+
+</code></pre>
+
+        <p>
+          ブランチのコミットがまだマージされていません。 本当に不要なら -D
+          で削除できます。
+        </p>
+
+        <pre><code class="bash">
+
+git branch -D feature/sample
+
+</code></pre>
+
+        <h3>エラー3：リモートブランチが削除できない</h3>
+
+        <pre><code class="bash">
+
+remote: error
+failed to push some refs
+
+</code></pre>
+
+        <p>
+          GitHubやGitLabで保護ブランチ（Protected
+          Branch）が設定されている可能性があります。
+          mainやmasterは削除禁止になっていることがあります。
+        </p>
+
+        <h3>エラー4：削除したのに一覧に残る</h3>
+
+        <pre><code class="bash">
+
+git branch -a
+
+</code></pre>
+
+        <p>
+          リモート追跡情報が残っている場合があります。
+          次のコマンドで不要な参照を削除できます。
+        </p>
+
+        <pre><code class="bash">
+
+git fetch --prune
+
+</code></pre>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>現在のブランチは削除できない</li>
+          <li>マージ済みなら git branch -d を使用する</li>
+          <li>未マージなら git branch -D で強制削除できる</li>
+          <li>リモートブランチは git push origin --delete を使用する</li>
+          <li>不要な追跡情報は git fetch --prune で整理する</li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li>
+            <a href="/git/index.html"> Git記事一覧 </a>
+          </li>
+          <li>
+            <a href="/git/git_conflict_error.html">
+              Gitコンフリクト発生時の解決方法
+            </a>
+          </li>
+          <li>
+            <a href="/git/git_push_rejected.html">
+              git pushできない原因と対処法
+            </a>
+          </li>
+          <li>
+            <a href="/git/git_rebase_error.html">
+              Git rebaseエラーの原因と解決方法
+            </a>
+          </li>
+          <li>
+            <a href="/git/git_stash_usage.html"> Git stashの使い方まとめ </a>
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>
