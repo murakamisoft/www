@@ -1,5 +1,5 @@
 ﻿フォルダー パスの一覧:  ボリューム Windows-SSD
-ボリューム シリアル番号は 0000007F 64B9:5F8F です
+ボリューム シリアル番号は 00000094 64B9:5F8F です
 C:.
 │  ads.txt
 │  articles.tsv
@@ -88,6 +88,19 @@ C:.
 │      jenkins_queue_issue.html
 │      jenkins_role_strategy.html
 │      jenkins_setup.html
+│      
+├─linux
+│      index.html
+│      linux_chmod_chown.html
+│      linux_command_not_found.html
+│      linux_cron_error.html
+│      linux_disk_full.html
+│      linux_find_command.html
+│      linux_grep_usage.html
+│      linux_permission_denied.html
+│      linux_port_check.html
+│      linux_systemctl_error.html
+│      linux_tail_log.html
 │      
 ├─murakamisoft
 │      index.html
@@ -206,104 +219,117 @@ C:.
 │      springboot_whitelabel.html
 │      spring_security_loop.html
 │      
-└─vbminigame
-    │  action.htm
-    │  block.htm
-    │  gamemodule.htm
-    │  index.html
-    │  javagame.htm
-    │  reversi.htm
-    │  rpg.htm
-    │  slidegame.htm
-    │  start.htm
-    │  stg.htm
-    │  style.css
-    │  
-    ├─file
-    │      action.lzh
-    │      Api.bas
-    │      blockbreak.lzh
-    │      edit.lzh
-    │      javastg.lzh
-    │      poker.zip
-    │      reversi.lzh
-    │      reversi.zip
-    │      rpg.lzh
-    │      slidegame.lzh
-    │      stg.lzh
-    │      teto.lzh
-    │      
-    ├─javastg
-    │  │  Chara.class
-    │  │  Charabullet.class
-    │  │  Enemy.class
-    │  │  Hitmanager.class
-    │  │  index.html
-    │  │  Input.class
-    │  │  Input.java
-    │  │  Keymanager.class
-    │  │  RandomNumber.class
-    │  │  RandomNumber.java
-    │  │  Shooting.class
-    │  │  Shooting.java
-    │  │  
-    │  └─pic
-    │          chara.bmp
-    │          chara.jpg
-    │          charabullet.bmp
-    │          charabullet.jpg
-    │          enemy.bmp
-    │          enemy.jpg
-    │          enemybullet.bmp
-    │          enemybullet.jpg
-    │          Thumbs.db
-    │          
-    ├─pic
-    │      action.bmp
-    │      actionedit.bmp
-    │      actionprj.bmp
-    │      api.bmp
-    │      blockbreak.bmp
-    │      blockprj.bmp
-    │      frm1.bmp
-    │      gameprj.bmp
-    │      gameprj2.bmp
-    │      gra.bmp
-    │      javapoker.bmp
-    │      javapoker2.bmp
-    │      javareversi.bmp
-    │      javareversi2.bmp
-    │      newmake.bmp
-    │      prjset.bmp
-    │      reversi.bmp
-    │      reversiprj.bmp
-    │      rpg.bmp
-    │      rpgedit.bmp
-    │      rpgprj.bmp
-    │      shooting.bmp
-    │      slipgame.bmp
-    │      slipprj.bmp
-    │      stg.bmp
-    │      stgedit.bmp
-    │      stgprj.bmp
-    │      teto.bmp
-    │      Thumbs.db
-    │      title.bmp
-    │      
-    └─teto
-        │  Block.class
-        │  Hitmanager.class
-        │  Hitmanager.java
-        │  index.html
-        │  Keymanager.class
-        │  Keymanager.java
-        │  Screen.class
-        │  Teto.class
-        │  Teto.java
-        │  
-        └─pic
-                back.jpg
-                back.xcf
-                block.jpg
-                Thumbs.db
-                
+├─vbminigame
+│  │  action.htm
+│  │  block.htm
+│  │  gamemodule.htm
+│  │  index.html
+│  │  javagame.htm
+│  │  reversi.htm
+│  │  rpg.htm
+│  │  slidegame.htm
+│  │  start.htm
+│  │  stg.htm
+│  │  style.css
+│  │  
+│  ├─file
+│  │      action.lzh
+│  │      Api.bas
+│  │      blockbreak.lzh
+│  │      edit.lzh
+│  │      javastg.lzh
+│  │      poker.zip
+│  │      reversi.lzh
+│  │      reversi.zip
+│  │      rpg.lzh
+│  │      slidegame.lzh
+│  │      stg.lzh
+│  │      teto.lzh
+│  │      
+│  ├─javastg
+│  │  │  Chara.class
+│  │  │  Charabullet.class
+│  │  │  Enemy.class
+│  │  │  Hitmanager.class
+│  │  │  index.html
+│  │  │  Input.class
+│  │  │  Input.java
+│  │  │  Keymanager.class
+│  │  │  RandomNumber.class
+│  │  │  RandomNumber.java
+│  │  │  Shooting.class
+│  │  │  Shooting.java
+│  │  │  
+│  │  └─pic
+│  │          chara.bmp
+│  │          chara.jpg
+│  │          charabullet.bmp
+│  │          charabullet.jpg
+│  │          enemy.bmp
+│  │          enemy.jpg
+│  │          enemybullet.bmp
+│  │          enemybullet.jpg
+│  │          Thumbs.db
+│  │          
+│  ├─pic
+│  │      action.bmp
+│  │      actionedit.bmp
+│  │      actionprj.bmp
+│  │      api.bmp
+│  │      blockbreak.bmp
+│  │      blockprj.bmp
+│  │      frm1.bmp
+│  │      gameprj.bmp
+│  │      gameprj2.bmp
+│  │      gra.bmp
+│  │      javapoker.bmp
+│  │      javapoker2.bmp
+│  │      javareversi.bmp
+│  │      javareversi2.bmp
+│  │      newmake.bmp
+│  │      prjset.bmp
+│  │      reversi.bmp
+│  │      reversiprj.bmp
+│  │      rpg.bmp
+│  │      rpgedit.bmp
+│  │      rpgprj.bmp
+│  │      shooting.bmp
+│  │      slipgame.bmp
+│  │      slipprj.bmp
+│  │      stg.bmp
+│  │      stgedit.bmp
+│  │      stgprj.bmp
+│  │      teto.bmp
+│  │      Thumbs.db
+│  │      title.bmp
+│  │      
+│  └─teto
+│      │  Block.class
+│      │  Hitmanager.class
+│      │  Hitmanager.java
+│      │  index.html
+│      │  Keymanager.class
+│      │  Keymanager.java
+│      │  Screen.class
+│      │  Teto.class
+│      │  Teto.java
+│      │  
+│      └─pic
+│              back.jpg
+│              back.xcf
+│              block.jpg
+│              Thumbs.db
+│              
+└─vscode
+        index.html
+        vscode_debug_error.html
+        vscode_extension_error.html
+        vscode_git_setup.html
+        vscode_intellisense_error.html
+        vscode_japanese.html
+        vscode_java_setup.html
+        vscode_launch_json.html
+        vscode_settings_json.html
+        vscode_start_error.html
+        vscode_terminal_error.html
+        

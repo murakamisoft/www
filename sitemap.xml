@@ -5,16 +5,17 @@
   <url><loc>https://vbminigame.sakura.ne.jp/</loc></url>
 
   <!-- CATEGORY INDEX -->
-  <url><loc>https://vbminigame.sakura.ne.jp/springboot/index.html</loc></url>
-  <url><loc>https://vbminigame.sakura.ne.jp/api_design/index.html</loc></url>
-  <url><loc>https://vbminigame.sakura.ne.jp/docker/index.html</loc></url>
-  <url><loc>https://vbminigame.sakura.ne.jp/jenkins/index.html</loc></url>
-  <url><loc>https://vbminigame.sakura.ne.jp/react/index.html</loc></url>
-  <url><loc>https://vbminigame.sakura.ne.jp/postgres/index.html</loc></url>
-  <url><loc>https://vbminigame.sakura.ne.jp/mybatis/index.html</loc></url>
-  <url><loc>https://vbminigame.sakura.ne.jp/aws/index.html</loc></url>
-  <url><loc>https://vbminigame.sakura.ne.jp/git/index.html</loc></url>
-  <url><loc>https://vbminigame.sakura.ne.jp/vscode/index.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/springboot/index.html</loc><lastmod>2026-06-15</lastmod></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/api_design/index.html</loc><lastmod>2026-06-15</lastmod></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/docker/index.html</loc><lastmod>2026-06-15</lastmod></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/jenkins/index.html</loc><lastmod>2026-06-15</lastmod></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/react/index.html</loc><lastmod>2026-06-15</lastmod></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/postgres/index.html</loc><lastmod>2026-06-15</lastmod></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/mybatis/index.html</loc><lastmod>2026-06-15</lastmod></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/aws/index.html</loc><lastmod>2026-06-15</lastmod></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/git/index.html</loc><lastmod>2026-06-15</lastmod></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/vscode/index.html</loc><lastmod>2026-06-15</lastmod></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/linux/index.html</loc><lastmod>2026-06-15</lastmod></url>
 
   <!-- sample -->
   <url><loc>https://vbminigame.sakura.ne.jp/sample/bookmanager/list.html</loc></url>
@@ -23,10 +24,6 @@
   <url><loc>https://vbminigame.sakura.ne.jp/sample/bookmanager/edit.html</loc></url>
   <url><loc>https://vbminigame.sakura.ne.jp/sample/bookmanager/login.html</loc></url>
   <url><loc>https://vbminigame.sakura.ne.jp/sample/bookmanager/userbook.html</loc></url>
-
-  <!-- api_design -->
-  <url><loc>https://vbminigame.sakura.ne.jp/api_design/api_design_basic.html</loc></url>
-  <url><loc>https://vbminigame.sakura.ne.jp/api_design/api_design_mistake.html</loc></url>
 
   <!-- development -->
   <url><loc>https://vbminigame.sakura.ne.jp/development/code_review_checklist.html</loc></url>
@@ -116,6 +113,8 @@
   <url><loc>https://vbminigame.sakura.ne.jp/docker/docker_volume_error.html</loc></url>
 
   <!-- api_design -->
+  <url><loc>https://vbminigame.sakura.ne.jp/api_design/api_design_basic.html</loc></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/api_design/api_design_mistake.html</loc></url>
   <url><loc>https://vbminigame.sakura.ne.jp/api_design/api_design_filter.html</loc></url>
   <url><loc>https://vbminigame.sakura.ne.jp/api_design/api_design_frontend_bff.html</loc></url>
   <url><loc>https://vbminigame.sakura.ne.jp/api_design/api_design_idempotency.html</loc></url>
