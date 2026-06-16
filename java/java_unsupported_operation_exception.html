@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>UnsupportedOperationExceptionとは | Programming Lab</title>
+
+    <meta
+      name="description"
+      content="JavaでList.of()などで作成した変更不可（イミュータブル）なコレクションに対して、要素の追加や削除を行おうとすると発生するUnsupportedOperationExceptionの原因と、正しい修正方法を解説します。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/java/java_unsupported_operation_exception.html"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">UnsupportedOperationExceptionとは</h1>
+
+        <p class="lead">
+          Javaで要素を追加・削除しようとした瞬間にプログラムが停止する<code>UnsupportedOperationException</code>。これは主に「変更不可（イミュータブル）」なコレクションを操作しようとした際に発生します。なぜ発生するのか、どう修正すべきかを解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-16</p>
+
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. 概要</a></li>
+          <li><a href="#section2">2. なぜ発生するのか</a></li>
+          <li><a href="#section3">3. 回避と修正方法</a></li>
+          <li><a href="#section4">4. よくあるエラー例</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. 概要</h2>
+
+        <p>
+          <code>UnsupportedOperationException</code
+          >は、呼び出されたメソッドがサポートされていない（実装されていない）場合にスローされる非チェック例外です。Javaでは、固定されたコレクションに対する変更操作を行った際によく遭遇します。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>項目</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>主な要因</td>
+            <td>変更不可コレクションへのadd/remove操作</td>
+          </tr>
+          <tr>
+            <td>環境</td>
+            <td>Java 21 / Spring Boot 3.x</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. なぜ発生するのか</h2>
+
+        <p>
+          Java
+          9以降で導入された<code>List.of()</code>や<code>Set.of()</code>、あるいは<code>Arrays.asList()</code>（サイズ固定）など、特定のメソッドで作成されたコレクションは、要素の変更が許可されていません。これに対して<code>add()</code>等を呼ぶと、例外が発生します。
+        </p>
+
+        <hr />
+
+        <h2 id="section3">3. サンプルコード</h2>
+
+        <p>
+          変更したい場合は、新しいミュータブル（変更可能）なインスタンスにコピーする必要があります。
+        </p>
+
+        <pre><code class="java">
+// NG: 変更不可のリスト
+List&lt;String&gt; list = List.of("A", "B");
+list.add("C"); // ここで UnsupportedOperationException
+
+// OK: 変更可能なリストにコピーして使用する
+List&lt;String&gt; mutableList = new ArrayList&lt;&gt;(List.of("A", "B"));
+mutableList.add("C"); // 成功
+        </code></pre>
+
+        <hr />
+
+        <div class="my-4 text-center">
+          <ins
+            class="adsbygoogle"
+            style="display: block"
+            data-ad-client="ca-pub-3116106279235219"
+            data-ad-slot="YOUR_AD_SLOT_ID"
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+          ></ins>
+          <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+        </div>
+
+        <hr />
+
+        <h2 id="section4">4. よくあるエラー</h2>
+
+        <h3>スタックトレース例</h3>
+
+        <pre><code class="java">
+java.lang.UnsupportedOperationException
+    at java.base/java.util.ImmutableCollections.uoe(ImmutableCollections.java:...)
+    at java.base/java.util.ImmutableCollections$AbstractImmutableCollection.add(...)
+        </code></pre>
+
+        <p>
+          <code>ImmutableCollections</code
+          >という文字が見えたら、それは「変更できないコレクションを操作しようとした」ことが原因です。
+        </p>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>
+            原因は「変更不可」なコレクションに対して変更操作を行っていること。
+          </li>
+          <li>
+            <code>List.of()</code>
+            等で作られたリストはイミュータブルであることを意識する。
+          </li>
+          <li>
+            要素を変更する必要がある場合は、<code
+              >new ArrayList&lt;&gt;(...)</code
+            >
+            で包んで操作する。
+          </li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li>
+            <a href="/java/index.html"
+              >Javaエラー・例外トラブル解決まとめ（一覧ページ）</a
+            >
+          </li>
+          <li>
+            <a href="/java/java_null_pointer_exception.html"
+              >NullPointerExceptionの原因と解決方法</a
+            >
+          </li>
+          <li>
+            <a href="/java/java_no_such_bean_definition_exception.html"
+              >NoSuchBeanDefinitionExceptionの原因と解決方法</a
+            >
+          </li>
+          <li>
+            <a href="/java/java_out_of_memory_error.html"
+              >OutOfMemoryErrorの原因と対処法</a
+            >
+          </li>
+          <li>
+            <a href="/java/java_index_out_of_bounds_exception.html"
+              >IndexOutOfBoundsExceptionの原因と解決方法</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ClassNotFoundExceptionの原因と解決方法 | Programming Lab</title>
+
+    <meta
+      name="description"
+      content="Java開発で遭遇するClassNotFoundExceptionの原因を徹底解説。クラスパスの設定ミスや依存関係の問題を特定し、確実に解決するための手順を分かりやすく紹介します。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/Java/java_class_not_found_exception.html"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">ClassNotFoundExceptionの原因と解決方法</h1>
+
+        <p class="lead">
+          Java開発中に発生する「ClassNotFoundException」に頭を抱えていませんか？この記事では、このエラーが発生する主な原因から、クラスパスの確認、ライブラリの依存関係トラブルの解決手順までを丁寧に解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-16</p>
+
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. 概要</a></li>
+          <li><a href="#section2">2. 主な原因と確認手順</a></li>
+          <li><a href="#section3">3. クラスパス確認のサンプルコード</a></li>
+          <li><a href="#section4">4. よくあるエラーとその対処法</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. 概要</h2>
+
+        <p>
+          <code>ClassNotFoundException</code
+          >は、Javaの実行時にJVM（Java仮想マシン）が指定された名前のクラスを見つけることができない場合に発生する例外です。主にアプリケーションの起動時や、特定のライブラリをロードしようとしたタイミングで発生します。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>項目</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>例外の種類</td>
+            <td>Checked Exception</td>
+          </tr>
+          <tr>
+            <td>主な要因</td>
+            <td>クラスパス未設定、jarファイルの不足、クラス名のタイプミス</td>
+          </tr>
+          <tr>
+            <td>推奨環境</td>
+            <td>Java 17以降推奨</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. 主な原因と確認手順</h2>
+
+        <h3>2-1. クラスパス（Classpath）の確認</h3>
+        <p>
+          最も多い原因は、実行時にクラスパスが正しく通っていないことです。コマンドラインで実行する場合、<code>-cp</code>または<code>-classpath</code>オプションを確認してください。
+        </p>
+
+        <pre><code class="bash">
+# クラスパスを指定して実行する例
+java -cp .:lib/my-library.jar com.example.Main
+        </code></pre>
+
+        <h3>2-2. 依存関係（Dependency）の確認</h3>
+        <p>
+          MavenやGradleを使用している場合、ライブラリが正しくダウンロードされていないか、<code
+            >pom.xml</code
+          >
+          / <code>build.gradle</code>での指定漏れが考えられます。
+        </p>
+
+        <pre><code class="xml">
+&lt;dependency&gt;
+    &lt;groupId&gt;org.example&lt;/groupId&gt;
+    &lt;artifactId&gt;example-lib&lt;/artifactId&gt;
+    &lt;version&gt;1.0.0&lt;/version&gt;
+&lt;/dependency&gt;
+        </code></pre>
+
+        <hr />
+
+        <h2 id="section3">3. クラスパス確認のサンプルコード</h2>
+
+        <p>
+          現在実行中の環境で、どのクラスパスが読み込まれているかを確認するためのJavaコード例です。
+        </p>
+
+        <pre><code class="java">
+public class ClasspathChecker {
+    public static void main(String[] args) {
+        String classpath = System.getProperty("java.class.path");
+        System.out.println("現在のクラスパス:");
+        for (String path : classpath.split(System.getProperty("path.separator"))) {
+            System.out.println(path);
+        }
+    }
+}
+        </code></pre>
+
+        <hr />
+
+        <div class="my-4 text-center">
+          <ins
+            class="adsbygoogle"
+            style="display: block"
+            data-ad-client="ca-pub-3116106279235219"
+            data-ad-slot="YOUR_AD_SLOT_ID"
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+          ></ins>
+          <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+        </div>
+
+        <hr />
+
+        <h2 id="section4">4. よくあるエラーとその対処法</h2>
+
+        <h3>スタックトレースの例</h3>
+
+        <pre><code class="java">
+java.lang.ClassNotFoundException: com.example.MyClass
+    at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(...)
+    ...
+        </code></pre>
+
+        <p><strong>対処法:</strong></p>
+        <ul>
+          <li>
+            <strong>クラス名の確認:</strong>
+            パッケージ名を含めて正確に記述されているか確認してください。
+          </li>
+          <li>
+            <strong>Jarファイルの配置:</strong>
+            必要なJarファイルが正しいディレクトリに配置されているか再確認してください。
+          </li>
+          <li>
+            <strong>IDE設定:</strong> EclipseやIntelliJを使用している場合、Build
+            Path設定からライブラリが正しく追加されているか確認してください。
+          </li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>
+            ClassNotFoundExceptionは、JVMがクラスを見つけられないときに発生する。
+          </li>
+          <li>まずはクラスパスの設定が正しいかを最優先で確認する。</li>
+          <li>
+            ビルドツール（Maven/Gradle）を使用している場合は、依存関係の宣言にミスがないかチェックする。
+          </li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li>
+            <a href="/java/index.html"
+              >Javaエラー・例外トラブル解決まとめ（一覧ページ）</a
+            >
+          </li>
+          <li>
+            <a href="/java/java_null_pointer_exception.html"
+              >NullPointerExceptionの原因と解決方法</a
+            >
+          </li>
+          <li>
+            <a href="/java/java_no_such_bean_definition_exception.html"
+              >NoSuchBeanDefinitionExceptionの原因と解決方法</a
+            >
+          </li>
+          <li>
+            <a href="/java/java_out_of_memory_error.html"
+              >OutOfMemoryErrorの原因と対処法</a
+            >
+          </li>
+          <li>
+            <a href="/java/java_stack_overflow_error.html"
+              >StackOverflowErrorの原因と解決方法</a
+            >
+          </li>
+          <li>
+            <a href="/java/java_concurrent_modification_exception.html"
+              >ConcurrentModificationExceptionとは</a
+            >
+          </li>
+          <li>
+            <a href="/java/java_number_format_exception.html"
+              >NumberFormatExceptionの原因と対処法</a
+            >
+          </li>
+          <li>
+            <a href="/java/java_index_out_of_bounds_exception.html"
+              >IndexOutOfBoundsExceptionの原因と解決方法</a
+            >
+          </li>
+          <li>
+            <a href="/java/java_unsupported_operation_exception.html"
+              >UnsupportedOperationExceptionとは</a
+            >
+          </li>
+          <li>
+            <a href="/java/java_sql_exception.html"
+              >SQLExceptionの原因と調査方法</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

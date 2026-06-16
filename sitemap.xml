@@ -16,7 +16,50 @@
   <url><loc>https://vbminigame.sakura.ne.jp/git/index.html</loc><lastmod>2026-06-15</lastmod></url>
   <url><loc>https://vbminigame.sakura.ne.jp/vscode/index.html</loc><lastmod>2026-06-15</lastmod></url>
   <url><loc>https://vbminigame.sakura.ne.jp/linux/index.html</loc><lastmod>2026-06-15</lastmod></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/java/index.html</loc><lastmod>2026-06-16</lastmod></url>
 
+  <!-- java error -->
+  <url>
+      <loc>https://vbminigame.sakura.ne.jp/java/java_null_pointer_exception.html</loc>
+      <lastmod>2026-06-16</lastmod>
+  </url>
+  <url>
+      <loc>https://vbminigame.sakura.ne.jp/java/java_class_not_found_exception.html</loc>
+      <lastmod>2026-06-16</lastmod>
+  </url>
+  <url>
+      <loc>https://vbminigame.sakura.ne.jp/java/java_no_such_bean_definition_exception.html</loc>
+      <lastmod>2026-06-16</lastmod>
+  </url>
+  <url>
+      <loc>https://vbminigame.sakura.ne.jp/java/java_out_of_memory_error.html</loc>
+      <lastmod>2026-06-16</lastmod>
+  </url>
+  <url>
+      <loc>https://vbminigame.sakura.ne.jp/java/java_stack_overflow_error.html</loc>
+      <lastmod>2026-06-16</lastmod>
+  </url>
+  <url>
+      <loc>https://vbminigame.sakura.ne.jp/java/java_concurrent_modification_exception.html</loc>
+      <lastmod>2026-06-16</lastmod>
+  </url>
+  <url>
+      <loc>https://vbminigame.sakura.ne.jp/java/java_number_format_exception.html</loc>
+      <lastmod>2026-06-16</lastmod>
+  </url>
+  <url>
+      <loc>https://vbminigame.sakura.ne.jp/java/java_index_out_of_bounds_exception.html</loc>
+      <lastmod>2026-06-16</lastmod>
+  </url>
+  <url>
+      <loc>https://vbminigame.sakura.ne.jp/java/java_unsupported_operation_exception.html</loc>
+      <lastmod>2026-06-16</lastmod>
+  </url>
+  <url>
+      <loc>https://vbminigame.sakura.ne.jp/java/java_sql_exception.html</loc>
+      <lastmod>2026-06-16</lastmod>
+  </url>
+  
   <!-- sample -->
   <url><loc>https://vbminigame.sakura.ne.jp/sample/bookmanager/list.html</loc></url>
   <url><loc>https://vbminigame.sakura.ne.jp/sample/bookmanager/add.html</loc></url>

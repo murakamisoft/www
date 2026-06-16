@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>SQLExceptionの原因と調査方法 | Programming Lab</title>
+
+    <meta
+      name="description"
+      content="Javaのデータベース操作で発生するSQLException。接続情報ミスやSQL構文エラーなど、原因を素早く特定するためのログ確認手順とトラブルシューティングを解説します。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/java/java_sql_exception.html"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">SQLExceptionの原因と調査方法</h1>
+
+        <p class="lead">
+          Javaでデータベース（DB）とやり取りする際に発生する<code>SQLException</code>は、非常に範囲の広い例外です。接続エラーなのか、SQLの構文ミスなのかを切り分け、迅速に解決するための調査手順を解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-16</p>
+
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. 概要</a></li>
+          <li><a href="#section2">2. 原因切り分けのステップ</a></li>
+          <li><a href="#section3">3. ログの確認と設定</a></li>
+          <li><a href="#section4">4. よくあるエラー例</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. 概要</h2>
+
+        <p>
+          <code>SQLException</code
+          >は、データベースへのアクセスに関するエラーが発生した際に投げられる例外です。Spring
+          Bootなどのフレームワークを使用している場合、より具体的なサブクラス（<code>DataAccessException</code>等）としてラップされて投げられることが一般的です。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>項目</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>発生元</td>
+            <td>JDBCドライバ、データソース</td>
+          </tr>
+          <tr>
+            <td>主な要因</td>
+            <td>接続情報誤り、SQL構文不正、制約違反</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. 原因切り分けのステップ</h2>
+
+        <h3>2-1. 接続情報の確認</h3>
+        <p>
+          アプリがDBに到達できているか確認します。URL、ユーザー名、パスワードに誤りがないか（特に環境変数周り）をチェックしてください。
+        </p>
+
+        <h3>2-2. SQLの直接実行</h3>
+        <p>
+          エラーが発生したSQLをコピーし、DBクライアントツール（DBeaverやMySQL
+          Workbenchなど）で直接実行できるか試します。ここでエラーが出れば、問題はJavaではなくSQL自体にあります。
+        </p>
+
+        <hr />
+
+        <h2 id="section3">3. ログの確認と設定</h2>
+
+        <p>
+          詳細なSQLとパラメータを確認するために、<code>application.properties</code>でログレベルを調整します。
+        </p>
+
+        <pre><code class="properties">
+# SQLを出力し、パラメータも表示する設定
+logging.level.org.hibernate.SQL=DEBUG
+logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+        </code></pre>
+
+        <hr />
+
+        <div class="my-4 text-center">
+          <ins
+            class="adsbygoogle"
+            style="display: block"
+            data-ad-client="ca-pub-3116106279235219"
+            data-ad-slot="YOUR_AD_SLOT_ID"
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+          ></ins>
+          <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+        </div>
+
+        <hr />
+
+        <h2 id="section4">4. よくあるエラー</h2>
+
+        <h3>エラー例：認証失敗</h3>
+        <pre><code class="text">
+java.sql.SQLException: Access denied for user 'root'@'localhost'
+        </code></pre>
+        <p>
+          パスワードやユーザー名が正しく設定されていません。環境変数や設定ファイルを見直してください。
+        </p>
+
+        <h3>エラー例：SQL構文エラー</h3>
+        <pre><code class="text">
+java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax
+        </code></pre>
+        <p>
+          予約語を列名に使っている、テーブル名が間違っているなどの可能性があります。
+        </p>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>
+            まずはSQL単体で実行し、DB側の問題かアプリ側の問題か切り分ける。
+          </li>
+          <li>Hibernate/JPAのログレベルを上げて、実際の発行SQLを確認する。</li>
+          <li>DBへの接続情報は環境変数等で正しく注入されているか検証する。</li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li>
+            <a href="/java/index.html"
+              >Javaエラー・例外トラブル解決まとめ（一覧ページ）</a
+            >
+          </li>
+          <li>
+            <a href="/java/java_null_pointer_exception.html"
+              >NullPointerExceptionの原因と解決方法</a
+            >
+          </li>
+          <li>
+            <a href="/java/java_number_format_exception.html"
+              >NumberFormatExceptionの原因と対処法</a
+            >
+          </li>
+          <li>
+            <a href="/java/java_out_of_memory_error.html"
+              >OutOfMemoryErrorの原因と対処法</a
+            >
+          </li>
+          <li>
+            <a href="/java/java_no_such_bean_definition_exception.html"
+              >NoSuchBeanDefinitionExceptionの原因と解決方法</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

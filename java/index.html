@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Javaの例外・実行時エラー・トラブル解決を体系的に解説。"
+    />
+
+    <title>Javaエラー一覧｜例外・実行時エラー・トラブル解決まとめ</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/java/index.html"
+    />
+
+    <style>
+      body {
+        background: #f8f9fa;
+      }
+
+      .hero {
+        background: linear-gradient(135deg, #111827, #0f172a);
+        color: white;
+        padding: 30px;
+        border-radius: 12px;
+        margin-top: 20px;
+      }
+
+      .card-box {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 16px;
+        height: 100%;
+        transition: 0.2s;
+      }
+
+      .card-box:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .tag {
+        font-size: 12px;
+        color: #6b7280;
+      }
+
+      .ad-box {
+        margin: 20px 0;
+        text-align: center;
+      }
+    </style>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">Programming Lab</a>
+      </div>
+    </nav>
+    <main class="container">
+      <!-- HERO -->
+      <div class="hero">
+        <h1>Java エラー一覧</h1>
+        <p class="mb-0">
+          NullPointerException・メモリ不足・Bean取得失敗・クラスロードエラーなど、
+          Java実務で頻出する例外とエラーの原因・調査方法・解決策を体系的にまとめています。
+        </p>
+      </div>
+      <h2 class="mt-5 mb-3">記事一覧</h2>
+      <div class="row g-3">
+        <div class="col-md-4 col-sm-6">
+          <a href="java_null_pointer_exception.html">
+            <div class="card-box">
+              <div class="tag">Exception</div>
+              <h5>NullPointerExceptionの原因と解決方法</h5>
+              <p class="text-muted small">
+                Javaで最も多いnull参照エラーの原因と対処法
+              </p>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-4 col-sm-6">
+          <a href="java_class_not_found_exception.html">
+            <div class="card-box">
+              <div class="tag">ClassLoader</div>
+              <h5>ClassNotFoundExceptionの原因と解決方法</h5>
+              <p class="text-muted small">
+                クラスが見つからないエラーの原因と解決方法
+              </p>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-4 col-sm-6">
+          <a href="java_no_such_bean_definition_exception.html">
+            <div class="card-box">
+              <div class="tag">Spring</div>
+              <h5>NoSuchBeanDefinitionExceptionの原因と解決方法</h5>
+              <p class="text-muted small">
+                Spring BootでBeanが見つからないエラーの対処法
+              </p>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-4 col-sm-6">
+          <a href="java_out_of_memory_error.html">
+            <div class="card-box">
+              <div class="tag">Memory</div>
+              <h5>OutOfMemoryErrorの原因と対処法</h5>
+              <p class="text-muted small">
+                Javaヒープ不足やメモリリークの調査方法
+              </p>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-4 col-sm-6">
+          <a href="java_stack_overflow_error.html">
+            <div class="card-box">
+              <div class="tag">Memory</div>
+              <h5>StackOverflowErrorの原因と解決方法</h5>
+              <p class="text-muted small">
+                無限再帰によるスタックオーバーフロー対策
+              </p>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-4 col-sm-6">
+          <a href="java_concurrent_modification_exception.html">
+            <div class="card-box">
+              <div class="tag">Collection</div>
+              <h5>ConcurrentModificationExceptionとは</h5>
+              <p class="text-muted small">
+                ListやMap変更時に発生する例外の回避方法
+              </p>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-4 col-sm-6">
+          <a href="java_number_format_exception.html">
+            <div class="card-box">
+              <div class="tag">Conversion</div>
+              <h5>NumberFormatExceptionの原因と対処法</h5>
+              <p class="text-muted small">文字列から数値変換時のエラー対策</p>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-4 col-sm-6">
+          <a href="java_index_out_of_bounds_exception.html">
+            <div class="card-box">
+              <div class="tag">Collection</div>
+              <h5>IndexOutOfBoundsExceptionの原因と解決方法</h5>
+              <p class="text-muted small">
+                配列やListの範囲外アクセスの解決方法
+              </p>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-4 col-sm-6">
+          <a href="java_unsupported_operation_exception.html">
+            <div class="card-box">
+              <div class="tag">Collection</div>
+              <h5>UnsupportedOperationExceptionとは</h5>
+              <p class="text-muted small">
+                変更不可コレクション操作時の例外対策
+              </p>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-4 col-sm-6">
+          <a href="java_sql_exception.html">
+            <div class="card-box">
+              <div class="tag">Database</div>
+              <h5>SQLExceptionの原因と調査方法</h5>
+              <p class="text-muted small">
+                SQL実行エラーやDB接続エラーの調査方法
+              </p>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="mt-5">
+        <a href="/" class="btn btn-outline-secondary">← トップへ戻る</a>
+      </div>
+    </main>
+
+    <footer class="text-center py-4 text-muted">Copyright (C) nori</footer>
+  </body>
+</html>

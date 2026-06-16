@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>NumberFormatExceptionの原因と対処法 | Programming Lab</title>
+
+    <meta
+      name="description"
+      content="Javaで文字列を数値に変換する際に発生するNumberFormatException。原因となる不正な文字列の特定と、安全な変換処理のためのバリデーション実装方法を詳しく解説します。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/java/java_number_format_exception.html"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">NumberFormatExceptionの原因と対処法</h1>
+
+        <p class="lead">
+          Javaで文字列を数値（IntegerやLongなど）に変換しようとした際、形式が正しくないと発生する<code>NumberFormatException</code>。この例外が発生する仕組みと、ユーザー入力値などを安全に扱うためのベストプラクティスを解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-16</p>
+
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. 概要</a></li>
+          <li><a href="#section2">2. 原因と発生パターン</a></li>
+          <li><a href="#section3">3. 安全な数値変換の方法</a></li>
+          <li><a href="#section4">4. よくあるエラー例</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. 概要</h2>
+
+        <p>
+          <code>NumberFormatException</code
+          >は、文字列を数値に変換するメソッド（<code>Integer.parseInt()</code>など）に対して、数値として解釈できない文字列が渡されたときに発生する非チェック例外です。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>項目</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>主な発生場所</td>
+            <td>Integer.parseInt, Long.parseLong, Double.parseDouble</td>
+          </tr>
+          <tr>
+            <td>発生原因</td>
+            <td>
+              空文字、空白文字、数値以外の文字（アルファベットなど）の混入
+            </td>
+          </tr>
+          <tr>
+            <td>環境</td>
+            <td>Java 21 / Spring Boot 3.x</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. 原因と発生パターン</h2>
+
+        <h3>2-1. 不正な文字列の変換</h3>
+        <p>
+          数値型ではない「abc」や「12.34（整数型への変換時）」を変換しようとすると例外になります。
+        </p>
+
+        <h3>2-2. nullまたは空文字</h3>
+        <p>
+          nullを渡すとNullPointerExceptionですが、空文字「""」を変換しようとした場合も同様にNumberFormatExceptionが発生します。
+        </p>
+
+        <hr />
+
+        <h2 id="section3">3. 安全な数値変換の方法</h2>
+
+        <p>
+          try-catchブロックで囲むか、あらかじめ正規表現でチェックを行うのが定石です。
+        </p>
+
+        <pre><code class="java">
+public Integer convertToInteger(String input) {
+    try {
+        return Integer.parseInt(input);
+    } catch (NumberFormatException e) {
+        // ログ出力やデフォルト値を返すなどのハンドリング
+        System.err.println("不正な値です: " + input);
+        return 0;
+    }
+}
+        </code></pre>
+
+        <hr />
+
+        <div class="my-4 text-center">
+          <ins
+            class="adsbygoogle"
+            style="display: block"
+            data-ad-client="ca-pub-3116106279235219"
+            data-ad-slot="YOUR_AD_SLOT_ID"
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+          ></ins>
+          <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+        </div>
+
+        <hr />
+
+        <h2 id="section4">4. よくあるエラー</h2>
+
+        <h3>例外のスタックトレース例</h3>
+
+        <pre><code class="java">
+java.lang.NumberFormatException: For input string: "123a"
+    at java.base/java.lang.NumberFormatException.forInputString(...)
+        </code></pre>
+
+        <p>
+          「For input string:
+          "123a"」と出ている通り、この文字列が変換対象として不適切であることを示しています。フォームの入力値など、外部から渡ってくるデータには必ずバリデーションをかけましょう。
+        </p>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>文字列を数値変換する際は、常に変換失敗の可能性を考慮する。</li>
+          <li>try-catchで例外をキャッチし、適切にハンドリングする。</li>
+          <li>
+            入力フォームなどで値を受け取る場合は、変換前に正規表現等で数値であることを確認する。
+          </li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li>
+            <a href="/java/index.html"
+              >Javaエラー・例外トラブル解決まとめ（一覧ページ）</a
+            >
+          </li>
+          <li>
+            <a href="/java/java_null_pointer_exception.html"
+              >NullPointerExceptionの原因と解決方法</a
+            >
+          </li>
+          <li>
+            <a href="/java/java_class_not_found_exception.html"
+              >ClassNotFoundExceptionの原因と解決方法</a
+            >
+          </li>
+          <li>
+            <a href="/java/java_no_such_bean_definition_exception.html"
+              >NoSuchBeanDefinitionExceptionの原因と解決方法</a
+            >
+          </li>
+          <li>
+            <a href="/java/java_out_of_memory_error.html"
+              >OutOfMemoryErrorの原因と対処法</a
+            >
+          </li>
+          <li>
+            <a href="/java/java_stack_overflow_error.html"
+              >StackOverflowErrorの原因と解決方法</a
+            >
+          </li>
+          <li>
+            <a href="/java/java_concurrent_modification_exception.html"
+              >ConcurrentModificationExceptionとは</a
+            >
+          </li>
+          <li>
+            <a href="/java/java_index_out_of_bounds_exception.html"
+              >IndexOutOfBoundsExceptionの原因と解決方法</a
+            >
+          </li>
+          <li>
+            <a href="/java/java_unsupported_operation_exception.html"
+              >UnsupportedOperationExceptionとは</a
+            >
+          </li>
+          <li>
+            <a href="/java/java_sql_exception.html"
+              >SQLExceptionの原因と調査方法</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

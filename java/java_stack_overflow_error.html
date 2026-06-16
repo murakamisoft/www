@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>StackOverflowErrorの原因と解決方法 | Programming Lab</title>
+
+    <meta
+      name="description"
+      content="Javaで発生するStackOverflowErrorの主な原因である「無限再帰」や「過度な再帰呼び出し」について解説。スタックトレースの読み方と、安全なループ処理への書き換え方法を紹介します。"
+    />
+
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/java/java_stack_overflow_error.html"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">StackOverflowErrorの原因と解決方法</h1>
+
+        <p class="lead">
+          プログラムの実行中に突然停止し、「java.lang.StackOverflowError」が出力されたことはありませんか？これはスレッドのスタック領域が枯渇したことを示すエラーです。なぜ発生するのか、そのメカニズムと解決のヒントを解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-16</p>
+
+        <h2>目次</h2>
+
+        <ul>
+          <li><a href="#section1">1. 概要</a></li>
+          <li><a href="#section2">2. 原因の特定方法</a></li>
+          <li><a href="#section3">3. サンプルコード（問題と解決）</a></li>
+          <li><a href="#section4">4. よくあるエラー例</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. 概要</h2>
+
+        <p>
+          <code>StackOverflowError</code
+          >は、JVMのスタック領域（メソッドの呼び出し履歴やローカル変数が格納される領域）が不足した際に発生する<code>Error</code>です。多くの場合、コードのロジックに問題があります。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>項目</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>例外の種類</td>
+            <td>Error（例外ではなく回復不能なエラー）</td>
+          </tr>
+          <tr>
+            <td>主な要因</td>
+            <td>無限再帰、深い階層のメソッド呼び出し</td>
+          </tr>
+          <tr>
+            <td>環境</td>
+            <td>Java 21 / Spring Boot 3.x</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. 原因の特定方法</h2>
+
+        <h3>2-1. スタックトレースを確認</h3>
+        <p>
+          エラーログを確認すると、同じメソッドが数百～数千回も連続して呼び出されている箇所が見つかるはずです。そこが「無限再帰」の起点です。
+        </p>
+
+        <h3>2-2. 呼び出し階層の検討</h3>
+        <p>
+          再帰構造が論理的に正しいか、終了条件（ベースケース）が正しく設定されているかを確認します。
+        </p>
+
+        <hr />
+
+        <h2 id="section3">3. サンプルコード</h2>
+
+        <p>問題のある再帰と、それを解決するループ処理の比較です。</p>
+
+        <pre><code class="java">
+// 問題があるコード（無限再帰）
+public void recursiveMethod() {
+    recursiveMethod(); // 終了条件がないため無限ループへ
+}
+
+// 解決後のコード（ループ処理）
+public void loopMethod() {
+    for (int i = 0; i < 100; i++) {
+        // 安全な反復処理
+    }
+}
+        </code></pre>
+
+        <hr />
+
+        <div class="my-4 text-center">
+          <ins
+            class="adsbygoogle"
+            style="display: block"
+            data-ad-client="ca-pub-3116106279235219"
+            data-ad-slot="YOUR_AD_SLOT_ID"
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+          ></ins>
+          <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+        </div>
+
+        <hr />
+
+        <h2 id="section4">4. よくあるエラー</h2>
+
+        <h3>エラーの出力例</h3>
+
+        <pre><code class="java">
+Exception in thread "main" java.lang.StackOverflowError
+    at com.example.MyClass.recursiveMethod(MyClass.java:10)
+    at com.example.MyClass.recursiveMethod(MyClass.java:10)
+    ...
+        </code></pre>
+
+        <p>
+          上記のように同じファイル・同じ行番号が延々と続く場合は、再帰呼び出しがループしています。終了条件を必ず設定してください。
+        </p>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>再帰を使用する場合は、必ず「終了条件」を設ける。</li>
+          <li>
+            深い再帰が必要な場合は、ループ（for/while）への書き換えを検討する。
+          </li>
+          <li>
+            どうしても深い再帰が必要な場合は、JVMオプション（-Xss）でスタックサイズを増やすが、根本解決を優先する。
+          </li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+
+        <ul>
+          <li>
+            <a href="/java/index.html"
+              >Javaエラー・例外トラブル解決まとめ（一覧ページ）</a
+            >
+          </li>
+          <li>
+            <a href="/java/java_null_pointer_exception.html"
+              >NullPointerExceptionの原因と解決方法</a
+            >
+          </li>
+          <li>
+            <a href="/java/java_out_of_memory_error.html"
+              >OutOfMemoryErrorの原因と対処法</a
+            >
+          </li>
+          <li>
+            <a href="/java/java_number_format_exception.html"
+              >NumberFormatExceptionの原因と対処法</a
+            >
+          </li>
+          <li>
+            <a href="/java/java_index_out_of_bounds_exception.html"
+              >IndexOutOfBoundsExceptionの原因と解決方法</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>
