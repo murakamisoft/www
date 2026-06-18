@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: gradle_multi_project.html
+CATEGORY: Gradle
+TITLE: マルチプロジェクト構成の作り方
+DESCRIPTION: Gradleのマルチプロジェクト構成（複数モジュール管理）の基本設計と、実務で使える構成パターン・設定方法・依存管理の考え方を解説。
+SEO META END -->
+
+    <!-- SEO -->
+    <title>マルチプロジェクト構成の作り方 | Programming Lab</title>
+
+    <meta
+      name="description"
+      content="Gradleのマルチプロジェクト構成（複数モジュール管理）の基本設計と、実務で使える構成パターン・設定方法・依存管理の考え方を解説。"
+    />
+
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/gradle/gradle_multi_project.html"
+    />
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <!-- Highlight.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!-- Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">マルチプロジェクト構成の作り方</h1>
+
+        <p class="lead">
+          Gradle（<strong><entity>Gradle</entity></strong
+          >）のマルチプロジェクト構成は、大規模開発で必須となる設計手法です。本記事ではモジュール分割の考え方から実装手順まで実務レベルで解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-18</p>
+
+        <h2>目次</h2>
+        <ul>
+          <li><a href="#section1">1. 概要</a></li>
+          <li><a href="#section2">2. 構成手順</a></li>
+          <li><a href="#section3">3. サンプル構成</a></li>
+          <li><a href="#section4">4. よくあるエラー</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. 概要</h2>
+
+        <p>
+          マルチプロジェクト構成とは、1つのGradleプロジェクトを複数モジュールに分割して管理する方式です。
+          例えば「API」「ドメイン」「インフラ」を分けることで保守性が大幅に向上します。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>項目</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>用途</td>
+            <td>中〜大規模システム開発</td>
+          </tr>
+          <tr>
+            <td>メリット</td>
+            <td>責務分離・再利用性向上</td>
+          </tr>
+          <tr>
+            <td>注意点</td>
+            <td>依存関係設計が複雑化</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. 構成手順</h2>
+
+        <h3>2-1. settings.gradle設定</h3>
+
+        <pre><code class="groovy">
+rootProject.name = 'demo'
+
+include 'api'
+include 'domain'
+include 'infra'
+        </code></pre>
+
+        <p>まずモジュール構造を明示的に定義します。</p>
+
+        <h3>2-2. 依存関係の整理</h3>
+
+        <pre><code class="groovy">
+dependencies {
+    implementation project(':domain')
+}
+        </code></pre>
+
+        <p>モジュール間依存は最小限に抑えるのが重要です。</p>
+
+        <hr />
+
+        <h2 id="section3">3. サンプル構成</h2>
+
+        <pre><code class="text">
+root
+ ├── api
+ ├── domain
+ ├── infra
+        </code></pre>
+
+        <p>基本は3層構造（API・ドメイン・インフラ）が最も実務で使われます。</p>
+
+        <hr />
+
+        <div class="my-4 text-center">
+          <!-- Adsense -->
+        </div>
+
+        <hr />
+
+        <h2 id="section4">4. よくあるエラー</h2>
+
+        <h3>① Project not found</h3>
+
+        <pre><code class="text">
+Project with path ':domain' could not be found
+        </code></pre>
+
+        <p>原因：settings.gradleにinclude漏れ</p>
+
+        <h3>② Circular dependency</h3>
+
+        <pre><code class="text">
+Circular dependency detected
+        </code></pre>
+
+        <p>原因：モジュール間の循環依存</p>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>マルチプロジェクトは責務分離が本質</li>
+          <li>settings.gradleの設計が最重要</li>
+          <li>循環依存を避ける構造設計が必須</li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+        <ul>
+          <li>
+            <a href="gradle_build_error.html"
+              >Gradle build failedの原因と解決方法</a
+            >
+          </li>
+          <li>
+            <a href="gradle_dependency_error.html"
+              >依存関係が解決できない原因と対処法</a
+            >
+          </li>
+          <li>
+            <a href="gradle_java_version.html"
+              >Javaバージョン不一致エラーの解決方法</a
+            >
+          </li>
+          <li>
+            <a href="gradle_sync_error.html"
+              >Gradle sync failedの原因と対処法</a
+            >
+          </li>
+          <li>
+            <a href="/java/index.html">
+              Gradleエラー・例外トラブル解決まとめ（一覧ページ）
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

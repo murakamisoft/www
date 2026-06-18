@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: gradle_build_error.html
+CATEGORY: Gradle
+TITLE: Gradle build failedの原因と解決方法
+DESCRIPTION: ビルド失敗時の原因調査と解決手順
+SEO META END -->
+
+    <!-- SEO -->
+    <title>Gradle build failedの原因と解決方法 | Programming Lab</title>
+
+    <meta
+      name="description"
+      content="Gradleのbuild failedエラーの原因を体系的に整理し、依存関係・Javaバージョン・プラグイン・キャッシュ問題などの具体的な解決手順を実務レベルで解説します。"
+    />
+
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/gradle/gradle_build_error.html"
+    />
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <!-- Highlight.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!-- Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <!-- タイトル -->
+        <h1 class="mt-5">Gradle build failedの原因と解決方法</h1>
+
+        <!-- リード文 -->
+        <p class="lead">
+          Gradleのビルド失敗は「依存関係・Javaバージョン・キャッシュ・プラグイン設定」の4つが主要因です。本記事では実務で再現性高く原因を特定し、最短で復旧する手順を解説します。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-18</p>
+
+        <!-- 目次 -->
+        <h2>目次</h2>
+        <ul>
+          <li><a href="#section1">1. 概要</a></li>
+          <li><a href="#section2">2. 原因調査と手順</a></li>
+          <li><a href="#section3">3. サンプル設定</a></li>
+          <li><a href="#section4">4. よくあるエラー</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <!-- 概要 -->
+        <h2 id="section1">1. 概要</h2>
+
+        <p>
+          Gradle（<strong><entity>Gradle</entity></strong
+          >）のbuild
+          failedは、単なる「ビルド失敗」ではなく複数レイヤーの問題が重なって発生します。
+          主に以下の4領域に分解して考えるのが実務的です。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>分類</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>依存関係</td>
+            <td>ライブラリ取得失敗・バージョン衝突</td>
+          </tr>
+          <tr>
+            <td>Java環境</td>
+            <td>JDK不一致・JAVA_HOME誤設定</td>
+          </tr>
+          <tr>
+            <td>Gradle本体</td>
+            <td>wrapper不整合・キャッシュ破損</td>
+          </tr>
+          <tr>
+            <td>プラグイン</td>
+            <td>Spring Boot等の互換性問題</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <!-- 手順 -->
+        <h2 id="section2">2. 原因調査と解決手順</h2>
+
+        <h3>2-1. まずやるべき初期確認</h3>
+        <p>最初に以下コマンドでエラーの本体を特定します。</p>
+
+        <pre><code class="bash">
+
+./gradlew build --stacktrace
+./gradlew build --info
+</code></pre>
+
+        <p>→ 「どのタスクで落ちたか」を特定するのが最優先です。</p>
+
+        <h3>2-2. キャッシュクリア</h3>
+
+        <pre><code class="bash">
+
+./gradlew clean
+rm -rf ~/.gradle/caches
+</code></pre>
+
+        <p>キャッシュ破損は実務でかなり多い原因です。</p>
+
+        <h3>2-3. Javaバージョン確認</h3>
+
+        <pre><code class="bash">
+
+java -version
+./gradlew -version
+</code></pre>
+
+        <p>JavaとGradleの組み合わせ不一致は典型的な失敗パターンです。</p>
+
+        <hr />
+
+        <!-- サンプルコード -->
+        <h2 id="section3">3. サンプルGradle設定</h2>
+
+        <p>最小構成のbuild.gradle例です。</p>
+
+        <pre><code class="groovy">
+plugins {
+id 'java'
+id 'org.springframework.boot' version '3.2.0'
+}
+
+group = 'com.example'
+version = '1.0.0'
+
+repositories {
+mavenCentral()
+}
+
+dependencies {
+testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+}
+
+test {
+useJUnitPlatform()
+}
+</code></pre>
+
+        <p>
+          Spring
+          Boot利用時はプラグインバージョンとJavaバージョンの整合性が重要です。
+        </p>
+
+        <hr />
+
+        <!-- 広告 -->
+        <div class="my-4 text-center">
+          <!-- Adsense -->
+        </div>
+
+        <hr />
+
+        <!-- エラー -->
+        <h2 id="section4">4. よくあるエラー</h2>
+
+        <h3>① Dependency not found</h3>
+
+        <pre><code class="text">
+Could not find org.example:lib:1.0.0
+</code></pre>
+
+        <p>原因：リポジトリ設定不足 or バージョン誤り</p>
+
+        <h3>② Java version mismatch</h3>
+
+        <pre><code class="text">
+
+Unsupported class file major version
+</code></pre>
+
+        <p>原因：JDKとGradleの互換性問題</p>
+
+        <h3>③ Plugin application failed</h3>
+
+        <pre><code class="text">
+Plugin with id 'org.springframework.boot' not found
+</code></pre>
+
+        <p>原因：プラグイン解決失敗（ネットワーク or version不整合）</p>
+
+        <hr />
+
+        <!-- まとめ -->
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>
+            Gradle build
+            failedは「依存・Java・キャッシュ・プラグイン」で切り分ける
+          </li>
+          <li>最初に --stacktrace で原因箇所を特定する</li>
+          <li>clean + キャッシュ削除は高確率で有効</li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+        <ul>
+          <li>
+            <a href="/java/index.html"
+              >Gradleエラー・例外トラブル解決まとめ（一覧ページ）</a
+            >
+          </li>
+          <li>
+            <a href="gradle_dependency_error.html"
+              >依存関係が解決できない原因と対処法</a
+            >
+          </li>
+          <li>
+            <a href="gradle_wrapper_error.html"
+              >Gradle Wrapperエラーの解決方法</a
+            >
+          </li>
+          <li>
+            <a href="gradle_springboot_error.html"
+              >Spring BootでGradleビルドが失敗する原因</a
+            >
+          </li>
+          <li>
+            <a href="gradle_sync_error.html"
+              >Gradle sync failedの原因と対処法</a
+            >
+          </li>
+        </ul>
+      </div>
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

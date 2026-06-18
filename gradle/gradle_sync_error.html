@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="ja" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO META START
+FILE_NAME: gradle_sync_error.html
+CATEGORY: Gradle
+TITLE: Gradle sync failedの原因と対処法
+DESCRIPTION: Android Studio / IntelliJ IDEAで発生するGradle Sync失敗の原因（キャッシュ・ネットワーク・設定不整合）と実務的な解決方法を解説。
+SEO META END -->
+
+    <!-- SEO -->
+    <title>Gradle sync failedの原因と対処法 | Programming Lab</title>
+
+    <meta
+      name="description"
+      content="Android Studio / IntelliJ IDEAで発生するGradle Sync失敗の原因（キャッシュ・ネットワーク・設定不整合）と実務的な解決方法を解説。"
+    />
+
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://vbminigame.sakura.ne.jp/gradle/gradle_sync_error.html"
+    />
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+
+    <!-- Highlight.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/mono-blue.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!-- Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3116106279235219"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="https://vbminigame.sakura.ne.jp">
+            Programming Lab
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-shrink-0">
+      <div class="container">
+        <h1 class="mt-5">Gradle sync failedの原因と対処法</h1>
+
+        <p class="lead">
+          IDE（<entity>IntelliJ IDEA</entity> /
+          <entity>Android Studio</entity
+          >）で発生するGradle同期失敗は、設定キャッシュ・ネットワーク・Gradleバージョン不整合が主原因です。
+        </p>
+
+        <p class="text-muted">最終更新日：2026-06-18</p>
+
+        <h2>目次</h2>
+        <ul>
+          <li><a href="#section1">1. 概要</a></li>
+          <li><a href="#section2">2. 原因と対処</a></li>
+          <li><a href="#section3">3. サンプル対処設定</a></li>
+          <li><a href="#section4">4. よくあるエラー</a></li>
+          <li><a href="#section5">5. まとめ</a></li>
+        </ul>
+
+        <hr />
+
+        <h2 id="section1">1. 概要</h2>
+
+        <p>
+          Gradle
+          SyncはIDEがプロジェクト構造を解釈する重要プロセスであり、ここで失敗するとビルド以前の問題になります。
+        </p>
+
+        <table class="table table-bordered">
+          <tr>
+            <th>原因カテゴリ</th>
+            <th>内容</th>
+          </tr>
+          <tr>
+            <td>キャッシュ</td>
+            <td>IDE側のGradleキャッシュ破損</td>
+          </tr>
+          <tr>
+            <td>ネットワーク</td>
+            <td>依存解決失敗</td>
+          </tr>
+          <tr>
+            <td>設定</td>
+            <td>Gradle JVM・Version不一致</td>
+          </tr>
+        </table>
+
+        <hr />
+
+        <h2 id="section2">2. 原因と対処方法</h2>
+
+        <h3>2-1. キャッシュクリア</h3>
+
+        <pre><code class="text">
+File → Invalidate Caches / Restart
+        </code></pre>
+
+        <p>IDE不整合の最も基本的な対処です。</p>
+
+        <h3>2-2. Gradle再同期</h3>
+
+        <pre><code class="bash">
+./gradlew clean
+./gradlew build
+        </code></pre>
+
+        <p>ローカル状態をリセットします。</p>
+
+        <h3>2-3. Offline Mode確認</h3>
+
+        <p>IDE設定でOffline ModeがONだと依存解決に失敗します。</p>
+
+        <hr />
+
+        <h2 id="section3">3. 推奨Gradle設定</h2>
+
+        <pre><code class="properties">
+org.gradle.daemon=true
+org.gradle.parallel=true
+org.gradle.caching=true
+        </code></pre>
+
+        <hr />
+
+        <div class="my-4 text-center">
+          <!-- Adsense -->
+        </div>
+
+        <hr />
+
+        <h2 id="section4">4. よくあるエラー</h2>
+
+        <h3>Sync failed: Could not resolve dependencies</h3>
+
+        <pre><code class="text">
+Could not resolve all files for configuration
+        </code></pre>
+
+        <p>原因：ネットワーク or repository設定ミス</p>
+
+        <h3>Gradle JVM mismatch</h3>
+
+        <pre><code class="text">
+Gradle JVM is not compatible
+        </code></pre>
+
+        <p>原因：IDEのJDK設定不一致</p>
+
+        <hr />
+
+        <h2 id="section5">5. まとめ</h2>
+
+        <ul>
+          <li>SyncエラーはIDEキャッシュ起因が多い</li>
+          <li>次に多いのはネットワーク・依存解決</li>
+          <li>JVM設定ズレも頻出ポイント</li>
+        </ul>
+
+        <hr />
+
+        <h2>関連記事</h2>
+        <ul>
+          <li>
+            <a href="gradle_build_error.html"
+              >Gradle build failedの原因と解決方法</a
+            >
+          </li>
+          <li>
+            <a href="gradle_dependency_error.html"
+              >依存関係が解決できない原因と対処法</a
+            >
+          </li>
+          <li>
+            <a href="gradle_java_version.html"
+              >Javaバージョン不一致エラーの解決方法</a
+            >
+          </li>
+          <li>
+            <a href="gradle_plugin_error.html"
+              >プラグイン適用エラーの原因と対処法</a
+            >
+          </li>
+          <li>
+            <a href="/java/index.html">
+              Gradleエラー・例外トラブル解決まとめ（一覧ページ）
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 300px"></div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted"> Copyright (C) nori </span>
+      </div>
+    </footer>
+  </body>
+</html>

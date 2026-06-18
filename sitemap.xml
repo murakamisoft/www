@@ -17,6 +17,68 @@
   <url><loc>https://vbminigame.sakura.ne.jp/vscode/index.html</loc><lastmod>2026-06-15</lastmod></url>
   <url><loc>https://vbminigame.sakura.ne.jp/linux/index.html</loc><lastmod>2026-06-15</lastmod></url>
   <url><loc>https://vbminigame.sakura.ne.jp/java/index.html</loc><lastmod>2026-06-16</lastmod></url>
+  <url><loc>https://vbminigame.sakura.ne.jp/gradle/index.html</loc><lastmod>2026-06-18</lastmod></url>
+
+  <!-- gradle -->
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/gradle/gradle_build_error.html</loc>
+    <lastmod>2026-06-18</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/gradle/gradle_dependency_error.html</loc>
+    <lastmod>2026-06-18</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/gradle/gradle_wrapper_error.html</loc>
+    <lastmod>2026-06-18</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/gradle/gradle_springboot_error.html</loc>
+    <lastmod>2026-06-18</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/gradle/gradle_sync_error.html</loc>
+    <lastmod>2026-06-18</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/gradle/gradle_java_version.html</loc>
+    <lastmod>2026-06-18</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/gradle/gradle_plugin_error.html</loc>
+    <lastmod>2026-06-18</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/gradle/gradle_test_error.html</loc>
+    <lastmod>2026-06-18</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/gradle/gradle_multi_project.html</loc>
+    <lastmod>2026-06-18</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://vbminigame.sakura.ne.jp/gradle/gradle_performance.html</loc>
+    <lastmod>2026-06-18</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
 
   <!-- java error -->
   <url>
